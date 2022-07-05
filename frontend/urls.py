@@ -3,9 +3,12 @@ from .views import index
 
 urlpatterns = [
     path('', index),
-    path('student', index),
     path('course', index),
-    path('student/List', index),
+    path('students', index),
+    path('students/<studentID>', index),
+    path('students/new', index),
     path('login', index),
-    path('student/<studentID>', index),
+    path('users', index),
+    path('users/<userID>', index),
+    path('users/new', index),
 ]

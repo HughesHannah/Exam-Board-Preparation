@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import "./studentList.scss"
+import "./new.scss"
 
 export default class HomePage extends Component {
   constructor(props) {
@@ -7,8 +7,8 @@ export default class HomePage extends Component {
   }
 
   render() {
-      return (<div className="studentList">
-        Student List
+      return (<div className="new">
+        New
       </div>);
   }
 }
