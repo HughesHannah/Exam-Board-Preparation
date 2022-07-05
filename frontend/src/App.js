@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { render } from "react-dom";
 import { BrowserRouter as Router, Routes, Route,} from 'react-router-dom';
 
-import Home from "./pages/home/Home.jsx";
-import Single from "./pages/Single/Single.jsx";
-import List from "./pages/List/List.jsx";
-import Login from "./pages/login/Login.jsx";
-import New from "./pages/new/New.jsx";
+import Home from "./pages/home/Home.js";
+import Single from "./pages/Single/Single.js";
+import List from "./pages/List/List.js";
+import Login from "./pages/login/Login.js";
+import New from "./pages/new/New.js";
 
 
 function App() {
