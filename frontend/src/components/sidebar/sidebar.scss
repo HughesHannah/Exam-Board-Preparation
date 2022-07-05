@@ -9,11 +9,13 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
 
         .logo{
             font-size: 20px;
             font-weight: bold;
-            color: #6439ff;
+            color: #0a91ff;
         }
     }
 
@@ -40,12 +42,12 @@
                 cursor: pointer;
 
                 &:hover{
-                    background-color: #ece8ff;
+                    background-color: #d6edff;
                 }
 
                 .icon{
                     font-size: 18px;
-                    color: #7451f8;
+                    color: #0a91ff;
                 }
 
                 span{

@@ -13,9 +13,8 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="top">
-        <span className="logo">EBP</span>
+        <span className="logo">Exam Board <br/>Preparation</span>
       </div>
-      <hr />
       <div className="center">
         <ul>
           <p className="title">MAIN</p>
