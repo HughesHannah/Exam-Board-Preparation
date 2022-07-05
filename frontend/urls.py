@@ -5,6 +5,7 @@ urlpatterns = [
     path('', index),
     path('student', index),
     path('course', index),
-    path('studentList', index),
+    path('student/List', index),
     path('login', index),
+    path('student/<studentID>', index),
 ]

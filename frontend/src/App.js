@@ -15,8 +15,10 @@ function App() {
         <Routes>
           <Route path='/'>
             <Route index element={<Home/>}/>
-            <Route path='student' element={<StudentSingle/> } />
-            <Route path='studentList' element={<StudentList/>} />
+            <Route path='student'>
+              <Route path='List' element={<StudentList/>} />
+              <Route path=':studentID' element={<StudentSingle/> } />
+            </Route>
             <Route path='login' element={<Login/>} />
           </Route>
         </Routes>
