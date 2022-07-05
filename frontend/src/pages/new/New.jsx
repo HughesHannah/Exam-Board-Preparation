@@ -1,14 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react'
 import "./new.scss"
 
-export default class HomePage extends Component {
-  constructor(props) {
-      super(props);
-  }
 
-  render() {
-      return (<div className="new">
-        New
-      </div>);
-  }
+const New = () => {
+  return (
+    <div className="new">New</div>
+  )
 }
+
+export default New
