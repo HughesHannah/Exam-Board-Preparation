@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { render } from "react-dom";
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route,} from 'react-router-dom';
 
 import Home from "./pages/home/Home.js";
@@ -37,4 +37,5 @@ function App() {
 export default App;
 
   const appDiv = document.getElementById("app");
-  render(<App />, appDiv);
+  const root = createRoot(appDiv);
+  root.render(<App />);
