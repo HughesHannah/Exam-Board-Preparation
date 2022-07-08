@@ -9,6 +9,9 @@ import Paper from '@mui/material/Paper';
 
 import { DataGrid } from '@mui/x-data-grid';
 
+let matriculation, credits, class1, class2, class3
+
+
 function createData(matriculation, credits, class1, class2, class3) {
   return { matriculation, credits, class1, class2, class3 };
 }
@@ -25,12 +28,28 @@ const rows = [
   createData('5555555', 356, 16.0, 9, 3.9),
 ];
 
+const rowss = [
+  {matriculation: '1111111', credits: 159, class1:6.0, class2: 4, class3: 4.0},
+  {matriculation: '2222222', credits: 237, class1:9.0, class2: 7, class3: 4.3},
+  {matriculation: '3333333', credits: 262, class1:16.0, class2: 4, class3: 6.0},
+  {matriculation: '4444444', credits: 305, class1:3.7, class2: 7, class3: 4.3},
+  {matriculation: '5555555', credits: 356, class1:16.0, class2: 9, class3: 3.9},
+]
+
 const columns = [
-  createColumns('matriculation', 'Matriculation', 100),
-  createColumns('credits', 'Credits', 100),
-  createColumns('class1', 'Class 1', 100),
-  createColumns('class2', 'Class 2', 100),
-  createColumns('class3', 'Class 3', 100),
+  createColumns(matriculation, 'Matriculation', 100),
+  createColumns(credits, 'Credits', 100),
+  createColumns(class1, 'Class 1', 100),
+  createColumns(class2, 'Class 2', 100),
+  createColumns(class3, 'Class 3', 100),
+]
+
+const columnss = [
+  {field: matriculation, headerName:'Matriculation'},
+  {field: credits, headerName:'Credits'},
+  {field: class1, headerName:'Class 1'},
+  {field: class2, headerName:'Class 2'},
+  {field: class3, headerName:'Class 3'},
 ]
 
 export default function BasicTable() {
@@ -71,16 +90,15 @@ export default function BasicTable() {
   
 //   return (
 //     <div style={{ height: 400, width: '100%' }}>
+      
 //       <DataGrid
-//         rows={rows}
-//         columns={columns}
+//         rows={rowss}
+//         columns={columnss}
 //         pageSize={5}
 //         rowsPerPageOptions={[5]}
 //         checkboxSelection
 //       />
 
-//       {/* {console.log(rows)}
-//       {console.log(columns)} */}
 //     </div>
 //   );
 // }
