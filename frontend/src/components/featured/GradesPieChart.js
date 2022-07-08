@@ -14,11 +14,11 @@ export default class GradesPieChartExample extends PureComponent {
 
   render() {
     return (
-      <PieChart width={800} height={400} onMouseEnter={this.onPieEnter}>
+      <PieChart width={280} height={250} onMouseEnter={this.onPieEnter}>
         <Pie
           data={data}
-          cx={120}
-          cy={200}
+          cx={130}
+          cy={120}
           innerRadius={60}
           outerRadius={80}
           fill="#8884d8"

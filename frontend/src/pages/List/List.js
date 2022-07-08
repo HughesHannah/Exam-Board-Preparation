@@ -1,9 +1,11 @@
 import React from 'react'
 import "./list.scss"
 
+import BasicTable from "../../components/table/Table.js";
+
 const List = () => {
   return (
-    <div className="list">List</div>
+    <div className="list"><BasicTable/></div>
   )
 }
 
