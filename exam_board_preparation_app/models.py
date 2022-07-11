@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Departments(models.Model):
-    DepartmentID= models.AutoField(primary_key=True, unique=True)
+    id= models.AutoField(primary_key=True, unique=True)
     DepartmentName= models.CharField(max_length=255)
 
 class Cohort(models.Model):

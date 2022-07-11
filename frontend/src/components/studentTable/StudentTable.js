@@ -4,7 +4,7 @@ import { variables } from '../../Variables.js';
 import { DataGrid } from '@mui/x-data-grid'
 
 const columns = [
-  { field: 'DepartmentID', headerName: 'ID' },
+  { field: 'id', headerName: 'ID' },
   { field: 'DepartmentName', headerName: 'Title', width: 300 },
 ]
 
@@ -26,7 +26,6 @@ const StudentTable2 = () => {
         columns={columns}
         pageSize={12}
         checkboxSelection
-        getRowId={(row) => row.internalId}
       />
 
     </div>

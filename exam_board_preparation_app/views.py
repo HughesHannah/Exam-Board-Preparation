@@ -17,7 +17,7 @@ def DepartmentAPI(request, id=0):
     
     elif request.method == 'PUT':
         department_data = JSONParser().parse(request)
-        departments = Departments.objects.get(DepartmentID=department_data['DepartmentID'])
+        departments = Departments.objects.get(id=department_data['id'])
         department_serializer = DepartmentSerializer(departments, data=department_data)
         if department_serializer.is_valid(): 
             department_serializer.save()
