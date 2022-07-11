@@ -12,9 +12,6 @@ const StudentTable2 = () => {
 
     const [tableData, setTableData] = useState([])
 
-    // const [rows, setRows] = useState(tableData);
-    //const [deletedRows, setDeletedRows] = useState([]);
-
     useEffect(() => {
         fetch(variables.API_URL+'department')
           .then((data) => data.json())
