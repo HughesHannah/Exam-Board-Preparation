@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Student
+# from .models import Csv
 
-class StudentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Student
-        fields = ('id', 'metriculation_number', 'student_name')
+# class CsvSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Csv
+#         fields = ('matriculation', 'degree', 'year', )
