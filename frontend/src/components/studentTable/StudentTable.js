@@ -1,45 +1,39 @@
-import React, { Component, useEffect, useState } from 'react';
+
+import React, { useState, useEffect } from 'react'
 import { variables } from '../../Variables.js';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid'
 
 const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'DepartmentName', headerName: 'Department', width: 70 },
-  ];
+  { field: 'DepartmentID', headerName: 'ID' },
+  { field: 'DepartmentName', headerName: 'Title', width: 300 },
+]
 
+const StudentTable2 = () => {
 
-export class StudentTable extends Component {
+    const [tableData, setTableData] = useState([])
 
-    constructor(props) {
-        super(props);
+    // const [rows, setRows] = useState(tableData);
+    //const [deletedRows, setDeletedRows] = useState([]);
 
-        this.state = {
-            // define array 
-            departments:[]
-        }
-    }
-
-    refreshList(){
+    useEffect(() => {
         fetch(variables.API_URL+'department')
-        .then(response => response.json())
-        .then(data => {
-            this.setState({departments:data});
-        })
-    }
+          .then((data) => data.json())
+          .then((data) => setTableData(data))
+      }, [])
+       console.log(tableData)
 
-    componentDidMount() {
-        this.refreshList();
-    }
+  return (
+    <div style={{ height: 700, width: '100%' }}>
+<DataGrid
+        rows={tableData}
+        columns={columns}
+        pageSize={12}
+        checkboxSelection
+        getRowId={(row) => row.internalId}
+      />
 
-    render(){
-        const {departments} = this.state;
-
-        <div className="datatable"><DataGrid
-    rows={departments}
-    columns={columns}
-    pageSize={5}
-    rowsPerPageOptions={[5]}
-    checkboxSelection
-    /></div>
-    }
+    </div>
+  )
 }
+
+export default StudentTable2
