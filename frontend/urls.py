@@ -11,4 +11,5 @@ urlpatterns = [
     path('users', index),
     path('users/<userID>', index),
     path('users/new', index),
+    path('departments', index),
 ]

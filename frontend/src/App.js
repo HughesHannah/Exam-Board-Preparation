@@ -7,6 +7,8 @@ import Single from "./pages/Single/Single.js";
 import List from "./pages/List/List.js";
 import Login from "./pages/login/Login.js";
 import New from "./pages/new/New.js";
+// import StudentTable from "./components/studentTable/StudentTable.js";
+import StudentTable2 from "./components/studentTable/StudentTable2.js";
 
 
 function App() {
@@ -22,6 +24,7 @@ function App() {
               <Route path='new' element={<New/>} />
             </Route>
             <Route path='login' element={<Login/>} />
+            <Route path='departments' element={<StudentTable2/>} />
             <Route path='users'>
               <Route index element={<List/>} />
               <Route path=':userID' element={<Single/> } />
