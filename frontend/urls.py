@@ -6,10 +6,10 @@ urlpatterns = [
     path('course', index),
     path('students', index),
     path('students/<studentID>', index),
-    path('students/new', index),
     path('login', index),
     path('users', index),
     path('users/<userID>', index),
-    path('users/new', index),
     path('departments', index),
+    path('courses', index),
+    path('courses/<courseID>', index),
 ]

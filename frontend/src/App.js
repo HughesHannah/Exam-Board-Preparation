@@ -6,7 +6,6 @@ import Home from "./pages/home/Home.js";
 import Single from "./pages/Single/Single.js";
 import List from "./pages/List/List.js";
 import Login from "./pages/login/Login.js";
-import New from "./pages/new/New.js";
 import StudentTable from "./components/studentTable/StudentTable.js";
 
 
@@ -20,6 +19,10 @@ function App() {
             <Route path='students'>
               <Route index element={<List/>} />
               <Route path=':studentID' element={<Single/> } />
+            </Route>
+            <Route path='courses'>
+              <Route index element={<List/>} />
+              <Route path=':courseID' element={<Single/> } />
             </Route>
             <Route path='login' element={<Login/>} />
             <Route path='departments' element={<StudentTable/>} />

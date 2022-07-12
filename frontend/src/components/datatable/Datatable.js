@@ -3,6 +3,7 @@ import "./datatable.scss"
 
 import { DataGrid } from '@mui/x-data-grid';
 import { gotColumns, gotRows } from "../../Datatablesource.js";
+import {Link} from 'react-router-dom';
 
 
 const Datatable = () => {
@@ -15,9 +16,11 @@ const Datatable = () => {
       renderCell: () => {
         return (
           <div className="cellAction">
-          <div className="viewButton">
-            View
-          </div>
+            <Link to="/students/777" style={{textDecoration: 'none'}}>
+              <div className="viewButton">
+                View
+              </div>
+            </Link>
         </div>
         )
         
