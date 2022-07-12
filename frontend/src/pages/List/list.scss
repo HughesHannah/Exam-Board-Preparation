@@ -1,0 +1,16 @@
+.list{
+    display: flex;
+
+    .mainContainer{
+        flex: 6;
+
+        .title{
+            padding: 20px;
+        }
+
+        .table{
+            padding: 20px;
+        }
+        
+    }
+}

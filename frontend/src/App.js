@@ -20,14 +20,12 @@ function App() {
             <Route path='students'>
               <Route index element={<List/>} />
               <Route path=':studentID' element={<Single/> } />
-              <Route path='new' element={<New/>} />
             </Route>
             <Route path='login' element={<Login/>} />
             <Route path='departments' element={<StudentTable/>} />
             <Route path='users'>
               <Route index element={<List/>} />
               <Route path=':userID' element={<Single/> } />
-              <Route path='new' element={<New/>} />
             </Route>
           </Route>
         </Routes>
