@@ -20,7 +20,11 @@ const Sidebar = () => {
         </Link>
       </div>
 
-      <div className="center">
+      <div className="middle">
+        <p>2021-2022</p>
+      </div>
+
+      <div className="bottom">
         <ul>
           <p className="title">MAIN</p>
           <Link to="/" style={{textDecoration: 'none'}}>
@@ -68,9 +72,6 @@ const Sidebar = () => {
           </li>
           </Link>
         </ul>
-      </div>
-      <div className="bottom">
-        other
       </div>
     </div>
   )

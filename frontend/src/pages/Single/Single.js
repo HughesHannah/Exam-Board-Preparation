@@ -2,7 +2,7 @@ import React from 'react'
 import "./single.scss"
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
-import Chart from "../../components/chart/Chart.js";
+import Comments from "../../components/comments/Comments.js";
 import DataTable from "../../components/dataTable/DataTable.js";
 
 const Single = () => {
@@ -32,7 +32,8 @@ const Single = () => {
             </div>
           </div>
           <div className="right">
-            <Chart/>
+          <h1 className="title">Comments</h1>
+            <Comments/>
           </div>
         </div>
         <div className="bottom">

@@ -19,7 +19,15 @@
         }
     }
 
-    .center{
+    .middle{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: gray;
+        padding: 10px;
+    }
+
+    .bottom{
         padding-left: 10px;
 
         ul{
