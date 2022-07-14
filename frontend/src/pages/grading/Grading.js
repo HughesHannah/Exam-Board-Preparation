@@ -7,11 +7,11 @@ import Table from "../../components/table/Table.js";
 const Grading = () => {
   return (
     <div className="grading">
-        <Sidebar />
+      <Sidebar />
       <div className="mainContainer">
-        <div className="title">
-            Grading Rules
-        </div>
+        <h3 className="title">
+          Grading Rules
+        </h3>
         <div className="tableOfGrades">
             <div className="editButton">Edit</div>
             <div className="titleOfSection">

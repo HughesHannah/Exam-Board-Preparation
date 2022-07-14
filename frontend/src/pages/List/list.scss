@@ -1,5 +1,7 @@
 .list{
     display: flex;
+    width: 100%;
+    height: 100%;
 
     .mainContainer{
         flex: 6;
@@ -8,11 +10,25 @@
 
         .title{
             padding: 20px;
+            font-weight: 300;
+            font-size: 24px;
         }
 
-        .table{
+        .tableOfGrades{
             padding: 20px;
+            margin: 20px;
+            -webkit-box-shadow: 2px 4px 10px rgba(0,0,0,0.47);
+            box-shadow: 2px 4px 10px 1px rgba(201,201,201,0.47);
+            position: relative;
+
+            .titleOfSection{
+                margin-bottom: 10px;
+                color: gray;
+            }
+
+            .filterChips{
+                padding: 10px 0px 20px 0px;
+            }
         }
-        
     }
 }
