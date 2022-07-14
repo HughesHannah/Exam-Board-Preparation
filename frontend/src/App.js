@@ -7,6 +7,7 @@ import Single from "./pages/Single/Single.js";
 import List from "./pages/List/List.js";
 import Login from "./pages/login/Login.js";
 import StudentTable from "./components/studentTable/StudentTable.js";
+import Grading from "./pages/grading/Grading.js";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
             </Route>
             <Route path='login' element={<Login/>} />
             <Route path='departments' element={<StudentTable/>} />
+            <Route path='Grading' element={<Grading/>} />
             <Route path='users'>
               <Route index element={<List/>} />
               <Route path=':userID' element={<Single/> } />

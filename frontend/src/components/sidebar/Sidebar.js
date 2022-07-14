@@ -7,7 +7,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 import {Link} from "react-router-dom";
 
@@ -33,7 +33,7 @@ const Sidebar = () => {
               <span>Dashboard</span>
             </li>
           </Link>
-          <Link to="/" style={{textDecoration: 'none'}}>
+          <Link to="/grading" style={{textDecoration: 'none'}}>
             <li>
               <SchoolIcon className="icon" />
               <span>Grading</span>
@@ -55,8 +55,8 @@ const Sidebar = () => {
           <p className="title">SYSTEM</p>
           <Link to="/" style={{textDecoration: 'none'}}>
             <li>
-            <NotificationsNoneIcon className="icon" />
-            <span>Notifications</span>
+            <CalendarMonthIcon className="icon" />
+            <span>Change Year</span>
           </li>
           </Link>
           <Link to="/" style={{textDecoration: 'none'}}>

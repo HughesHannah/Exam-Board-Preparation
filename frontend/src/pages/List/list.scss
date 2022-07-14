@@ -3,6 +3,8 @@
 
     .mainContainer{
         flex: 6;
+        height: 100vh;
+        overflow:scroll;
 
         .title{
             padding: 20px;

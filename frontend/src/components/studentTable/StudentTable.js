@@ -14,7 +14,7 @@ const StudentTable2 = () => {
 
     useEffect(() => {
         fetch(variables.API_URL+'department')
-          // .then((data) => data.json())
+           .then((data) => data.json())
           .then((data) => setTableData(data))
       }, [])
        console.log(tableData)

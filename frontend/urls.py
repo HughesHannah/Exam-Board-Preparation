@@ -12,4 +12,5 @@ urlpatterns = [
     path('departments', index),
     path('courses', index),
     path('courses/<courseID>', index),
+    path('grading', index),
 ]
