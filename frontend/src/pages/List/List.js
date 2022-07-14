@@ -1,7 +1,6 @@
-import React from 'react'
-import "./list.scss"
+import React from "react";
+import "./list.scss";
 
-import BasicTable from "../../components/table/Table.js";
 import Datatable from "../../components/datatable/Datatable.js";
 import Sidebar from "../../components/sidebar/Sidebar.js";
 
@@ -14,11 +13,11 @@ const List = () => {
           <h2>Title of Table</h2>
         </div>
         <div className="table">
-          <Datatable/>
+          <Datatable />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default List
+export default List;

@@ -1,5 +1,5 @@
-import React from 'react'
-import "./single.scss"
+import React from "react";
+import "./single.scss";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import Comments from "../../components/comments/Comments.js";
@@ -32,18 +32,17 @@ const Single = () => {
             </div>
           </div>
           <div className="right">
-          <h1 className="title">Comments</h1>
-            <Comments/>
+            <h1 className="title">Comments</h1>
+            <Comments />
           </div>
         </div>
         <div className="bottom">
           <h1 className="title">Student Grades</h1>
-          <DataTable/>
+          <DataTable />
         </div>
       </div>
     </div>
-    
-  )
-}
+  );
+};
 
-export default Single
+export default Single;

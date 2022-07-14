@@ -1,5 +1,5 @@
-import React from 'react'
-import "./single.scss"
+import React from "react";
+import "./single.scss";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import DataTable from "../../components/dataTable/DataTable.js";
@@ -15,7 +15,7 @@ const SingleCourse = () => {
             <h1 className="title">Course Information</h1>
             <div className="details">
               <h1 className="itemTitle">Course Name</h1>
-            
+
               <div className="detailItem">
                 <span className="itemKey">Code:</span>
                 <span className="itemValue">COMPSCI1234</span>
@@ -35,17 +35,17 @@ const SingleCourse = () => {
             </div>
           </div>
           <div className="right">
-          <h1 className="title">Comments</h1>
-            Lecturer Comments here.. 
+            <h1 className="title">Comments</h1>
+            Lecturer Comments here..
           </div>
         </div>
         <div className="bottom">
           <h1 className="title">Student Grades</h1>
-          <DataTable/>
+          <DataTable />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SingleCourse
+export default SingleCourse;

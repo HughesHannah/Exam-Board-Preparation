@@ -1,17 +1,16 @@
-.datatable{
-    height: 600px;
+.datatable {
+  height: 600px;
 
-    .cellAction{
-        display: flex;
-        align-items: center;
+  .cellAction {
+    display: flex;
+    align-items: center;
 
-        .viewButton{
-            padding: 2px 5px;
-            border-radius: 5px;
-            color: darkblue;
-            background-color: rgba(173, 216, 230, 0.424);
-            cursor: pointer;
-        }
+    .viewButton {
+      padding: 2px 5px;
+      border-radius: 5px;
+      color: darkblue;
+      background-color: rgba(173, 216, 230, 0.424);
+      cursor: pointer;
     }
-    
+  }
 }

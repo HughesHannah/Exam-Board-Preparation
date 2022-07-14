@@ -1,17 +1,17 @@
-.featured{
-    flex: 2;
-    
-   padding: 10px;
+.featured {
+  flex: 2;
 
-   .top{
+  padding: 10px;
+
+  .top {
     display: flex;
     align-items: center;
     justify-content: space-between;
     color: gray;
 
-    .title{
-        font-size: 16px;
-        font-weight: 500;
+    .title {
+      font-size: 16px;
+      font-weight: 500;
     }
-   }
+  }
 }
