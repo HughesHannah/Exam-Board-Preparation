@@ -8,6 +8,7 @@ import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 import {Link} from "react-router-dom";
 
@@ -59,6 +60,14 @@ const Sidebar = () => {
             <span>Change Year</span>
           </li>
           </Link>
+          <Link to="/" style={{textDecoration: 'none'}}>
+            <li>
+            <FileDownloadIcon className="icon" />
+            <span>Export Views</span>
+          </li>
+          </Link>
+
+          <p className="title">USER</p>
           <Link to="/" style={{textDecoration: 'none'}}>
             <li>
             <AccountBoxIcon className="icon" />
