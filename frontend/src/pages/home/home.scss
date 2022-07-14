@@ -1,21 +1,56 @@
-.home{
-    display: flex;
+.home {
+  display: flex;
 
-    .homeContainer{
-        flex: 6;
+  .homeContainer {
+    flex: 6;
 
-        .widgets, .charts{
-            display: flex;
-            padding: 20px;
-            gap: 20px;
-        }
-
-        .pieChart, .lineChart{
-            padding: 5px 20px;
-            -webkit-box-shadow: 2px 4px 10px rgba(0,0,0,0.47);
-            box-shadow: 2px 4px 10px 1px rgba(201,201,201,0.47);
-            margin: 10px;
-        }
+    .widgets,
+    .charts {
+      display: flex;
+      padding: 20px;
+      gap: 20px;
     }
-}
 
+    .pieChart,
+    .lineChart {
+      padding: 0px, 20px;
+      -webkit-box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      border-radius: 10px;
+      margin: 10px;
+    }
+
+    .searchdiv {
+      -webkit-box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px 20px 0px 20px;
+
+      .search {
+        display: flex;
+        align-items: center;
+        border: 0.5px solid lightgray;
+        border-radius: 30px;
+        padding: 10px;
+        margin: 5px 20px;
+
+        .searchIcon{
+            padding: 0px 10px;
+            align-items: center;
+        }
+
+        input {
+          border: none;
+          outline: none;
+          background-color: transparent;
+          padding: 0px 10px;
+
+          &::placeholder {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+}

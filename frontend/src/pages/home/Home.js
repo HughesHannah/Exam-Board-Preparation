@@ -1,8 +1,10 @@
 import React from 'react'
 import "./home.scss"
 
+import SearchIcon from '@mui/icons-material/Search';
+import SendIcon from '@mui/icons-material/Send';
+
 import Sidebar from "../../components/sidebar/Sidebar.js";
-import Navbar from "../../components/navbar/Navbar.js";
 import Widget from "../../components/widget/Widget.js";
 import Featured from "../../components/featured/Featured.js";
 import Chart from "../../components/chart/Chart.js";
@@ -19,6 +21,12 @@ const Home = () => {
           <Widget type="completedCourseCounter"/>
           <Widget type="preponderanceCounter"/>
           <Widget type="issueCounter"/>
+        </div>
+        <div className="searchdiv">
+          <div className="search">
+            <SearchIcon className="searchIcon"/>
+            <input type="text" placeholder="Search..." />
+          </div>
         </div>
         <div className="charts">
           <div className="pieChart"><Featured /></div>
