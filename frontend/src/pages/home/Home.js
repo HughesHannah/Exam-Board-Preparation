@@ -21,8 +21,8 @@ const Home = () => {
           <Widget type="issueCounter"/>
         </div>
         <div className="charts">
-          <Featured />
-          <Chart />
+          <div className="pieChart"><Featured /></div>
+          <div className="lineChart"><Chart /></div>
         </div>
         <div className="table">
           

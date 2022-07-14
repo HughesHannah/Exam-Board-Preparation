@@ -1,3 +1,17 @@
 .chart{
     flex: 4;
+    padding: 20px;
+
+    .top{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: gray;
+        padding-bottom: 10px;
+    
+        .title{
+            font-size: 16px;
+            font-weight: 500;
+        }
+       }
 }
