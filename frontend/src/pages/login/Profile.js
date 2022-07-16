@@ -5,7 +5,7 @@ import "./profile.scss";
 import Sidebar from "../../components/sidebar/Sidebar.js";
 
 const Profile = () => {
-    let {name} = useContext(AuthContext)
+    let {user} = useContext(AuthContext)
   return (
     <div className="profile">
         <Sidebar />
@@ -14,7 +14,9 @@ const Profile = () => {
           <h2>User Profile Page</h2>
         </div>
         <div className="table">
-          <p>Hello, {name}</p>
+
+          {user && <p>Hello, {user.username}</p>}
+          
         </div>
       </div>
     </div>
