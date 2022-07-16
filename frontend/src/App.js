@@ -1,6 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import PrivateRoute from "./utils/PrivateRoute.js";
+import { AuthProvider } from "./context/AuthContext.js"
 
 import Home from "./pages/home/Home.js";
 import Single from "./pages/Single/Single.js";
@@ -12,14 +15,17 @@ import CourseList from "./pages/List/CourseList.js";
 import Login from "./pages/login/Login.js";
 import StudentTable from "./components/studentTable/StudentTable.js";
 import Grading from "./pages/grading/Grading.js";
+import Profile from "./pages/login/Profile.js";
 
 function App() {
   return (
     <div className="App">
+
       <Router>
-        <Routes>
-          <Route path="/">
-            <Route index element={<Home />} />
+        <AuthProvider>
+      <Routes>
+          <Route exact path='/' element={<PrivateRoute/>}>
+            <Route exact path='/' element={<Home/>}/>
             <Route path="students">
               <Route index element={<StudentList />} />
               <Route path=":studentID" element={<SingleStudent />} />
@@ -28,16 +34,21 @@ function App() {
               <Route index element={<CourseList />} />
               <Route path=":courseID" element={<SingleCourse />} />
             </Route>
-            <Route path="login" element={<Login />} />
-            <Route path="departments" element={<StudentTable />} />
             <Route path="Grading" element={<Grading />} />
             <Route path="users">
               <Route index element={<List />} />
-              <Route path=":userID" element={<Single />} />
+              <Route path=":userID" element={<Profile />} />
             </Route>
+
+            {/* For testing purposes only */}
+            <Route path="departments" element={<StudentTable />} />
+
           </Route>
+          <Route exact path='/login' element={<Login/>}/>
         </Routes>
+        </AuthProvider>
       </Router>
+
     </div>
   );
 }

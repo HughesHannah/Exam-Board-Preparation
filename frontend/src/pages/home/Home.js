@@ -8,6 +8,7 @@ import Widget from "../../components/widget/Widget.js";
 import Featured from "../../components/featured/Featured.js";
 import Chart from "../../components/chart/Chart.js";
 
+
 const Home = () => {
   return (
     <div className="home">

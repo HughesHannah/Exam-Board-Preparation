@@ -6,7 +6,8 @@ from django.http.response import JsonResponse
 from exam_board_preparation_app.serializers import DepartmentSerializer
 from exam_board_preparation_app.models import Departments
 
-
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 @csrf_exempt
 def DepartmentAPI(request, id=0):
@@ -24,3 +25,18 @@ def DepartmentAPI(request, id=0):
             return JsonResponse("update successful", safe=False)
         return JsonResponse("update failed", safe=False)
     
+    
+    
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] = user.username
+        # ...
+
+        return token
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer

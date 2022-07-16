@@ -71,7 +71,7 @@ const Sidebar = () => {
           </Link>
 
           <p className="title">USER</p>
-          <Link to="/" style={{ textDecoration: "none" }}>
+          <Link to="/users/Profile" style={{ textDecoration: "none" }}>
             <li>
               <AccountBoxIcon className="icon" />
               <span>User Profile</span>
