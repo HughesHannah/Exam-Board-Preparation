@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import "./sidebar.scss";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -11,8 +11,10 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 import { Link } from "react-router-dom";
+import AuthContext from "../../context/AuthContext.js";
 
 const Sidebar = () => {
+  let {user, logoutUser} = useContext(AuthContext)
   return (
     <div className="sidebar">
       <div className="top">
@@ -77,12 +79,12 @@ const Sidebar = () => {
               <span>User Profile</span>
             </li>
           </Link>
-          <Link to="/logout" style={{ textDecoration: "none" }}>
-            <li>
+          
+            <li onClick={logoutUser}>
               <LogoutIcon className="icon" />
               <span>Logout</span>
             </li>
-          </Link>
+          
         </ul>
       </div>
     </div>
