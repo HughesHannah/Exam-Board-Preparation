@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Departments(models.Model):
@@ -31,8 +32,6 @@ class Coursework(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     studnet = models.ForeignKey(Student, on_delete=models.CASCADE)
     
-    
-    
 class Exam(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -40,7 +39,9 @@ class Exam(models.Model):
     q2Mark = models.IntegerField()
     q3Mark = models.IntegerField()
     
-   
+class ClassHead(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    level = models.IntegerField()   
     
     
 

@@ -2,9 +2,12 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
-from exam_board_preparation_app.serializers import DepartmentSerializer
-from exam_board_preparation_app.models import Departments
+from exam_board_preparation_app.serializers import DepartmentSerializer, ClassHeadSerializer
+from exam_board_preparation_app.models import Departments, ClassHead
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -25,7 +28,13 @@ def DepartmentAPI(request, id=0):
             return JsonResponse("update successful", safe=False)
         return JsonResponse("update failed", safe=False)
     
-    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def ClassHeadAPI(request):
+    user = request.user
+    classHeads = ClassHead.objects.filter(user=user)
+    serializer = ClassHeadSerializer(classHeads, many=True)
+    return Response(serializer.data)
     
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
