@@ -7,7 +7,7 @@ import { variables } from "../../Variables.js";
 import Sidebar from "../../components/sidebar/Sidebar.js";
 
 const Profile = () => {
-  let { user, authTokens } = useContext(AuthContext);
+  let { user, authTokens, logoutUser } = useContext(AuthContext);
   let [classHeads, setClassHeads] = useState([]);
 
   useEffect(() => {
@@ -23,11 +23,11 @@ const Profile = () => {
       },
     });
     let data = await response.json();
-    // if(response.status === 200){
-    setClassHeads(data);
-    // }else if(response.statusText === 'Unauthorized'){
-    //   logoutUser()
-    // }
+    if(response.status === 200){
+      setClassHeads(data);
+    }else if(response.statusText === 'Unauthorized'){
+     logoutUser()
+    }
   };
 
   return (
