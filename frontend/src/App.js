@@ -16,6 +16,7 @@ import Login from "./pages/login/Login.js";
 import StudentTable from "./components/studentTable/StudentTable.js";
 import Grading from "./pages/grading/Grading.js";
 import Profile from "./pages/login/Profile.js";
+import Export from "./pages/export/Export.js"
 
 function App() {
   return (
@@ -34,12 +35,10 @@ function App() {
               <Route index element={<CourseList />} />
               <Route path=":courseID" element={<SingleCourse />} />
             </Route>
-            <Route path="Grading" element={<Grading />} />
-            <Route path="users">
-              <Route index element={<List />} />
-              <Route path=":userID" element={<Profile />} />
-            </Route>
-
+            <Route path="grading" element={<Grading />} />
+            <Route path="export" element={<Export />} />
+            <Route path="profile" element={<Profile />} />
+    
             {/* For testing purposes only */}
             <Route path="departments" element={<StudentTable />} />
 

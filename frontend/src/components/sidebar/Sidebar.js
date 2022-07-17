@@ -65,7 +65,7 @@ const Sidebar = () => {
               <span>Change Year</span>
             </li>
           </Link>
-          <Link to="/" style={{ textDecoration: "none" }}>
+          <Link to="/export" style={{ textDecoration: "none" }}>
             <li>
               <FileDownloadIcon className="icon" />
               <span>Export Views</span>
@@ -73,7 +73,7 @@ const Sidebar = () => {
           </Link>
 
           <p className="title">USER</p>
-          <Link to="/users/Profile" style={{ textDecoration: "none" }}>
+          <Link to="/profile" style={{ textDecoration: "none" }}>
             <li>
               <AccountBoxIcon className="icon" />
               <span>User Profile</span>
