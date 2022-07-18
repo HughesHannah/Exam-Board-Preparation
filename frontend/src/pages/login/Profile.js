@@ -23,10 +23,10 @@ const Profile = () => {
       },
     });
     let data = await response.json();
-    if(response.status === 200){
+    if (response.status === 200) {
       setClassHeads(data);
-    }else if(response.statusText === 'Unauthorized'){
-     logoutUser()
+    } else if (response.statusText === "Unauthorized") {
+      logoutUser();
     }
   };
 
@@ -34,9 +34,8 @@ const Profile = () => {
     <div className="profile">
       <Sidebar />
       <div className="mainContainer">
-        <div className="title">
-          <h2>User Profile Page</h2>
-        </div>
+        <h3 className="title">User Profile Page</h3>
+
         <div className="table">
           {user && <p>Hello, {user.username}</p>}
 
