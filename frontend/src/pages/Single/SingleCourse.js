@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import "./single.scss";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import DataTable from "../../components/dataTable/DataTable.js";
+import GradesPieChartExample from "../../components/featured/GradesPieChart.js"
+import ScatterChartExample from "../../components/chart/Scatter.js";
 
 const SingleCourse = () => {
   return (
@@ -11,7 +13,6 @@ const SingleCourse = () => {
       <div className="mainContainer">
         <div className="top">
           <div className="left">
-            <div className="editButton">Edit</div>
             <h1 className="title">Course Information</h1>
             <div className="details">
               <h1 className="itemTitle">Course Name</h1>
@@ -37,6 +38,16 @@ const SingleCourse = () => {
           <div className="right">
             <h1 className="title">Comments</h1>
             Lecturer Comments here..
+          </div>
+        </div>
+        <div className="middle">
+          <div className="left">
+            <h1 className="title">Grade Distribution</h1>
+            <GradesPieChartExample />
+          </div>
+          <div className="right">
+            <h1 className="title">Scatter Chart</h1>
+            <ScatterChartExample />
           </div>
         </div>
         <div className="bottom">
