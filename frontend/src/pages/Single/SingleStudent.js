@@ -12,7 +12,6 @@ const SingleStudent = () => {
       <div className="mainContainer">
         <div className="top">
           <div className="left">
-            <div className="editButton">Edit</div>
             <h1 className="title">Student Information</h1>
             <div className="details">
               <h1 className="itemTitle">Metric: 1234567</h1>
@@ -32,6 +31,7 @@ const SingleStudent = () => {
             </div>
           </div>
           <div className="right">
+          <div className="editButton">Add Comment</div>
             <h1 className="title">Comments</h1>
             <Comments />
           </div>
