@@ -50,30 +50,24 @@ def UploadAPI(request):
 	    skiprows=[1],  
 	) 
 
-    df['Degree'], df['Degree_type'] = str(df['Degree']).split(',', 1)
-    df['Degree'], df['FR'] = str(df['Degree']).split('(', 1)
-    df['FR'] = str(df['FR']).replace(')','').replace('FR','1')
+    
+    df[['Degree', 'Degree_Master']] = df['Degree'].str.split(', ', n=1, expand=True)
+    df['Degree_Master'] = df['Degree_Master'].str.replace('MSci', 'True')
+    df['Degree_Master'] = df['Degree_Master'].str.replace('BSc', 'False')
+    df[['Degree', 'FR']] = df['Degree'].str.split('(', n=1, expand=True)
+    df['FR'] = df['FR'].str.replace(')','').replace('FR','True').fillna('False')
 
     # print(df) 
     
     df_records = df.to_dict('records')
     
-    def translateMasters(input):
-        if (str(input)==('MSci')):
-            return True
-        else: return False
-        
-    def translateFR(input):
-        if (str(input)==('1')):
-            return True
-        else: return False
     
     model_instances = [Student(
         metriculationNumber=record['ID'],
         name=record['Name'],
         degreeTitle = record['Degree'],
-        mastersStudent = translateMasters(record['Degree_type']),
-        fastRouteStudent = translateFR(record['FR']),
+        mastersStudent = record['Degree_Master'],
+        fastRouteStudent = record['FR'],
         yearOfStudy = studentLevel,
     ) for record in df_records]
 
