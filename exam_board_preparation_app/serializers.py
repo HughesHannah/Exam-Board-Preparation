@@ -4,7 +4,7 @@ from .models import Student, Departments, ClassHead
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ('matriculationNumber')
+        fields = ('__all__')
         
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,4 +15,6 @@ class ClassHeadSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClassHead
         fields = '__all__'
+        
+
         

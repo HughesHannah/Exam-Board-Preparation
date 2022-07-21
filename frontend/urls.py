@@ -13,4 +13,5 @@ urlpatterns = [
     path('courses/<courseID>', index),
     path('grading', index),
     path('export', index),
+    path('upload', index),
 ]

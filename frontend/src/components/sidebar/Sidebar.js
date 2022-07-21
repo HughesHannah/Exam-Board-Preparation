@@ -9,6 +9,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 import { Link } from "react-router-dom";
 import AuthContext from "../../context/AuthContext.js";
@@ -63,6 +64,12 @@ const Sidebar = () => {
             <li>
               <CalendarMonthIcon className="icon" />
               <span>Change Year</span>
+            </li>
+          </Link>
+          <Link to="/upload" style={{ textDecoration: "none" }}>
+            <li>
+              <UploadFileIcon className="icon" />
+              <span>Upload Data</span>
             </li>
           </Link>
           <Link to="/export" style={{ textDecoration: "none" }}>

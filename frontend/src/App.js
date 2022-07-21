@@ -16,7 +16,8 @@ import Login from "./pages/login/Login.js";
 import StudentTable from "./components/studentTable/StudentTable.js";
 import Grading from "./pages/grading/Grading.js";
 import Profile from "./pages/login/Profile.js";
-import Export from "./pages/export/Export.js"
+import Export from "./pages/export/Export.js";
+import Upload from "./pages/upload/Upload.js"
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             </Route>
             <Route path="grading" element={<Grading />} />
             <Route path="export" element={<Export />} />
+            <Route path="upload" element={<Upload />} />
             <Route path="profile" element={<Profile />} />
     
             {/* For testing purposes only */}

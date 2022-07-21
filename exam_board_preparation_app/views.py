@@ -5,9 +5,11 @@ from django.http.response import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django.contrib import messages
+import pandas as pd
 
-from exam_board_preparation_app.serializers import DepartmentSerializer, ClassHeadSerializer
-from exam_board_preparation_app.models import Departments, ClassHead
+from exam_board_preparation_app.serializers import DepartmentSerializer, ClassHeadSerializer, StudentSerializer
+from exam_board_preparation_app.models import Departments, ClassHead, Student
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -28,6 +30,63 @@ def DepartmentAPI(request, id=0):
             return JsonResponse("update successful", safe=False)
         return JsonResponse("update failed", safe=False)
     
+@api_view(['POST'])
+def UploadAPI(request):
+    # if request.method == 'GET':
+    #     students = Student.objects.all()
+    #     student_serializer = StudentSerializer(students, many=True)
+    #     return JsonResponse(student_serializer.data, safe=False)
+    
+    uploadFile = request.FILES['file']
+    studentLevel = 0;
+    if not uploadFile.name.endswith('.xlsx'):
+        messages.error('request', 'This is not an excel file')
+    
+    df = pd.read_excel(
+	    io = uploadFile,
+	    sheet_name='static_numbers', 
+	    header=0, 
+	    usecols='A:S',  
+	    skiprows=[1],  
+	) 
+
+    df['Degree'], df['Degree_type'] = str(df['Degree']).split(',', 1)
+    df['Degree'], df['FR'] = str(df['Degree']).split('(', 1)
+    df['FR'] = str(df['FR']).replace(')','').replace('FR','1')
+
+    # print(df) 
+    
+    df_records = df.to_dict('records')
+    
+    def translateMasters(input):
+        if (str(input)==('MSci')):
+            return True
+        else: return False
+        
+    def translateFR(input):
+        if (str(input)==('1')):
+            return True
+        else: return False
+    
+    model_instances = [Student(
+        metriculationNumber=record['ID'],
+        name=record['Name'],
+        degreeTitle = record['Degree'],
+        mastersStudent = translateMasters(record['Degree_type']),
+        fastRouteStudent = translateFR(record['FR']),
+        yearOfStudy = studentLevel,
+    ) for record in df_records]
+
+    Student.objects.bulk_create(model_instances)
+    
+    students = Student.objects.all()
+    student_serializer = StudentSerializer(students, many=True)
+    
+    return JsonResponse(student_serializer.data, safe=False)
+    
+    
+
+    
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def ClassHeadAPI(request):
@@ -40,11 +99,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-
-        # Add custom claims
         token['username'] = user.username
-        # ...
-
         return token
 
 class MyTokenObtainPairView(TokenObtainPairView):
