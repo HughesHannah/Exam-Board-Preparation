@@ -49,7 +49,6 @@ def UploadAPI(request):
 	    usecols='A:S',  
 	    skiprows=[1],  
 	) 
-
     
     df[['Degree', 'Degree_Master']] = df['Degree'].str.split(', ', n=1, expand=True)
     df['Degree_Master'] = df['Degree_Master'].str.replace('MSci', 'True')
