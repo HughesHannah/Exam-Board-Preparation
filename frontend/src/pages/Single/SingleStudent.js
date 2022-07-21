@@ -1,11 +1,28 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+import { variables } from "../../Variables";
+import { useParams } from 'react-router-dom';
+
+
 import "./single.scss";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import Comments from "../../components/comments/Comments.js";
 import DataTable from "../../components/dataTable/DataTable.js";
 
-const SingleStudent = () => {
+const SingleStudent = ({id}) => {
+  const [studentData, setStudentData] = useState([]);
+
+  const path = useParams();
+
+  useEffect(() => {
+    fetch(variables.API_URL + "individualStudentAPI/"+path.studentID)
+      .then((data) => data.json())
+      .then((data) => setStudentData(data));
+  }, []);
+  console.log(studentData);
+
+
+
   return (
     <div className="single">
       <Sidebar />
@@ -14,8 +31,11 @@ const SingleStudent = () => {
           <div className="left">
             <h1 className="title">Student Information</h1>
             <div className="details">
-              <h1 className="itemTitle">Metric: 1234567</h1>
-
+              <h1 className="itemTitle">{studentData.name}</h1>
+              <div className="detailItem">
+                <span className="itemKey">Metric:</span>
+                <span className="itemValue">{studentData.metriculationNumber}</span>
+              </div>
               <div className="detailItem">
                 <span className="itemKey">Year:</span>
                 <span className="itemValue">5</span>

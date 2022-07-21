@@ -1,7 +1,7 @@
 import React from "react";
 import "./list.scss";
 
-import Datatable from "../../components/datatable/Datatable.js";
+import StudentTable from "../../components/StudentTable/StudentTable";
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import Chip from "../../components/chip/Chip.js";
 
@@ -16,7 +16,7 @@ const List = () => {
           <div className="filterChips">
             <Chip />
           </div>
-          <Datatable />
+          <StudentTable />
         </div>
       </div>
     </div>

@@ -10,31 +10,10 @@ class Departments(models.Model):
     DepartmentName= models.CharField(max_length=255)
 #############################
 
-# class Cohort(models.Model):
-#     requiredCredits = models.IntegerField()
-#     degreeTitle = models.CharField(max_length=100) 
-#     masters = models.BooleanField()
-    
-#     yearOfStudy_CHOICES = [
-#         (1, 'Level 1'),
-#         (2, 'Level 2'),
-#         (3, 'Level 3'),
-#         (4, 'Level 4'),
-#         (5, 'Level 5'),
-#         (6, 'Graduate'),
-#         (0, 'Other'),
-#     ]
-#     yearOfStudy = models.IntegerField(
-#         choices=yearOfStudy_CHOICES,
-#         default=0,
-#     )
-    
-#     def __str__(self): return ("Level " + self.yearOfStudy + " " + self.degree)
 
 class Student(models.Model):
-    metriculationNumber = models.CharField(max_length=10)
+    metriculationNumber = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=225)
-    # cohort = models.ForeignKey(Cohort, on_delete=models.SET_NULL, null=True)
     
     ###### Info from Cohort ######
     degreeTitle = models.CharField(max_length=100) 

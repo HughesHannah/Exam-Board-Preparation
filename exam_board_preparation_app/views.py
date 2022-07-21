@@ -9,7 +9,7 @@ from django.contrib import messages
 import pandas as pd
 
 from exam_board_preparation_app.serializers import DepartmentSerializer, ClassHeadSerializer, StudentSerializer
-from exam_board_preparation_app.models import Departments, ClassHead, Student
+from exam_board_preparation_app.models import Departments, ClassHead, Student, Course
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -23,7 +23,7 @@ def DepartmentAPI(request, id=0):
     
     elif request.method == 'PUT':
         department_data = JSONParser().parse(request)
-        departments = Departments.objects.get(id=department_data['id'])
+        departments = Departments.objects.get(id = department_data['id'])
         department_serializer = DepartmentSerializer(departments, data=department_data)
         if department_serializer.is_valid(): 
             department_serializer.save()
@@ -32,16 +32,14 @@ def DepartmentAPI(request, id=0):
     
 @api_view(['POST'])
 def UploadAPI(request):
-    # if request.method == 'GET':
-    #     students = Student.objects.all()
-    #     student_serializer = StudentSerializer(students, many=True)
-    #     return JsonResponse(student_serializer.data, safe=False)
     
     uploadFile = request.FILES['file']
-    studentLevel = 0;
+    studentLevel = request.VALUE['level']
+    studentLevel = 0 
     if not uploadFile.name.endswith('.xlsx'):
         messages.error('request', 'This is not an excel file')
     
+    # read file
     df = pd.read_excel(
 	    io = uploadFile,
 	    sheet_name='static_numbers', 
@@ -50,18 +48,17 @@ def UploadAPI(request):
 	    skiprows=[1],  
 	) 
     
+    # clean file data
     df[['Degree', 'Degree_Master']] = df['Degree'].str.split(', ', n=1, expand=True)
     df['Degree_Master'] = df['Degree_Master'].str.replace('MSci', 'True')
     df['Degree_Master'] = df['Degree_Master'].str.replace('BSc', 'False')
     df[['Degree', 'FR']] = df['Degree'].str.split('(', n=1, expand=True)
     df['FR'] = df['FR'].str.replace(')','').replace('FR','True').fillna('False')
-
-    # print(df) 
     
     df_records = df.to_dict('records')
     
-    
-    model_instances = [Student(
+    # create students from data
+    student_instances = [Student(
         metriculationNumber=record['ID'],
         name=record['Name'],
         degreeTitle = record['Degree'],
@@ -70,15 +67,33 @@ def UploadAPI(request):
         yearOfStudy = studentLevel,
     ) for record in df_records]
 
-    Student.objects.bulk_create(model_instances)
+    # add all student objects to database (ignores students already in database)
+    Student.objects.bulk_create(student_instances, ignore_conflicts=True)
     
     students = Student.objects.all()
     student_serializer = StudentSerializer(students, many=True)
     
     return JsonResponse(student_serializer.data, safe=False)
     
+   
+@api_view(['GET'])
+def IndividualStudentAPI(request, id):
+    # user = request.user 
+    # classHead = ClassHead.objects.filter(user=user)
+    # students = Student.objects.filter(yearOfStudy=classHead.level)
+    students = Student.objects.get(metriculationNumber=id)
+    serializer = StudentSerializer(students, many=False)
+    return Response(serializer.data)
     
-
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def StudentAPI(request, id=0):
+    # user = request.user 
+    # classHead = ClassHead.objects.filter(user=user)
+    # students = Student.objects.filter(yearOfStudy=classHead.level)
+    students = Student.objects.all()
+    serializer = StudentSerializer(students, many=True)
+    return Response(serializer.data)
     
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
