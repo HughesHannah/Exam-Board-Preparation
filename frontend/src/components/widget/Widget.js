@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+import { variables } from "../../Variables.js";
 import "./widget.scss";
 
 import PeopleIcon from "@mui/icons-material/People";
@@ -9,9 +10,24 @@ import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 const Widget = ({ type }) => {
   let data;
 
+  const [studentData, setStudentData] = useState([]);
+  const [courseData, setCourseData] = useState([]);
+
+  useEffect(() => {
+    fetch(variables.API_URL + "studentAPI")
+      .then((data) => data.json())
+      .then((data) => setStudentData(data));
+  }, []);
+
+  useEffect(() => {
+    fetch(variables.API_URL + "courseAPI")
+      .then((data) => data.json())
+      .then((data) => setCourseData(data));
+  }, []);
+
   //temp until retrieved data
-  const studentCount = 235;
-  const courseCount = "31/45";
+  const studentCount = studentData.length;
+  const courseCount = courseData.length;
   const preponderanceCount = 5;
   const issuesCount = 2;
 
@@ -28,7 +44,7 @@ const Widget = ({ type }) => {
       break;
     case "completedCourseCounter":
       data = {
-        title: "Completed Courses",
+        title: "Courses",
         link: "See course list",
         icon: <HistoryEduIcon className="icon" />,
         value: courseCount,

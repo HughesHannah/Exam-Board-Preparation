@@ -108,6 +108,8 @@ def ClassHeadAPI(request):
     classHeads = ClassHead.objects.filter(user=user)
     serializer = ClassHeadSerializer(classHeads, many=True)
     return Response(serializer.data)
+
+
     
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
