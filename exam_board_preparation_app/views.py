@@ -34,8 +34,11 @@ def DepartmentAPI(request, id=0):
 def UploadAPI(request):
     
     uploadFile = request.FILES['file']
-    studentLevel = request.VALUE['level']
-    studentLevel = 0 
+    studentLevel = request.data['level']
+    
+    # print(request.data['level'])
+    
+    # studentLevel = 0 
     if not uploadFile.name.endswith('.xlsx'):
         messages.error('request', 'This is not an excel file')
     

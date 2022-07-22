@@ -8,21 +8,26 @@ import Sidebar from "../../components/sidebar/Sidebar.js";
 const Upload = () => {
   const [file, setFile] = useState(null);
   const [level, setLevel] = useState(0);
-  const [status, setStatus] = useState("");
   
 
 	const handleSubmission = async (e) => {
     e.preventDefault();
-    setStatus(""); // Reset status
     const formData = new FormData();
     formData.append("file", file);
     formData.append("level", level);
-    const resp = axios.post(variables.API_URL + "uploader", formData, {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    });
-    setStatus(resp.status === 200 ? "Thank you!" : "Error.");
+    // console.log(formData.get('level'));
+
+    let response
+    try{
+       response = axios.post(variables.API_URL + "uploader", formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      });
+      alert("file uploaded");
+    }catch (error) {
+      console.error(error.response.data);     // NOTE - use "error.response.data` (not "error")
+    }
 	};
 
   return (
@@ -38,7 +43,6 @@ const Upload = () => {
           <input type="number" onChange={(e) => setLevel(e.target.value)} value={level} />
           <div>
             <button onClick={handleSubmission} disabled={!(file)}>Submit</button>
-            {status ? <h1>{status}</h1> : null}
           </div>
         </div>
       </div>
