@@ -2,8 +2,13 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
-
-
+class Year(models.Model):
+    #TODO enforce yyyy
+    yearStart = models.IntegerField(unique=True)
+    yearEnd = models.IntegerField(unique=True)
+    
+    def __str__(self): return (str(self.yearStart) + "/" + str(self.yearEnd))
+    
 class Student(models.Model):
     metriculationNumber = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=225)
@@ -32,7 +37,7 @@ class Course(models.Model):
     className = models.CharField(max_length=255, null=True)  
     credits = models.IntegerField()  
     students = models.ManyToManyField(Student, blank = True)
-    year = models.CharField(max_length=9, default=(str(datetime.date.today().year) + "/" + str(datetime.date.today().year+1)))
+    year = models.ForeignKey(Year, null=True, on_delete=models.CASCADE)
     
     def __str__(self): return (self.classCode + " - " + str(self.year))
     
@@ -42,7 +47,6 @@ class Assignment(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     weighting = models.IntegerField()
     gradeMark = models.IntegerField()
-    
     
 class Exam(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
