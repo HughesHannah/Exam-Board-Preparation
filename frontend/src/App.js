@@ -11,11 +11,11 @@ import SingleCourse from "./pages/Single/SingleCourse.js";
 import StudentList from "./pages/List/StudentList.js";
 import CourseList from "./pages/List/CourseList.js";
 import Login from "./pages/login/Login.js";
-import StudentTable from "./components/datatables/StudentTable.js";
 import Grading from "./pages/grading/Grading.js";
 import Profile from "./pages/login/Profile.js";
 import Export from "./pages/export/Export.js";
-import Upload from "./pages/upload/Upload.js"
+import Upload from "./pages/upload/Upload.js";
+import ChangeYear from "./pages/changeYear/ChangeYear.js";
 
 function App() {
   return (
@@ -38,7 +38,7 @@ function App() {
             <Route path="export" element={<Export />} />
             <Route path="upload" element={<Upload />} />
             <Route path="profile" element={<Profile />} />
-
+            <Route path="changeYear" element={<ChangeYear />} />
           </Route>
           <Route exact path='/login' element={<Login/>}/>
         </Routes>

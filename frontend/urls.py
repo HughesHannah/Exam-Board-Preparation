@@ -13,4 +13,5 @@ urlpatterns = [
     path('grading', index),
     path('export', index),
     path('upload', index),
+    path('changeYear', index),
 ]

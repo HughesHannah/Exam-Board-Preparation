@@ -60,7 +60,7 @@ const Sidebar = () => {
           </Link>
 
           <p className="title">SYSTEM</p>
-          <Link to="/" style={{ textDecoration: "none" }}>
+          <Link to="/changeYear" style={{ textDecoration: "none" }}>
             <li>
               <CalendarMonthIcon className="icon" />
               <span>Change Year</span>

@@ -8,8 +8,8 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib import messages
 import pandas as pd
 
-from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, StudentSerializer
-from exam_board_preparation_app.models import ClassHead, Student, Course
+from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, StudentSerializer, YearSerializer
+from exam_board_preparation_app.models import ClassHead, Student, Course, Year
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -26,6 +26,12 @@ def CourseAPI(request, id=0):
     courses = Course.objects.all()
     serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data)    
+
+@api_view(['GET'])
+def YearsAPI(request, id=0):
+    years = Year.objects.all()
+    serializer = YearSerializer(years, many=True)
+    return Response(serializer.data)  
     
 @api_view(['POST'])
 def UploadAPI(request):
