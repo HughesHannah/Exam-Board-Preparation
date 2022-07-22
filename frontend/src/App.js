@@ -38,9 +38,6 @@ function App() {
             <Route path="export" element={<Export />} />
             <Route path="upload" element={<Upload />} />
             <Route path="profile" element={<Profile />} />
-    
-            {/* For testing purposes only */}
-            <Route path="departments" element={<StudentTable />} />
 
           </Route>
           <Route exact path='/login' element={<Login/>}/>

@@ -7,7 +7,6 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
-    path('department', views.DepartmentAPI),
     path('classheads', views.ClassHeadAPI),
     path('studentAPI', views.StudentAPI),
     path('individualStudentAPI/<id>', views.IndividualStudentAPI),

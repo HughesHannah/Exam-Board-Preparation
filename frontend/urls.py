@@ -8,7 +8,6 @@ urlpatterns = [
     path('students/<studentID>', index),
     path('login', index),
     path('profile', index),
-    path('departments', index),
     path('courses', index),
     path('courses/<courseID>', index),
     path('grading', index),
