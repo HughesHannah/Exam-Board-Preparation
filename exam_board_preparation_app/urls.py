@@ -11,6 +11,7 @@ urlpatterns = [
     path('classheads', views.ClassHeadAPI),
     path('studentAPI', views.StudentAPI),
     path('individualStudentAPI/<id>', views.IndividualStudentAPI),
+    path('courseAPI', views.CourseAPI),
     path('uploader', views.UploadAPI),
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

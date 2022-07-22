@@ -6,14 +6,12 @@ import PrivateRoute from "./utils/PrivateRoute.js";
 import { AuthProvider } from "./context/AuthContext.js"
 
 import Home from "./pages/home/Home.js";
-import Single from "./pages/Single/Single.js";
 import SingleStudent from "./pages/Single/SingleStudent.js";
 import SingleCourse from "./pages/Single/SingleCourse.js";
-import List from "./pages/List/List.js";
 import StudentList from "./pages/List/StudentList.js";
 import CourseList from "./pages/List/CourseList.js";
 import Login from "./pages/login/Login.js";
-import StudentTable from "./components/studentTable/StudentTable.js";
+import StudentTable from "./components/datatables/StudentTable.js";
 import Grading from "./pages/grading/Grading.js";
 import Profile from "./pages/login/Profile.js";
 import Export from "./pages/export/Export.js";

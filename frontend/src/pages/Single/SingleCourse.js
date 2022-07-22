@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import "./single.scss";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
-import DataTable from "../../components/dataTable/DataTable.js";
+import DataTable from "../../components/dataTables/DataTable.js";
 import GradesPieChartExample from "../../components/featured/GradesPieChart.js"
 import ScatterChartExample from "../../components/chart/Scatter.js";
 

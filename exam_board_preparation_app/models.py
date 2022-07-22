@@ -14,8 +14,6 @@ class Departments(models.Model):
 class Student(models.Model):
     metriculationNumber = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=225)
-    
-    ###### Info from Cohort ######
     degreeTitle = models.CharField(max_length=100) 
     mastersStudent = models.BooleanField()
     fastRouteStudent = models.BooleanField()
@@ -33,7 +31,6 @@ class Student(models.Model):
         choices=yearOfStudy_CHOICES,
         default=0,
     )
-    #######################################
     
     def __str__(self): return self.metriculationNumber
 
@@ -41,7 +38,7 @@ class Course(models.Model):
     classCode = models.CharField(max_length=255)
     className = models.CharField(max_length=255, null=True)  
     credits = models.IntegerField()  
-    students = models.ManyToManyField(Student)
+    students = models.ManyToManyField(Student, blank = True)
     year = models.CharField(max_length=9, default=(str(datetime.date.today().year) + "/" + str(datetime.date.today().year+1)))
     
     def __str__(self): return (self.classCode + " - " + str(self.year))

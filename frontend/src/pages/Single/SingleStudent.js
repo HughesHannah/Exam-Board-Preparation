@@ -7,7 +7,7 @@ import "./single.scss";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import Comments from "../../components/comments/Comments.js";
-import DataTable from "../../components/dataTable/DataTable.js";
+import DataTable from "../../components/dataTables/DataTable.js";
 
 const SingleStudent = ({id}) => {
   const [studentData, setStudentData] = useState([]);
@@ -19,7 +19,6 @@ const SingleStudent = ({id}) => {
       .then((data) => data.json())
       .then((data) => setStudentData(data));
   }, []);
-  console.log(studentData);
 
 
 

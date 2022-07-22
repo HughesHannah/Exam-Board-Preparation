@@ -1,7 +1,7 @@
 import React from "react";
 import "./list.scss";
 
-import Datatable from "../../components/datatable/Datatable.js";
+import CourseTable from "../../components/datatables/CourseTable.js";
 import Sidebar from "../../components/sidebar/Sidebar.js";
 
 const List = () => {
@@ -12,7 +12,7 @@ const List = () => {
         <h3 className="title">List of Courses</h3>
         <div className="tableOfGrades">
           <div className="titleOfSection">Table of Courses</div>
-          <Datatable />
+          <CourseTable />
         </div>
       </div>
     </div>

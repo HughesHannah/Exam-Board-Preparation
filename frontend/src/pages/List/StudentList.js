@@ -1,7 +1,7 @@
 import React from "react";
 import "./list.scss";
 
-import StudentTable from "../../components/StudentTable/StudentTable";
+import StudentTable from "../../components/datatables/StudentTable";
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import Chip from "../../components/chip/Chip.js";
 

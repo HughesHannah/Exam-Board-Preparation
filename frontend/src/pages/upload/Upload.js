@@ -15,7 +15,6 @@ const Upload = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("level", level);
-    // console.log(formData.get('level'));
 
     let response
     try{
@@ -36,6 +35,14 @@ const Upload = () => {
       <div className="mainContainer">
         <div>
           <h1 className="title">Upload Page</h1>
+        </div>
+        <div className="form">
+          <h3>Upload Course Information</h3>
+          <input type="file" name="file" onChange={(e) => setFile(e.target.files[0])} />
+          <input type="number" onChange={(e) => setLevel(e.target.value)} value={level} />
+          <div>
+            <button onClick={handleSubmission} disabled={!(file)}>Submit</button>
+          </div>
         </div>
         <div className="form">
           <h3>Upload Students and Courses</h3>

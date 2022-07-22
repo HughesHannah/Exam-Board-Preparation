@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib import messages
 import pandas as pd
 
-from exam_board_preparation_app.serializers import DepartmentSerializer, ClassHeadSerializer, StudentSerializer
+from exam_board_preparation_app.serializers import CourseSerializer, DepartmentSerializer, ClassHeadSerializer, StudentSerializer
 from exam_board_preparation_app.models import Departments, ClassHead, Student, Course
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -30,15 +30,26 @@ def DepartmentAPI(request, id=0):
             return JsonResponse("update successful", safe=False)
         return JsonResponse("update failed", safe=False)
     
+# @api_view(['GET'])
+# def IndividualCourseAPI(request, id, year):
+#     courses = Course.objects.get((courseCode = id, year = year))
+#     serializer = StudentSerializer(courses, many=False)
+#     return Response(serializer.data)
+    
+@api_view(['GET'])
+def CourseAPI(request, id=0):
+    courses = Course.objects.all()
+    serializer = CourseSerializer(courses, many=True)
+    return Response(serializer.data)    
+    
 @api_view(['POST'])
 def UploadAPI(request):
     
+    # get data from request
     uploadFile = request.FILES['file']
     studentLevel = request.data['level']
     
-    # print(request.data['level'])
-    
-    # studentLevel = 0 
+    # check it's the right format
     if not uploadFile.name.endswith('.xlsx'):
         messages.error('request', 'This is not an excel file')
     
@@ -58,6 +69,7 @@ def UploadAPI(request):
     df[['Degree', 'FR']] = df['Degree'].str.split('(', n=1, expand=True)
     df['FR'] = df['FR'].str.replace(')','').replace('FR','True').fillna('False')
     
+    # create instances
     df_records = df.to_dict('records')
     
     # create students from data
@@ -70,6 +82,7 @@ def UploadAPI(request):
         yearOfStudy = studentLevel,
     ) for record in df_records]
 
+    # TODO: update student year/level if needed
     # add all student objects to database (ignores students already in database)
     Student.objects.bulk_create(student_instances, ignore_conflicts=True)
     
@@ -81,9 +94,7 @@ def UploadAPI(request):
    
 @api_view(['GET'])
 def IndividualStudentAPI(request, id):
-    # user = request.user 
-    # classHead = ClassHead.objects.filter(user=user)
-    # students = Student.objects.filter(yearOfStudy=classHead.level)
+    #TODO check user can view? or does this not matter??
     students = Student.objects.get(metriculationNumber=id)
     serializer = StudentSerializer(students, many=False)
     return Response(serializer.data)
@@ -91,6 +102,7 @@ def IndividualStudentAPI(request, id):
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def StudentAPI(request, id=0):
+    # TODO: return only students accociated with user level
     # user = request.user 
     # classHead = ClassHead.objects.filter(user=user)
     # students = Student.objects.filter(yearOfStudy=classHead.level)
