@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import { variables } from "../../Variables";
 import { useParams } from 'react-router-dom';
 
-
 import "./single.scss";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";

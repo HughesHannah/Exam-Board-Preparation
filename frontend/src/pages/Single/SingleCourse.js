@@ -1,5 +1,7 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "./single.scss";
+import { variables } from "../../Variables";
+import { useParams } from 'react-router-dom';
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import DataTable from "../../components/dataTables/DataTable.js";
@@ -7,6 +9,16 @@ import GradesPieChartExample from "../../components/featured/GradesPieChart.js"
 import ScatterChartExample from "../../components/chart/Scatter.js";
 
 const SingleCourse = () => {
+  const [courseData, setCourseData] = useState([]);
+
+  const path = useParams();
+
+  useEffect(() => {
+    fetch(variables.API_URL + "individualCourseAPI/"+path.studentID)
+      .then((data) => data.json())
+      .then((data) => setStudentData(data));
+  }, []);
+
   return (
     <div className="single">
       <Sidebar />

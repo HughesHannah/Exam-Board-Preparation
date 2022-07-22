@@ -40,6 +40,46 @@ def YearsAPI(request, id=0):
     serializer = YearSerializer(years, many=True)
     return Response(serializer.data)  
     
+    
+@api_view(['POST'])
+def UploadCoursesAPI(request):
+    
+    # get data from request
+    uploadFile = request.FILES['file']
+    courseYear = request.data['year']
+    
+    # check it's the right format
+    if not uploadFile.name.endswith('.xlsx'):
+        messages.error('request', 'This is not an excel file')
+    
+    # read file
+    df = pd.read_excel(
+	    io = uploadFile, 
+	    header=0, 
+	    usecols='A:D',    
+	) 
+    
+    # create instances
+    df_records = df.to_dict('records')
+    
+    # create courses from data
+    course_instances = [Course(
+        className=record['Name'],
+        classCode=record['Code'], 
+        credits = record['Credits'],
+        year = Year.objects.get(year=courseYear),
+    ) for record in df_records]
+
+    print(course_instances)
+    
+    # add all student objects to database (ignores students already in database)
+    Course.objects.bulk_create(course_instances, ignore_conflicts=True)
+    
+    courses = Course.objects.all()
+    course_serializer = CourseSerializer(courses, many=True)
+    
+    return JsonResponse(course_serializer.data, safe=False)    
+    
 @api_view(['POST'])
 def UploadAPI(request):
     

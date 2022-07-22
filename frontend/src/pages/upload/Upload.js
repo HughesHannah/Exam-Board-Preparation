@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./upload.scss";
 import axios from "axios";
 
@@ -8,6 +8,23 @@ import Sidebar from "../../components/sidebar/Sidebar.js";
 const Upload = () => {
   const [file, setFile] = useState(null);
   const [level, setLevel] = useState(0);
+  const [year, setYear] = useState("");
+  let [years, setYears] = useState([]);
+
+  useEffect(() => {
+    getYears();
+  }, []);
+
+  let getYears = async () => {
+    let response = await fetch(variables.API_URL + "yearsAPI", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    let data = await response.json();
+    setYears(data);
+  };
 
   const handleSubmission = async (e) => {
     e.preventDefault();
@@ -18,6 +35,25 @@ const Upload = () => {
     let response;
     try {
       response = axios.post(variables.API_URL + "uploader", formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      });
+      alert("file uploaded");
+    } catch (error) {
+      console.error(error.response.data);
+    }
+  };
+
+  const handleCourseSubmission = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("year", year);
+
+    let response;
+    try {
+      response = axios.post(variables.API_URL + "courseUploader", formData, {
         headers: {
           "content-type": "multipart/form-data",
         },
@@ -47,14 +83,17 @@ const Upload = () => {
           </div>
           <div className="formInput">
             <p>Year</p>
-            <input
-              type="number"
-              onChange={(e) => setLevel(e.target.value)}
-              value={level}
-            />
+            <select id="Year" name="Years" onChange={(e) => setYear(e.target.value)}>
+              <option>Please Select</option>
+              {years.map((eachYear) => (
+                <option key={eachYear.id} value={eachYear.year}>
+                  {eachYear.year}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
-            <button onClick={handleSubmission} disabled={!file}>
+            <button onClick={handleCourseSubmission} disabled={!file}>
               Submit
             </button>
           </div>
