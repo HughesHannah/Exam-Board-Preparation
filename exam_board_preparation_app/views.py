@@ -28,6 +28,13 @@ def CourseAPI(request, id=0):
     return Response(serializer.data)    
 
 @api_view(['GET'])
+def CourseYearAPI(request, year):
+    dbYear = Year.objects.get(year=year)
+    courses = Course.objects.filter(year=dbYear.id)
+    serializer = CourseSerializer(courses, many=True)
+    return Response(serializer.data) 
+
+@api_view(['GET'])
 def YearsAPI(request, id=0):
     years = Year.objects.all()
     serializer = YearSerializer(years, many=True)

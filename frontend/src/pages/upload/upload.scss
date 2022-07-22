@@ -21,6 +21,15 @@
       padding: 20px;
       margin: 20px;
       position: relative;
+
+      .formInput{
+        display: flex;
+        margin: 10px 0px;
+        
+        p{
+          padding-right: 10px;
+        }
+      }
     }
   }
 }

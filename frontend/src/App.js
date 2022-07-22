@@ -32,7 +32,10 @@ function App() {
             </Route>
             <Route path="courses">
               <Route index element={<CourseList />} />
-              <Route path=":courseID" element={<SingleCourse />} />
+              <Route path=":year">
+                <Route index element={<CourseList />} />
+                <Route path=":courseID" element={<SingleCourse />} />
+              </Route>
             </Route>
             <Route path="grading" element={<Grading />} />
             <Route path="export" element={<Export />} />

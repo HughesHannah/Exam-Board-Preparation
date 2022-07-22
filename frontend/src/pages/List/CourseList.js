@@ -5,7 +5,7 @@ import CourseTable from "../../components/datatables/CourseTable.js";
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import YearPicker from "../../components/yearPicker/YearPicker.js";
 
-const List = () => {
+const CourseList = () => {
   return (
     <div className="list">
       <Sidebar />
@@ -23,4 +23,4 @@ const List = () => {
   );
 };
 
-export default List;
+export default CourseList;

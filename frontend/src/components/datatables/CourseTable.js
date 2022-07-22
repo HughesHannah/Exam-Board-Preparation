@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { variables } from "../../Variables.js";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
 const columns = [
   { field: "classCode", headerName: "Code", width: 200 },
@@ -12,12 +13,15 @@ const columns = [
 
 const CourseTable = () => {
   const [tableData, setTableData] = useState([]);
+  const path = useParams();
 
   useEffect(() => {
-    fetch(variables.API_URL + "courseAPI")
+    fetch(variables.API_URL + "courseAPI/"+path.year)
       .then((data) => data.json())
       .then((data) => setTableData(data));
   }, []);
+
+  
 
   const actionColumn = [
     {

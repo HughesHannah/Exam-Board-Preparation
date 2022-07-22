@@ -1,13 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import React, { useState, useEffect } from "react";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import { variables } from "../../Variables";
+import { useParams, Link } from "react-router-dom";
 
 export default function SelectVariants() {
-  const [year, setYear] = useState('');
+  const [year, setYear] = useState("");
   let [years, setYears] = useState([]);
+
+  const path = useParams();
+  let currentYear = path.year;
 
   useEffect(() => {
     getYears();
@@ -40,12 +44,15 @@ export default function SelectVariants() {
           label="Year"
         >
           <MenuItem value="">
-            <em>None</em>
+            <em>{currentYear}</em>
           </MenuItem>
-            {years.map((eachYear) => (
-              <MenuItem key={eachYear.id}>{eachYear.yearStart} - {eachYear.yearEnd}</MenuItem>
-            ))}
-
+          {years.map((eachYear) => (
+            <MenuItem key={eachYear.id}>
+              <Link to={"/courses/"+eachYear.year}>
+                {eachYear.year}
+              </Link>
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </div>
