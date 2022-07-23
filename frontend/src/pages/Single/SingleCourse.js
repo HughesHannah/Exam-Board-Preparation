@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "./single.scss";
 import { variables } from "../../Variables";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
-import DataTable from "../../components/dataTables/DataTable.js";
-import GradesPieChartExample from "../../components/featured/GradesPieChart.js"
+import StudentsInCourseTable from "../../components/dataTables/StudentsInCourseTable.js";
+import GradesPieChartExample from "../../components/featured/GradesPieChart.js";
 import ScatterChartExample from "../../components/chart/Scatter.js";
 
 const SingleCourse = () => {
@@ -14,13 +14,11 @@ const SingleCourse = () => {
   const path = useParams();
 
   useEffect(() => {
-    fetch(variables.API_URL + "courseAPI/"+path.year+"/" + path.courseID)
+    fetch(variables.API_URL + "courseAPI/" + path.year + "/" + path.courseID)
       .then((data) => data.json())
-      .then((data) => setCourseData(data))
+      .then((data) => setCourseData(data));
   }, []);
 
-
-    console.log(courseData);
   return (
     <div className="single">
       <Sidebar />
@@ -65,7 +63,7 @@ const SingleCourse = () => {
         </div>
         <div className="bottom">
           <h1 className="title">Student Grades</h1>
-          <DataTable />
+          <StudentsInCourseTable />
         </div>
       </div>
     </div>

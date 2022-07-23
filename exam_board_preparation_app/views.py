@@ -12,6 +12,15 @@ from exam_board_preparation_app.models import ClassHead, Student, Course, Year
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+# Students in Particular Course
+@api_view(['GET'])
+def StudentsInCourseAPI(request, year, code):
+    dbYear = Year.objects.get(year=year)
+    course = Course.objects.get(year=dbYear.id, classCode=code)
+    students = course.students.all()
+    serializer = StudentSerializer(students, many=True)
+    return Response(serializer.data) 
+
 # All courses in particular year with particular ID    
 @api_view(['GET'])
 def IndividualCourseYearAPI(request, year, code):

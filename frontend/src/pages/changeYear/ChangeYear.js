@@ -37,7 +37,7 @@ const changeYear = () => {
         <div className="years">
           <ul>
             {years.map((year) => (
-              <li key={year.id} onClick={handleClick}>{year.yearStart} - {year.yearEnd}</li>
+              <li key={year.id} onClick={handleClick}>{year.year}</li>
             ))}
           </ul>
         </div>
