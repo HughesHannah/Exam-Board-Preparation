@@ -13,6 +13,7 @@ urlpatterns = [
     path('courseAPI/<year>/<code>/students', views.StudentsInCourseAPI),
     path('courseAPI/<year>/<code>', views.IndividualCourseYearAPI),
     path('courseAPI/<year>', views.CourseYearAPI),
+    path('studentCoursesAPI/<id>', views.IndividualStudentCoursesAPI),
     path('courseAPI/', views.CourseAPI),
     path('yearsAPI', views.YearsAPI),
     path('uploader', views.UploadAPI),

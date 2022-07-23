@@ -176,6 +176,14 @@ def IndividualStudentAPI(request, id):
     serializer = StudentSerializer(students, many=False)
     return Response(serializer.data)
 
+# Get Courses for Individual Student
+@api_view(['GET'])
+def IndividualStudentCoursesAPI(request, id):
+    student = Student.objects.get(metriculationNumber=id)
+    courses = Course.objects.filter(students = student)
+    serializer = CourseSerializer(courses, many=True)
+    return Response(serializer.data)
+
 # All Students    
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
