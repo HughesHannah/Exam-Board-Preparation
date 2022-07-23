@@ -30,7 +30,7 @@ const StudentInCourseTable = () => {
       renderCell: (cellValues) => {
         return (
           <div className="cellAction">
-            <Link to={cellValues.row.metriculationNumber} style={{ textDecoration: "none" }}>
+            <Link to={"/students/" + cellValues.row.metriculationNumber} style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
             </Link>
           </div>
