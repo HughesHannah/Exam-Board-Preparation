@@ -172,7 +172,6 @@ def UploadAPI(request):
 # Individual Student   
 @api_view(['GET'])
 def IndividualStudentAPI(request, id):
-    #TODO check user can view? or does this not matter??
     students = Student.objects.get(metriculationNumber=id)
     serializer = StudentSerializer(students, many=False)
     return Response(serializer.data)

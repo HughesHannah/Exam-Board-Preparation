@@ -28,8 +28,8 @@ const Widget = ({ type }) => {
   //temp until retrieved data
   const studentCount = studentData.length;
   const courseCount = courseData.length;
-  const preponderanceCount = 5;
-  const issuesCount = 2;
+  const preponderanceCount = 0;
+  const issuesCount = 0;
 
   switch (type) {
     case "studentCounter":

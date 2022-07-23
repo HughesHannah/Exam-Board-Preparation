@@ -36,11 +36,15 @@ const SingleStudent = ({ id }) => {
               </div>
               <div className="detailItem">
                 <span className="itemKey">Year:</span>
-                <span className="itemValue">{student.yearOfStudy}</span>
+                <span className="itemValue">{studentData.yearOfStudy}</span>
               </div>
               <div className="detailItem">
                 <span className="itemKey">Degree:</span>
-                <span className="itemValue">{student.degreeTitle}</span>
+                <span className="itemValue">
+                    {studentData.mastersStudent ? "MSci ":"BSc "} 
+                    {studentData.degreeTitle} 
+                    {studentData.fastRouteStudent ? " FR":""}
+                  </span>
               </div>
               <div className="detailItem">
                 <span className="itemKey">Average Grade:</span>
