@@ -12,6 +12,8 @@ const columns = [
 
 const StudentCoursesTable = () => {
   const [tableData, setTableData] = useState([]);
+  const [selectYear, setSelectYear] = useState([]);
+
   const path = useParams();
 
   useEffect(() => {
@@ -19,6 +21,14 @@ const StudentCoursesTable = () => {
       .then((data) => data.json())
       .then((data) => setTableData(data));
   }, []);
+
+  function getYear(id) {
+    fetch(variables.API_URL + "yearsAPI/"+id)
+      .then((data) => data.json())
+      .then((data) => setSelectYear(data));
+
+     return selectYear.year 
+  }
 
   const actionColumn = [
     {
@@ -28,7 +38,7 @@ const StudentCoursesTable = () => {
       renderCell: (cellValues) => {
         return (
           <div className="cellAction">
-            <Link to={cellValues.row.classCode} style={{ textDecoration: "none" }}>
+            <Link to={"/courses/" + getYear(cellValues.row.year) + "/" + cellValues.row.classCode} style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
             </Link>
           </div>

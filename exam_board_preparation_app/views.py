@@ -50,6 +50,13 @@ def YearsAPI(request, id=0):
     years = Year.objects.all()
     serializer = YearSerializer(years, many=True)
     return Response(serializer.data)  
+
+# Year by ID
+@api_view(['GET'])
+def YearsIDAPI(request, id):
+    years = Year.objects.get(id=id)
+    serializer = YearSerializer(years, many=False)
+    return Response(serializer.data) 
     
 # Uploading Courses    
 @api_view(['POST'])
