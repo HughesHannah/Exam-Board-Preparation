@@ -5,11 +5,6 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ('__all__')
-        
-class CourseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Course
-        fields = ('__all__')
               
 class ClassHeadSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,4 +15,10 @@ class YearSerializer(serializers.ModelSerializer):
     class Meta:
         model = Year
         fields = '__all__'
+        
+class CourseSerializer(serializers.ModelSerializer):
+    year = YearSerializer(read_only=True)
+    class Meta:
+        model = Course
+        fields = ('__all__')
         

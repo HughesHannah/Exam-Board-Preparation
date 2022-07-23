@@ -4,31 +4,26 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 
+
 const columns = [
   { field: "classCode", headerName: "Code", width: 200 },
   { field: "className", headerName: "Course Name", width: 200},
   { field: "credits", headerName: "Credits" },
+  // { field: "year.year", headerName: "Year", width: 200},
 ];
 
 const StudentCoursesTable = () => {
-  const [tableData, setTableData] = useState([]);
-  const [selectYear, setSelectYear] = useState([]);
+  const [courses, setCourses] = useState([]);
+  
 
   const path = useParams();
 
   useEffect(() => {
     fetch(variables.API_URL + "studentCoursesAPI/"+path.studentID)
       .then((data) => data.json())
-      .then((data) => setTableData(data));
+      .then((data) => setCourses(data));       
+    
   }, []);
-
-  function getYear(id) {
-    fetch(variables.API_URL + "yearsAPI/"+id)
-      .then((data) => data.json())
-      .then((data) => setSelectYear(data));
-
-     return selectYear.year 
-  }
 
   const actionColumn = [
     {
@@ -38,7 +33,7 @@ const StudentCoursesTable = () => {
       renderCell: (cellValues) => {
         return (
           <div className="cellAction">
-            <Link to={"/courses/" + getYear(cellValues.row.year) + "/" + cellValues.row.classCode} style={{ textDecoration: "none" }}>
+            <Link to={"/courses/" + cellValues.row.year.year + "/" + cellValues.row.classCode} style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
             </Link>
           </div>
@@ -50,7 +45,7 @@ const StudentCoursesTable = () => {
   return (
     <div style={{ height: 700, width: "100%" }}>
       <DataGrid
-        rows={tableData}
+        rows={courses}
         columns={columns.concat(actionColumn)}
         pageSize={12}
         checkboxSelection
