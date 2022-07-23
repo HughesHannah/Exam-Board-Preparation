@@ -27,10 +27,6 @@ const Sidebar = () => {
         </Link>
       </div>
 
-      <div className="middle">
-        <p>2021-2022</p>
-      </div>
-
       <div className="bottom">
         <ul>
           <p className="title">MAIN</p>
@@ -63,7 +59,7 @@ const Sidebar = () => {
           <Link to="/changeYear" style={{ textDecoration: "none" }}>
             <li>
               <CalendarMonthIcon className="icon" />
-              <span>Change Year</span>
+              <span><s>Change Year</s></span>
             </li>
           </Link>
           <Link to="/upload" style={{ textDecoration: "none" }}>

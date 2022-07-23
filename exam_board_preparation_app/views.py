@@ -98,6 +98,7 @@ def UploadAPI(request):
     # get data from request
     uploadFile = request.FILES['file']
     studentLevel = request.data['level']
+    chosenYear = '2020-2021'
     
     # check it's the right format
     if not uploadFile.name.endswith('.xlsx'):
@@ -135,6 +136,33 @@ def UploadAPI(request):
     # TODO: update student year/level if needed
     # add all student objects to database (ignores students already in database)
     Student.objects.bulk_create(student_instances, ignore_conflicts=True)
+    
+    ######################################
+    # Add Students to Courses
+    
+    dfcs = pd.read_excel(
+        io = uploadFile,
+        sheet_name='static_numbers', 
+        header=0,
+        index_col=0, 
+        usecols='A,D:S',  
+	    skiprows=[1]
+    ) 
+
+    for courseName in dfcs: 
+        counter = 0
+        for values in dfcs[courseName]:
+            counter = counter+1
+            if (values == 1):
+                # get course with matching name and year
+                dbYear = Year.objects.get(year=chosenYear)
+                courseToAddTo = Course.objects.get(year=dbYear, className=courseName)
+                
+                # get student object from matriculation number
+                studentToAdd = Student.objects.get(metriculationNumber = dfcs.index[counter-1])
+                
+                # add student to course
+                courseToAddTo.students.add(studentToAdd)
     
     students = Student.objects.all()
     student_serializer = StudentSerializer(students, many=True)
