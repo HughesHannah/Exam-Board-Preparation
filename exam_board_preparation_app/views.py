@@ -7,26 +7,27 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib import messages
 import pandas as pd
-
 from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, StudentSerializer, YearSerializer
 from exam_board_preparation_app.models import ClassHead, Student, Course, Year
-
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+# All courses in particular year with particular ID    
+@api_view(['GET'])
+def IndividualCourseYearAPI(request, year, code):
+    dbYear = Year.objects.get(year=year)
+    courses = Course.objects.get(year=dbYear.id, classCode=code)
+    serializer = CourseSerializer(courses, many=False)
+    return Response(serializer.data) 
     
-# @api_view(['GET'])
-# def IndividualCourseAPI(request, id, year):
-#     courses = Course.objects.get((courseCode = id, year = year))
-#     serializer = StudentSerializer(courses, many=False)
-#     return Response(serializer.data)
-    
+# All Courses    
 @api_view(['GET'])
 def CourseAPI(request, id=0):
     courses = Course.objects.all()
     serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data)    
 
+# All Courses in particular year
 @api_view(['GET'])
 def CourseYearAPI(request, year):
     dbYear = Year.objects.get(year=year)
@@ -34,13 +35,14 @@ def CourseYearAPI(request, year):
     serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data) 
 
+# All Years
 @api_view(['GET'])
 def YearsAPI(request, id=0):
     years = Year.objects.all()
     serializer = YearSerializer(years, many=True)
     return Response(serializer.data)  
     
-    
+# Uploading Courses    
 @api_view(['POST'])
 def UploadCoursesAPI(request):
     
@@ -80,6 +82,7 @@ def UploadCoursesAPI(request):
     
     return JsonResponse(course_serializer.data, safe=False)    
     
+# Uploading Students and Courses  
 @api_view(['POST'])
 def UploadAPI(request):
     
@@ -129,14 +132,15 @@ def UploadAPI(request):
     
     return JsonResponse(student_serializer.data, safe=False)
     
-   
+# Individual Student   
 @api_view(['GET'])
 def IndividualStudentAPI(request, id):
     #TODO check user can view? or does this not matter??
     students = Student.objects.get(metriculationNumber=id)
     serializer = StudentSerializer(students, many=False)
     return Response(serializer.data)
-    
+
+# All Students    
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def StudentAPI(request, id=0):
@@ -147,7 +151,8 @@ def StudentAPI(request, id=0):
     students = Student.objects.all()
     serializer = StudentSerializer(students, many=True)
     return Response(serializer.data)
-    
+
+# Class Heads    
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def ClassHeadAPI(request):
@@ -157,7 +162,7 @@ def ClassHeadAPI(request):
     return Response(serializer.data)
 
 
-    
+# Tokens 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):

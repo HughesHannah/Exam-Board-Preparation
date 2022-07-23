@@ -14,11 +14,13 @@ const SingleCourse = () => {
   const path = useParams();
 
   useEffect(() => {
-    fetch(variables.API_URL + "individualCourseAPI/"+path.studentID)
+    fetch(variables.API_URL + "courseAPI/"+path.year+"/" + path.courseID)
       .then((data) => data.json())
-      .then((data) => setStudentData(data));
+      .then((data) => setCourseData(data))
   }, []);
 
+
+    console.log(courseData);
   return (
     <div className="single">
       <Sidebar />
@@ -27,23 +29,22 @@ const SingleCourse = () => {
           <div className="left">
             <h1 className="title">Course Information</h1>
             <div className="details">
-              <h1 className="itemTitle">Course Name</h1>
-
+              <h1 className="itemTitle">{courseData.className}</h1>
               <div className="detailItem">
                 <span className="itemKey">Code:</span>
-                <span className="itemValue">COMPSCI1234</span>
+                <span className="itemValue">{courseData.classCode}</span>
               </div>
               <div className="detailItem">
                 <span className="itemKey">Credits:</span>
-                <span className="itemValue">20</span>
+                <span className="itemValue">{courseData.credits}</span>
               </div>
               <div className="detailItem">
                 <span className="itemKey">Number of Students:</span>
-                <span className="itemValue">122</span>
+                <span className="itemValue">COUNT</span>
               </div>
               <div className="detailItem">
                 <span className="itemKey">Average Grade:</span>
-                <span className="itemValue">A5</span>
+                <span className="itemValue">CALCULATE</span>
               </div>
             </div>
           </div>
