@@ -37,6 +37,8 @@ class Course(models.Model):
     credits = models.IntegerField()  
     students = models.ManyToManyField(Student, blank = True)
     year = models.ForeignKey(Year, null=True, on_delete=models.CASCADE)
+    isTaught = models.BooleanField(default=True)
+    lecturerComments = models.TextField(max_length=500, null=True)
     
     def __str__(self): return (self.classCode + " - " + str(self.year))
     

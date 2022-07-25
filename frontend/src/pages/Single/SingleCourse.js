@@ -19,6 +19,7 @@ const SingleCourse = () => {
       .then((data) => setCourseData(data));
   }, []);
 
+
   return (
     <div className="single">
       <Sidebar />
@@ -38,7 +39,7 @@ const SingleCourse = () => {
               </div>
               <div className="detailItem">
                 <span className="itemKey">Number of Students:</span>
-                <span className="itemValue">COUNT</span>
+                <span className="itemValue">{courseData.students?.length}</span>
               </div>
               <div className="detailItem">
                 <span className="itemKey">Average Grade:</span>
@@ -47,8 +48,8 @@ const SingleCourse = () => {
             </div>
           </div>
           <div className="right">
-            <h1 className="title">Comments</h1>
-            Lecturer Comments here..
+            <h1 className="title">Lecturer Comments</h1>
+            <p>{courseData.lecturerComments}</p>
           </div>
         </div>
         <div className="middle">

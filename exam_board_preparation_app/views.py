@@ -67,7 +67,7 @@ def UploadCoursesAPI(request):
     df = pd.read_excel(
 	    io = uploadFile, 
 	    header=0, 
-	    usecols='A:D',    
+	    usecols='A:E',    
 	) 
     
     # create instances
@@ -78,6 +78,8 @@ def UploadCoursesAPI(request):
         className=record['Name'],
         classCode=record['Code'], 
         credits = record['Credits'],
+        isTaught = record['isTaught'],
+        lecturerComments = record['Comments'],
         year = Year.objects.get(year=courseYear),
     ) for record in df_records]
 
