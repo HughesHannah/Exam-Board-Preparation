@@ -4,7 +4,14 @@ from django.contrib.auth.models import User
 
 class Year(models.Model):
     #TODO enforce yyyy
-    year = models.CharField(max_length=125, unique = True)
+    # year = models.CharField(max_length=125, unique = True)
+    
+    yearStart = models.IntegerField()
+    yearEnd = models.IntegerField()
+    
+    @property
+    def year(self):
+        return ("%s-%s" % ( self.yearStart, self.yearEnd ))
     
     def __str__(self): return self.year
     
@@ -14,6 +21,7 @@ class Student(models.Model):
     degreeTitle = models.CharField(max_length=100) 
     mastersStudent = models.BooleanField()
     fastRouteStudent = models.BooleanField()
+    # exitYear = models.CharField(max_length=4, null=True)
     
     yearOfStudy_CHOICES = [
         (1, 'Level 1'),

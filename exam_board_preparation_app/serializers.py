@@ -12,6 +12,7 @@ class ClassHeadSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class YearSerializer(serializers.ModelSerializer):
+    year = serializers.CharField()
     class Meta:
         model = Year
         fields = '__all__'

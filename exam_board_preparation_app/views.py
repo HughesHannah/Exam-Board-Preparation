@@ -46,7 +46,7 @@ def CourseYearAPI(request, year):
 
 # All Years
 @api_view(['GET'])
-def YearsAPI(request, id=0):
+def YearsAPI(request):
     years = Year.objects.all()
     serializer = YearSerializer(years, many=True)
     return Response(serializer.data)  
@@ -58,6 +58,7 @@ def UploadCoursesAPI(request):
     # get data from request
     uploadFile = request.FILES['file']
     courseYear = request.data['year']
+    courseYearStart = courseYear.split('-')[0]
     
     # check it's the right format
     if not uploadFile.name.endswith('.xlsx'):
@@ -80,7 +81,7 @@ def UploadCoursesAPI(request):
         credits = record['Credits'],
         isTaught = record['isTaught'],
         lecturerComments = record['Comments'],
-        year = Year.objects.get(year=courseYear),
+        year = Year.objects.get(yearStart=courseYearStart),
     ) for record in df_records]
 
     print(course_instances)
