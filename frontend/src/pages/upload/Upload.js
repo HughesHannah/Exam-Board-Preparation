@@ -31,6 +31,7 @@ const Upload = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("level", level);
+    formData.append("year", year);
 
     let response;
     try {
@@ -64,6 +65,24 @@ const Upload = () => {
     }
   };
 
+  const handleStudentSubmission = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", file);
+
+    let response;
+    try {
+      response = axios.post(variables.API_URL + "studentUploader", formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      });
+      alert("file uploaded");
+    } catch (error) {
+      console.error(error.response.data);
+    }
+  };
+
   return (
     <div className="upload">
       <Sidebar />
@@ -72,7 +91,23 @@ const Upload = () => {
           <h1 className="title">Upload Page</h1>
         </div>
         <div className="form">
-          <h3>Upload Course Information</h3>
+          <h3>Upload Students</h3>
+          <div className="formInput">
+            <p>File to Upload:</p>
+            <input
+              type="file"
+              name="file"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+          </div>
+          <div>
+            <button onClick={handleStudentSubmission} disabled={!file}>
+              Submit
+            </button>
+          </div>
+        </div>
+        <div className="form">
+          <h3>Upload Courses</h3>
           <div className="formInput">
             <p>File to Upload:</p>
             <input
@@ -99,7 +134,7 @@ const Upload = () => {
           </div>
         </div>
         <div className="form">
-          <h3>Upload Students and Courses</h3>
+          <h3>Upload Students to Courses</h3>
           <div className="formInput">
             <p>File to Upload:</p>
             <input
@@ -115,6 +150,17 @@ const Upload = () => {
               onChange={(e) => setLevel(e.target.value)}
               value={level}
             />
+          </div>
+          <div className="formInput">
+            <p>Course Year</p>
+            <select id="Year" name="Years" onChange={(e) => setYear(e.target.value)}>
+              <option>Please Select</option>
+              {years.map((eachYear) => (
+                <option key={eachYear.id} value={eachYear.year}>
+                  {eachYear.year}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="formInput">
             <button onClick={handleSubmission} disabled={!file}>

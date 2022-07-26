@@ -21,21 +21,9 @@ class Student(models.Model):
     degreeTitle = models.CharField(max_length=100) 
     mastersStudent = models.BooleanField()
     fastRouteStudent = models.BooleanField()
-    # exitYear = models.CharField(max_length=4, null=True)
     
-    yearOfStudy_CHOICES = [
-        (1, 'Level 1'),
-        (2, 'Level 2'),
-        (3, 'Level 3'),
-        (4, 'Level 4'),
-        (5, 'Level 5'),
-        (6, 'Graduate'),
-        (0, 'Other'),
-    ]
-    yearOfStudy = models.IntegerField(
-        choices=yearOfStudy_CHOICES,
-        default=0,
-    )
+    
+    exitYear = models.ForeignKey(Year, null=True, on_delete=models.SET_NULL)
     
     def __str__(self): return self.metriculationNumber
 

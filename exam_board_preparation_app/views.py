@@ -154,55 +154,21 @@ def UploadCoursesAPI(request):
     
     return JsonResponse(course_serializer.data, safe=False)    
     
-# Uploading Students and Courses  
+# Uploading Students to Courses  
 @api_view(['POST'])
 def UploadAPI(request):
     
     # get data from request
     uploadFile = request.FILES['file']
-    studentLevel = request.data['level']
-    chosenYear = '2020-2021'
+    
+    chosenYear = request.data['year']
+    chosenYearStart = chosenYear.split('-')[0]
     
     # check it's the right format
     if not uploadFile.name.endswith('.xlsx'):
         messages.error('request', 'This is not an excel file')
-    
-    # read file
-    df = pd.read_excel(
-	    io = uploadFile,
-	    sheet_name='static_numbers', 
-	    header=0, 
-	    usecols='A:S',  
-	    skiprows=[1],  
-	) 
-    
-    # clean file data
-    df[['Degree', 'Degree_Master']] = df['Degree'].str.split(', ', n=1, expand=True)
-    df['Degree_Master'] = df['Degree_Master'].str.replace('MSci', 'True')
-    df['Degree_Master'] = df['Degree_Master'].str.replace('BSc', 'False')
-    df[['Degree', 'FR']] = df['Degree'].str.split('(', n=1, expand=True)
-    df['FR'] = df['FR'].str.replace(')','').replace('FR','True').fillna('False')
-    
-    # create instances
-    df_records = df.to_dict('records')
-    
-    # create students from data
-    student_instances = [Student(
-        metriculationNumber=record['ID'],
-        name=record['Name'],
-        degreeTitle = record['Degree'],
-        mastersStudent = record['Degree_Master'],
-        fastRouteStudent = record['FR'],
-        yearOfStudy = studentLevel,
-    ) for record in df_records]
 
-    # TODO: update student year/level if needed
-    # add all student objects to database (ignores students already in database)
-    Student.objects.bulk_create(student_instances, ignore_conflicts=True)
-    
-    ######################################
-    # Add Students to Courses
-    
+    # read the file    
     dfcs = pd.read_excel(
         io = uploadFile,
         sheet_name='static_numbers', 
@@ -218,14 +184,62 @@ def UploadAPI(request):
             counter = counter+1
             if (values == 1):
                 # get course with matching name and year
-                dbYear = Year.objects.get(year=chosenYear)
-                courseToAddTo = Course.objects.get(year=dbYear, className=courseName)
+                yearOfCourse = Year.objects.get(yearStart=chosenYearStart)
+                courseToAddTo = Course.objects.get(year=yearOfCourse, className=courseName)
                 
                 # get student object from matriculation number
                 studentToAdd = Student.objects.get(metriculationNumber = dfcs.index[counter-1])
                 
                 # add student to course
                 courseToAddTo.students.add(studentToAdd)
+    
+    students = Student.objects.all()
+    student_serializer = StudentSerializer(students, many=True)
+    
+    return JsonResponse(student_serializer.data, safe=False)
+    
+
+# Uploading Students
+@api_view(['POST'])
+def UploadStudentsAPI(request):
+    # Get file
+    uploadFile = request.FILES['file']
+    
+    # check it's the right format
+    if not uploadFile.name.endswith('.xlsx'):
+        messages.error('request', 'This is not an excel file')
+    
+    # read file
+    df = pd.read_excel(
+	    io = uploadFile,
+	    sheet_name='Sheet1', 
+	    header=0, 
+	    usecols='A:D',    
+	) 
+    
+    # clean file data
+    df[['Degree', 'Degree_Master']] = df['Degree'].str.split(', ', n=1, expand=True)
+    df['Degree_Master'] = df['Degree_Master'].str.replace('MSci', 'True')
+    df['Degree_Master'] = df['Degree_Master'].str.replace('BSc', 'False')
+    df[['Degree', 'FR']] = df['Degree'].str.split('(', n=1, expand=True)
+    df['FR'] = df['FR'].str.replace(')','').replace('FR','True').fillna('False')
+    df[['exitStart', 'exitEnd']] = df['ExitYear'].str.split('-', n=1, expand=True)
+    
+    # create instances
+    df_records = df.to_dict('records')
+    
+    # create students from data
+    student_instances = [Student(
+        metriculationNumber=record['ID'],
+        name=record['Name'],
+        degreeTitle = record['Degree'],
+        mastersStudent = record['Degree_Master'],
+        fastRouteStudent = record['FR'],
+        exitYear = Year.objects.get(yearStart=record['exitStart'])
+    ) for record in df_records]
+
+    # add all student objects to database (ignores students already in database)
+    Student.objects.bulk_create(student_instances, ignore_conflicts=True)
     
     students = Student.objects.all()
     student_serializer = StudentSerializer(students, many=True)

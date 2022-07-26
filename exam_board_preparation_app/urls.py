@@ -19,6 +19,7 @@ urlpatterns = [
     path('currentYearAPI', views.currentYearAPI),
     path('uploader', views.UploadAPI),
     path('courseUploader', views.UploadCoursesAPI),
+    path('studentUploader', views.UploadStudentsAPI),
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
