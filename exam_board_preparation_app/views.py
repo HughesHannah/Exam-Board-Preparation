@@ -1,6 +1,6 @@
-from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
+# from django.shortcuts import render
+# from django.views.decorators.csrf import csrf_exempt
+# from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -11,24 +11,11 @@ from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSe
 from exam_board_preparation_app.models import ClassHead, Student, Course, Year
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from datetime import date
 
-# Students in Particular Course
-@api_view(['GET'])
-def StudentsInCourseAPI(request, year, code):
-    dbYear = Year.objects.get(year=year)
-    course = Course.objects.get(year=dbYear.id, classCode=code)
-    students = course.students.all()
-    serializer = StudentSerializer(students, many=True)
-    return Response(serializer.data) 
 
-# All courses in particular year with particular ID    
-@api_view(['GET'])
-def IndividualCourseYearAPI(request, year, code):
-    dbYear = Year.objects.get(year=year)
-    courses = Course.objects.get(year=dbYear.id, classCode=code)
-    serializer = CourseSerializer(courses, many=False)
-    return Response(serializer.data) 
-    
+########## Get Course(s) APIs ###############################
+ 
 # All Courses    
 @api_view(['GET'])
 def CourseAPI(request, id=0):
@@ -44,13 +31,84 @@ def CourseYearAPI(request, year):
     serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data) 
 
+# All courses in particular year with particular ID    
+@api_view(['GET'])
+def IndividualCourseYearAPI(request, year, code):
+    dbYear = Year.objects.get(year=year)
+    courses = Course.objects.get(year=dbYear.id, classCode=code)
+    serializer = CourseSerializer(courses, many=False)
+    return Response(serializer.data) 
+
+# Get Courses for Individual Student
+@api_view(['GET'])
+def IndividualStudentCoursesAPI(request, id):
+    student = Student.objects.get(metriculationNumber=id)
+    courses = Course.objects.filter(students = student)
+    serializer = CourseSerializer(courses, many=True)
+    return Response(serializer.data)
+
+########## Get Student(s) APIs ###############################
+
+# All Students    
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def StudentAPI(request, id=0):
+    # TODO: return only students accociated with user level
+    # user = request.user 
+    # classHead = ClassHead.objects.filter(user=user)
+    # students = Student.objects.filter(yearOfStudy=classHead.level)
+    students = Student.objects.all()
+    serializer = StudentSerializer(students, many=True)
+    return Response(serializer.data)
+
+# Students in Particular Course
+@api_view(['GET'])
+def StudentsInCourseAPI(request, year, code):
+    dbYear = Year.objects.get(year=year)
+    course = Course.objects.get(year=dbYear.id, classCode=code)
+    students = course.students.all()
+    serializer = StudentSerializer(students, many=True)
+    return Response(serializer.data) 
+
+# Individual Student   
+@api_view(['GET'])
+def IndividualStudentAPI(request, id):
+    students = Student.objects.get(metriculationNumber=id)
+    serializer = StudentSerializer(students, many=False)
+    return Response(serializer.data)
+
+
+########## Get Year(s) APIs ###############################
+
 # All Years
 @api_view(['GET'])
 def YearsAPI(request):
     years = Year.objects.all()
     serializer = YearSerializer(years, many=True)
     return Response(serializer.data)  
+
+@api_view(['GET'])
+def currentYearAPI(request):
+    today = date.today()
+    if (today.month >= 9):
+        yearObj = Year.objects.get(yearStart=today.year)
+    else: yearObj = Year.objects.get(yearEnd=today.year)
+    serializer = YearSerializer(yearObj, many=False)
+    return Response(serializer.data)
     
+########## Get Class Head(s) APIs ###############################
+
+# Return Class Head Object for current user    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def ClassHeadAPI(request):
+    user = request.user
+    classHeads = ClassHead.objects.filter(user=user)
+    serializer = ClassHeadSerializer(classHeads, many=True)
+    return Response(serializer.data)
+    
+########## Uploads ###############################    
+
 # Uploading Courses    
 @api_view(['POST'])
 def UploadCoursesAPI(request):
@@ -172,44 +230,9 @@ def UploadAPI(request):
     
     return JsonResponse(student_serializer.data, safe=False)
     
-# Individual Student   
-@api_view(['GET'])
-def IndividualStudentAPI(request, id):
-    students = Student.objects.get(metriculationNumber=id)
-    serializer = StudentSerializer(students, many=False)
-    return Response(serializer.data)
 
-# Get Courses for Individual Student
-@api_view(['GET'])
-def IndividualStudentCoursesAPI(request, id):
-    student = Student.objects.get(metriculationNumber=id)
-    courses = Course.objects.filter(students = student)
-    serializer = CourseSerializer(courses, many=True)
-    return Response(serializer.data)
+########## Tokens ###############################
 
-# All Students    
-@api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-def StudentAPI(request, id=0):
-    # TODO: return only students accociated with user level
-    # user = request.user 
-    # classHead = ClassHead.objects.filter(user=user)
-    # students = Student.objects.filter(yearOfStudy=classHead.level)
-    students = Student.objects.all()
-    serializer = StudentSerializer(students, many=True)
-    return Response(serializer.data)
-
-# Class Heads    
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def ClassHeadAPI(request):
-    user = request.user
-    classHeads = ClassHead.objects.filter(user=user)
-    serializer = ClassHeadSerializer(classHeads, many=True)
-    return Response(serializer.data)
-
-
-# Tokens 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
