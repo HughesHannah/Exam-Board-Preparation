@@ -3,7 +3,7 @@ import "./list.scss";
 
 import StudentTable from "../../components/datatables/StudentTable";
 import Sidebar from "../../components/sidebar/Sidebar.js";
-import Chip from "../../components/chip/Chip.js";
+
 
 const List = () => {
   return (
@@ -13,9 +13,6 @@ const List = () => {
         <h3 className="title">List of Students</h3>
         <div className="tableOfGrades">
           <div className="titleOfSection">Table of Students</div>
-          <div className="filterChips">
-            <Chip />
-          </div>
           <StudentTable />
         </div>
       </div>

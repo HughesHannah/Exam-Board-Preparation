@@ -34,7 +34,7 @@ class Student(models.Model):
 class Course(models.Model):
     classCode = models.CharField(max_length=255)
     className = models.CharField(max_length=255, null=True)  
-    credits = models.IntegerField()  
+    credits = models.PositiveIntegerField()  
     students = models.ManyToManyField(Student, blank = True)
     year = models.ForeignKey(Year, null=True, on_delete=models.CASCADE)
     isTaught = models.BooleanField(default=True)

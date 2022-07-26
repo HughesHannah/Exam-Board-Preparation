@@ -2,18 +2,28 @@ import * as React from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 
+import "./chip.scss";
+
 export default function ClickableChips() {
   const handleClick = () => {
     console.info("You clicked the Chip.");
   };
 
   return (
-    <Stack direction="row" spacing={2}>
-      <Chip label="Cohort 1" onClick={handleClick} />
-      <Chip label="Cohort 2" onClick={handleClick} />
-      <Chip label="Cohort 3" onClick={handleClick} />
-      <Chip label="Cohort 4" onClick={handleClick} />
-      <Chip label="Cohort 5" onClick={handleClick} />
-    </Stack>
+    <div>
+      <Stack className="chips" direction="row" spacing={2}>
+        <Chip label="All" onClick={handleClick} />
+        <Chip label="Computing Science" onClick={handleClick} />
+        <Chip label="Software Engineering" onClick={handleClick} />
+        <Chip label="Combined Honours" onClick={handleClick} />
+      </Stack>
+      <Stack className="chips" direction="row" spacing={2}>
+      <Chip label="Infomatics" onClick={handleClick} />
+        <Chip
+          label="Electronics and Software Engineering"
+          onClick={handleClick}
+        />
+      </Stack>
+    </div>
   );
 }
