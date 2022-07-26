@@ -32,11 +32,11 @@ class Student(models.Model):
     def __str__(self): return self.metriculationNumber
 
 class Course(models.Model):
-    classCode = models.CharField(max_length=255)
+    classCode = models.CharField(max_length=11)
     className = models.CharField(max_length=255, null=True)  
     credits = models.PositiveIntegerField()  
     students = models.ManyToManyField(Student, blank = True)
-    year = models.ForeignKey(Year, null=True, on_delete=models.CASCADE)
+    year = models.ForeignKey(Year, null=True, on_delete=models.SET_NULL)
     isTaught = models.BooleanField(default=True)
     lecturerComments = models.TextField(max_length=500, null=True)
     
@@ -59,7 +59,7 @@ class Exam(models.Model):
     
 class ClassHead(models.Model):
     user = models.ManyToManyField(User)
-    level = models.IntegerField()   
+    level = models.IntegerField(unique=True)   
     
     def __str__(self): return ("Level " + str(self.level))
     
