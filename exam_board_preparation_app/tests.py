@@ -8,10 +8,10 @@ from django.core.exceptions import ValidationError
 
 class DeleteYearDoesNotDeleteCourses(TestCase):
     def setUp(self):
-        newYear = Year.objects.create(year="2021-2022")
+        newYear = Year.objects.create(yearStart = 2021, yearEnd = 2020)
         Course.objects.create(classCode="TEST1234", className="Course Name", credits=10, year = newYear)
     def test_year_deletion(self):
-        year = Year.objects.get(year="2021-2022")
+        year = Year.objects.get(yearStart=2021)
         year.delete()
         Course.objects.get(classCode="TEST1234")
         
@@ -55,12 +55,12 @@ class CourseCodeCannotBeLong(TestCase):
             
 class DeleteCourseDoesNotDeleteYear(TestCase):
     def setUp(self):
-        newYear = Year.objects.create(year="2021-2022")
+        newYear = Year.objects.create(yearStart = 2021, yearEnd = 2020)
         Course.objects.create(classCode="TEST1234", className="Course Name", credits=10, year = newYear)
     def test_course_deletion(self):
         course= Course.objects.get(classCode="TEST1234")
         course.delete()
-        Year.objects.get(year="2021-2022")
+        Year.objects.get(yearStart=2021)
                    
         
         
