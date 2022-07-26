@@ -26,7 +26,8 @@ def CourseAPI(request, id=0):
 # All Courses in particular year
 @api_view(['GET'])
 def CourseYearAPI(request, year):
-    dbYear = Year.objects.get(year=year)
+    start = year.split('-')[0]
+    dbYear = Year.objects.get(yearStart=start)
     courses = Course.objects.filter(year=dbYear.id)
     serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data) 
@@ -34,7 +35,8 @@ def CourseYearAPI(request, year):
 # All courses in particular year with particular ID    
 @api_view(['GET'])
 def IndividualCourseYearAPI(request, year, code):
-    dbYear = Year.objects.get(year=year)
+    start = year.split('-')[0]
+    dbYear = Year.objects.get(yearStart=start)
     courses = Course.objects.get(year=dbYear.id, classCode=code)
     serializer = CourseSerializer(courses, many=False)
     return Response(serializer.data) 
