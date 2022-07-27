@@ -15,6 +15,40 @@ class DeleteYearDoesNotDeleteCourses(TestCase):
         year.delete()
         Course.objects.get(classCode="TEST1234")
         
+class YearValidation(TestCase):
+    def test_start_under_2000(self): 
+        try:
+            Year.objects.create(yearStart=1, yearEnd=2020)
+            self.fail("Start year is accepted at 1")
+        except AssertionError:
+            pass
+    def test_end_under_2000(self): 
+        try:
+            Year.objects.create(yearStart=2020, yearEnd=1999)
+            self.fail("End year is accepted at 1999")
+        except AssertionError:
+            pass
+    def test_start_over_2000(self): 
+        try:
+            Year.objects.create(yearStart=3001, yearEnd=2020)
+            self.fail("Start year is accepted at 3001")
+        except AssertionError:
+            pass
+    def test_end_over_2000(self): 
+        try:
+            Year.objects.create(yearStart=2020, yearEnd=1000000)
+            self.fail("End year is accepted at 1000000")
+        except AssertionError:
+            pass
+  
+class DeleteStudentDoesntDeleteYear(TestCase):
+    def setUp(self):
+        year = Year.objects.create(yearStart=2020, yearEnd=2021)
+        Student.objects.create(metriculationNumber="12345678", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False, exitYear=year)
+    def test_delete_year(self):
+        deleteYear = Year.objects.get(yearStart=2020)
+        deleteYear.delete()
+        Student.objects.get(metriculationNumber="12345678")
         
 ########### Course Tests #################################
 class CourseLecturerCommentsDefaultNull(TestCase):
@@ -39,7 +73,7 @@ class CourseCreditsPositive(TestCase):
             pass
         
 class CourseCodeCannotBeNull(TestCase):
-    def test_negative_credit_creation_not_possible(self):
+    def test_course_code_null(self):
         try:
             Course.objects.create(className="Course Name", credits=10, isTaught=False)
         except IntegrityError:
@@ -50,9 +84,10 @@ class CourseCodeCannotBeLong(TestCase):
         course = Course.objects.create(className="Course Name", classCode="COMPSCI1234XXXX", credits=10, isTaught=False)
         try:
             course.full_clean()
+            self.fail("Course code too long")
         except ValidationError:
             pass
-            
+                
 class DeleteCourseDoesNotDeleteYear(TestCase):
     def setUp(self):
         newYear = Year.objects.create(yearStart = 2021, yearEnd = 2020)
@@ -62,16 +97,35 @@ class DeleteCourseDoesNotDeleteYear(TestCase):
         course.delete()
         Year.objects.get(yearStart=2021)
                    
-        
-        
+      
 ########### Student Tests #################################       
  
+# class TestModelCreation(TestCase):
+#     def number_too_long(self): 
+#         student = Student.objects.create(metriculationNumber="123456789XXXXX", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False)
+#         try:
+#             student.full_clean()
+#             self.fail("Student number too long")
+#         except ValidationError:
+#             pass
+    
+# class DeleteStudentDoesntDeleteYear(TestCase):
+#     def setUp(self):
+#         year = Year.objects.create(yearStart=2020, yearEnd=2021)
+#         Student.objects.create(metriculationNumber="12345678", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False, exitYear=year)
+
+#     def test_delete_year(self):
+#         deleteStudent = Student.objects.get(metriculationNumber="12345678")
+#         deleteStudent.delete()
+#         Year.objects.get(yearStart=2020)
+
+
 ########### Assignment Tests ################################# 
 
 ########### Exam Tests ################################# 
 
 ########### ClassHead Tests #################################        
         
-    
+########### API Tests #################################  
 
 

@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib import messages
 import pandas as pd
 from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, StudentSerializer, YearSerializer
-from exam_board_preparation_app.models import ClassHead, Student, Course, Year
+from exam_board_preparation_app.models import ClassHead, GradedWork, Student, Course, Year
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import date
@@ -246,6 +246,76 @@ def UploadStudentsAPI(request):
     
     return JsonResponse(student_serializer.data, safe=False)
     
+@api_view(['POST'])
+def UploadGradesAPI(request):
+    # Get file
+    uploadFile = request.FILES['file']
+    
+    # check it's the right format
+    if not uploadFile.name.endswith('.xlsx'):
+        messages.error('request', 'This is not an excel file')
+    
+
+    sheetNames = ["Course1", "Course2", "Course3", "Course4", "Course5", 
+                  "Course6", "Course7", "Course8", "Course9", "Course10", 
+                  "Course11", "Course12", "Course13", "Course14", "Course15",
+                  "Project3", "Project4", "Project5"]
+    
+    
+    
+    for sheetName in sheetNames:
+
+        # Get Work weightings
+        cw = df = pd.read_excel(
+            io = uploadFile,
+            sheet_name=sheetName, 
+            index_col=0,   
+        ) 
+
+        # clean
+        cw = cw[0:1]
+        cw = cw.transpose()
+        cw.columns =['Weight']
+        cw['Name'] = cw.index
+        cw = cw.drop('Course Code')
+        cw = cw.drop('Metriculation')
+        cw = cw.drop('Student Name')
+        cw = cw.drop('Total')
+        cw = cw.drop('Final Grade')
+        
+        # create instances
+        cw_records = cw.to_dict('record')
+        
+        for record in cw_records:
+            nameOfWork = record['Name']
+            typeOfWork = nameOfWork[0]
+            workWeighting = record['Weight']
+            
+            # Get students and grades
+            df = pd.read_excel(
+                io = uploadFile,
+                sheet_name=sheetName, 
+                header=0,
+                index_col=0,  
+                skiprows=[1]
+            )     
+            # create instances
+            df_records = df.to_dict('records')
+            
+            grade_instances = [GradedWork(
+                name = nameOfWork,
+                course = Course.objects.get(classCode=record['Course Code']),
+                student = Student.objects.get(metriculationNumber=record['Metriculation']),
+                weighting = workWeighting,
+                gradeMark = record[nameOfWork],
+                type = typeOfWork
+                
+            ) for record in df_records]
+                
+            GradedWork.objects.bulk_create(grade_instances, ignore_conflicts=True)
+        
+    return JsonResponse("Success", safe=False)    
+   
 
 ########## Tokens ###############################
 
