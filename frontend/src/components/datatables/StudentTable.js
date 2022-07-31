@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { variables } from "../../Variables.js";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -13,7 +13,6 @@ const columns = [
   { field: "degreeTitle", headerName: "Degree", width: 200 },
   { field: "mastersStudent", headerName: "Masters?" },
   { field: "fastRouteStudent", headerName: "Fast Route?" },
-  { field: "yearOfStudy", headerName: "Year" },
 ];
 
 const StudentTable = () => {
@@ -77,6 +76,7 @@ const StudentTable = () => {
           pageSize={10}
           checkboxSelection
           rowsPerPageOptions={[10, 50, 100]}
+          components={{ Toolbar: GridToolbar }}
         />
       </div>
     </div>

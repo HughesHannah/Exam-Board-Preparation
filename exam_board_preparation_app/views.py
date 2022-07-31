@@ -1,17 +1,15 @@
-# from django.shortcuts import render
-# from django.views.decorators.csrf import csrf_exempt
-# from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib import messages
 import pandas as pd
-from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, StudentSerializer, YearSerializer
+from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, GradedWorkSerializer, StudentSerializer, StudentsAndGradesSerializer, YearSerializer
 from exam_board_preparation_app.models import ClassHead, GradedWork, Student, Course, Year
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import date
+from django.db.models import Count
 
 
 ########## Get Course(s) APIs ###############################
@@ -49,6 +47,50 @@ def IndividualStudentCoursesAPI(request, id):
     serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data)
 
+########## Get Grade(s) APIs ###############################
+
+# get all grades for a particular course
+@api_view(['GET'])
+def GradesInCourseAPI(request, year, code):
+    start = year.split('-')[0]   
+    # get year, so that we can filter courses by year
+    dbYear = Year.objects.get(yearStart=start)
+    # get course so we can grab all the students off it
+    course = Course.objects.get(year=dbYear.id, classCode=code)
+    # get the graded works for that course
+    courseGrades = GradedWork.objects.filter(course = course)
+    
+    serializer = GradedWorkSerializer(courseGrades, many=True)
+    return Response(serializer.data)  
+
+# Students and their grades in Particular Course
+@api_view(['GET'])
+def StudentGradesInCourseAPI(request, year, code):
+    start = year.split('-')[0]   
+    # get year, so that we can filter courses by year
+    dbYear = Year.objects.get(yearStart=start)
+    # get course so we can grab all the students off it
+    course = Course.objects.get(year=dbYear.id, classCode=code)
+    # get the graded works for that course
+    courseGrades = GradedWork.objects.filter(course = course)
+    
+    
+    students = course.students.all()
+    
+    
+    
+    #list = courseGrades.query.group_by = ['student']
+    
+    # result = (GradedWork.objects
+    # .values('student')
+    # .annotate(dcount=Count('student'))
+    # .order_by())
+    
+    serializer = GradedWorkSerializer(courseGrades, many=True)
+    return Response(serializer.data)     
+
+    
+
 ########## Get Student(s) APIs ###############################
 
 # All Students    
@@ -63,14 +105,19 @@ def StudentAPI(request, id=0):
     serializer = StudentSerializer(students, many=True)
     return Response(serializer.data)
 
-# Students in Particular Course
 @api_view(['GET'])
 def StudentsInCourseAPI(request, year, code):
-    dbYear = Year.objects.get(year=year)
+    start = year.split('-')[0]
+    # get year, so that we can filter courses by year
+    dbYear = Year.objects.get(yearStart=start)
+    # get course
     course = Course.objects.get(year=dbYear.id, classCode=code)
+    # get students
     students = course.students.all()
     serializer = StudentSerializer(students, many=True)
-    return Response(serializer.data) 
+    return Response(serializer.data)
+    
+    
 
 # Individual Student   
 @api_view(['GET'])
@@ -198,7 +245,6 @@ def UploadAPI(request):
     
     return JsonResponse(student_serializer.data, safe=False)
     
-
 # Uploading Students
 @api_view(['POST'])
 def UploadStudentsAPI(request):
