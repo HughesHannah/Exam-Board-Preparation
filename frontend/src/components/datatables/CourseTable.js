@@ -45,7 +45,7 @@ const CourseTable = () => {
       <DataGrid
         rows={tableData}
         columns={columns.concat(actionColumn)}
-        pageSize={12}
+        pageSize={25}
         checkboxSelection
       />
     </div>

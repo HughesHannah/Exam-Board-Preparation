@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { variables } from "../../Variables.js";
 import { DataGrid, gridColumnsTotalWidthSelector } from "@mui/x-data-grid";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const defaultColumns = [
   { field: "metriculationNumber", headerName: "Metriculation" },
@@ -121,11 +122,31 @@ const StudentInCourseTable = () => {
     fetchDataHandler();
   }, [fetchDataHandler]);
 
+  const actionColumn = [
+    {
+      field: "action",
+      headerName: "Action",
+      width: 200,
+      renderCell: (cellValues) => {
+        return (
+          <div className="cellAction">
+            <Link
+              to={"/students/" + cellValues.row.metriculationNumber}
+              style={{ textDecoration: "none" }}
+            >
+              <div className="viewButton">View</div>
+            </Link>
+          </div>
+        );
+      },
+    },
+  ];
+
   return (
     <div style={{ height: 700, width: "100%" }}>
       <DataGrid
         rows={studentData}
-        columns={columns}
+        columns={columns.concat(actionColumn)}
         pageSize={50}
         checkboxSelection
       />

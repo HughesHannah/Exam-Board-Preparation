@@ -73,7 +73,7 @@ const StudentTable = () => {
         <DataGrid
           rows={filteredData}
           columns={columns.concat(actionColumn)}
-          pageSize={10}
+          pageSize={50}
           checkboxSelection
           rowsPerPageOptions={[10, 50, 100]}
           components={{ Toolbar: GridToolbar }}
