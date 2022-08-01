@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib import messages
 import pandas as pd
-from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, GradedWorkInfoSerializer, GradedWorkSerializer, StudentSerializer, StudentsAndGradesSerializer, YearSerializer
+from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, GradedWorkSerializer, StudentSerializer, YearSerializer
 from exam_board_preparation_app.models import ClassHead, GradedWork, Student, Course, Year
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -65,20 +65,16 @@ def GradesInCourseAPI(request, year, code):
 
 # get all graded work information for a particular course
 @api_view(['GET'])
-def GradedWorkInCourseAPI(request, year, code):
-    start = year.split('-')[0]   
-    # get year, so that we can filter courses by year
-    dbYear = Year.objects.get(yearStart=start)
-    # get course so we can grab all the students off it
-    course = Course.objects.get(year=dbYear.id, classCode=code)
+def GradesInStudentAPI(request, id):
+    student = Student.objects.get(metriculationNumber=id)
+
+    # get the graded works for that course
+    studentGrades = GradedWork.objects.filter(student = student)
     
-    # get each unique type of coursework
-    gradedWorks = GradedWork.objects.order_by().values('name').distinct()
+    serializer = GradedWorkSerializer(studentGrades, many=True)
+    return Response(serializer.data)  
     
-    weightings = GradedWork.objects.order_by().values('weighting').distinct()
-    
-    serializer = GradedWorkInfoSerializer(weightings, many=True)
-    return Response(serializer.data) 
+
     
     
 

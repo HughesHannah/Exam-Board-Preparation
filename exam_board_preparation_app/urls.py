@@ -12,13 +12,12 @@ urlpatterns = [
     path('individualStudentAPI/<id>', views.IndividualStudentAPI),
     path('courseAPI/<year>/<code>/students', views.StudentsInCourseAPI),
     path('courseAPI/<year>/<code>/students/grades', views.GradesInCourseAPI),
-    
     path('courseAPI/<year>/<code>', views.IndividualCourseYearAPI),
-    path('courseAPI/<year>/<code>/gradedWork', views.GradedWorkInCourseAPI),
-    
     
     path('courseAPI/<year>', views.CourseYearAPI),
     path('studentCoursesAPI/<id>', views.IndividualStudentCoursesAPI),
+    path('studentCoursesAPI/<id>/grades', views.GradesInStudentAPI),
+    
     path('courseAPI/', views.CourseAPI),
     path('yearsAPI', views.YearsAPI),
     path('currentYearAPI', views.currentYearAPI),

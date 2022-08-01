@@ -7,28 +7,20 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = ('__all__')
         
-class GradedWorkSerializer(serializers.ModelSerializer):
-    student = StudentSerializer()
-    class Meta:
-        model = GradedWork
-        fields = ('__all__')      
+     
         
-class GradedWorkInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GradedWork
-        fields = (['name', 'weighting'])            
-        
-class StudentsAndGradesSerializer(serializers.ModelSerializer): 
-    @classmethod
-    def get_serializer(cls, model):
-        if model == Student:
-            return StudentSerializer
-        elif model == GradedWork:
-            return GradedWorkSerializer
+          
+# class StudentsAndGradesSerializer(serializers.ModelSerializer): 
+#     @classmethod
+#     def get_serializer(cls, model):
+#         if model == Student:
+#             return StudentSerializer
+#         elif model == GradedWork:
+#             return GradedWorkSerializer
 
-    def to_representation(self, instance):
-        serializer = self.get_serializer(instance.__class__)
-        return serializer(instance, context=self.context).data        
+#     def to_representation(self, instance):
+#         serializer = self.get_serializer(instance.__class__)
+#         return serializer(instance, context=self.context).data        
               
 class ClassHeadSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,4 +38,11 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ('__all__')
+        
+class GradedWorkSerializer(serializers.ModelSerializer):
+    student = StudentSerializer()
+    course = CourseSerializer()
+    class Meta:
+        model = GradedWork
+        fields = ('__all__')         
         
