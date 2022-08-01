@@ -8,38 +8,53 @@ const StudentInCourseTable = () => {
   const [gradeData, setGradeData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [tableData, setTableData] = useState([]);
 
-  const columns = [
+  const defaultColumns = [
     { field: "metriculationNumber", headerName: "Metriculation" },
     { field: "name", headerName: "Student Name", width: 200 },
     { field: "degreeTitle", headerName: "Degree", width: 200 },
   ];
 
-  const Assesment1Col = [
-    {
-      field: "Assessment1",
-      headerName: "Assessment 1",
-      width: 200,
-      valueGetter: (params) => {
-        let rowStudent = studentData.find((obj) => {
-          return obj.id === params.row.id;
-        });
+  const [columns, setColumns] = useState(defaultColumns);
 
-        let allStudentAssesment1 = gradeData.filter((obj) => {
-          return obj.name === "Assessment 1";
-        });
+  useEffect(() => {
 
-        let myStudentAssesment1 = allStudentAssesment1.find((obj) => {
-          return (
-            obj.student.metriculationNumber === rowStudent.metriculationNumber
-          );
-        });
+    const works = [...new Set(gradeData.map((item) => item.name))];
+    works.forEach((work) => {
+      addColumn(work);
+    });
+  }, [gradeData]);
 
-        return myStudentAssesment1 ? myStudentAssesment1.gradeMark : "";
-      },
-    },
-  ];
+  function addColumn(work) {
+
+    const slugName = work.replace(" ", "");
+
+    const newCol = {
+        field: slugName,
+        headerName: work,
+        width: 130,
+        valueGetter: (params) => {
+          let rowStudent = studentData.find((obj) => {
+            return obj.id === params.row.id;
+          });
+  
+          let allStudentAssesment = gradeData.filter((obj) => {
+            return obj.name === work;
+          });
+  
+          let myStudentAssesment = allStudentAssesment.find((obj) => {
+            return (
+              obj.student.metriculationNumber === rowStudent.metriculationNumber
+            );
+          });
+  
+          return myStudentAssesment ? myStudentAssesment.gradeMark : "";
+        },
+      }
+ 
+    setColumns(columns => ([...columns, newCol])); // how to update state using existing!
+
+  }
 
   const path = useParams();
 
@@ -91,7 +106,7 @@ const StudentInCourseTable = () => {
     <div style={{ height: 700, width: "100%" }}>
       <DataGrid
         rows={studentData}
-        columns={columns.concat(Assesment1Col)}
+        columns={columns}
         pageSize={12}
         checkboxSelection
       />

@@ -11,7 +11,12 @@ class GradedWorkSerializer(serializers.ModelSerializer):
     student = StudentSerializer()
     class Meta:
         model = GradedWork
-        fields = ('__all__')        
+        fields = ('__all__')      
+        
+class GradedWorkInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GradedWork
+        fields = (['name', 'weighting'])            
         
 class StudentsAndGradesSerializer(serializers.ModelSerializer): 
     @classmethod
