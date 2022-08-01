@@ -5,22 +5,7 @@ from .models import GradedWork, Student, ClassHead, Course, Year
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ('__all__')
-        
-     
-        
-          
-# class StudentsAndGradesSerializer(serializers.ModelSerializer): 
-#     @classmethod
-#     def get_serializer(cls, model):
-#         if model == Student:
-#             return StudentSerializer
-#         elif model == GradedWork:
-#             return GradedWorkSerializer
-
-#     def to_representation(self, instance):
-#         serializer = self.get_serializer(instance.__class__)
-#         return serializer(instance, context=self.context).data        
+        fields = ('__all__')     
               
 class ClassHeadSerializer(serializers.ModelSerializer):
     class Meta:

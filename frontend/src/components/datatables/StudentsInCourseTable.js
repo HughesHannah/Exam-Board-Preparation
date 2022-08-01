@@ -99,7 +99,7 @@ const StudentInCourseTable = () => {
       <DataGrid
         rows={studentData}
         columns={columns}
-        pageSize={12}
+        pageSize={50}
         checkboxSelection
       />
     </div>

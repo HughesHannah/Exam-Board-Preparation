@@ -56,12 +56,6 @@ const Sidebar = () => {
           </Link>
 
           <p className="title">SYSTEM</p>
-          {/* <Link to="/changeYear" style={{ textDecoration: "none" }}>
-            <li>
-              <CalendarMonthIcon className="icon" />
-              <span><s>Change Year</s></span>
-            </li>
-          </Link> */}
           <Link to="/upload" style={{ textDecoration: "none" }}>
             <li>
               <UploadFileIcon className="icon" />

@@ -9,7 +9,6 @@ from exam_board_preparation_app.models import ClassHead, GradedWork, Student, Co
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import date
-from django.db.models import Count
 
 
 ########## Get Course(s) APIs ###############################
@@ -75,8 +74,6 @@ def GradesInStudentAPI(request, id):
     return Response(serializer.data)  
     
 
-    
-    
 
 ########## Get Student(s) APIs ###############################
 
@@ -104,8 +101,6 @@ def StudentsInCourseAPI(request, year, code):
     serializer = StudentSerializer(students, many=True)
     return Response(serializer.data)
     
-    
-
 # Individual Student   
 @api_view(['GET'])
 def IndividualStudentAPI(request, id):
