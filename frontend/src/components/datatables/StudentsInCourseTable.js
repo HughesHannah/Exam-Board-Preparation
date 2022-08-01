@@ -16,10 +16,12 @@ const StudentInCourseTable = () => {
   const [columns, setColumns] = useState(defaultColumns);
 
   useEffect(() => {
+    setColumns(defaultColumns);
     const works = [...new Set(gradeData.map((item) => item.name))];
     works.forEach((work) => {
       addColumn(work);
-    });
+    })
+    totalsColumn();
   }, [gradeData]);
 
   function addColumn(work) {
@@ -48,6 +50,31 @@ const StudentInCourseTable = () => {
     };
 
     setColumns((columns) => [...columns, newCol]); // how to update state using existing!
+  }
+
+  function totalsColumn() {
+    const newTotalCol = {
+      field: 'totalGrade',
+      headerName: "Final Grade",
+      width: 130,
+      valueGetter: (params) => {
+        let rowStudent = studentData.find((obj) => {
+          return obj.id === params.row.id;
+        });
+
+        let allStudentAssesment = gradeData.filter((obj) => {
+          return obj.student.metriculationNumber === rowStudent.metriculationNumber;
+        });
+
+        let finalGrade = 0;
+        allStudentAssesment.forEach((obj) => {
+          finalGrade = finalGrade + (obj.gradeMark*obj.weighting/100)
+        })
+
+        return finalGrade ? finalGrade.toFixed(1) : "";
+      },
+    };
+    setColumns((columns) => [...columns, newTotalCol]); // how to update state using existing!
   }
 
   const path = useParams();

@@ -18,10 +18,12 @@ const StudentCoursesTable = () => {
   const path = useParams();
 
   useEffect(() => {
+    setColumns(defaultColumns);
     const works = [...new Set(gradeData.map((item) => item.name))];
     works.forEach((work) => {
       addColumn(work);
     });
+    totalsColumn();
   }, [gradeData]);
 
   function addColumn(work) {
@@ -53,6 +55,31 @@ const StudentCoursesTable = () => {
     };
 
     setColumns((columns) => [...columns, newCol]); // how to update state using existing!
+  }
+
+  function totalsColumn() {
+    const newTotalCol = {
+      field: 'totalGrade',
+      headerName: "Final Grade",
+      width: 130,
+      valueGetter: (params) => {
+        let rowCourse = courseData.find((obj) => {
+          return obj.id === params.row.id;
+        });
+
+        let allCourseAssesment = gradeData.filter((obj) => {
+          return obj.course.classCode === rowCourse.classCode;
+        });
+
+        let finalGrade = 0;
+        allCourseAssesment.forEach((obj) => {
+          finalGrade = finalGrade + (obj.gradeMark*obj.weighting/100)
+        })
+
+        return finalGrade ? finalGrade.toFixed(1) : "";
+      },
+    };
+    setColumns((columns) => [...columns, newTotalCol]); // how to update state using existing!
   }
 
   const fetchDataHandler = useCallback(async () => {
@@ -109,7 +136,7 @@ const StudentCoursesTable = () => {
       <DataGrid
         rows={courseData}
         columns={columns.concat(actionColumn)}
-        pageSize={12}
+        pageSize={50}
         checkboxSelection
       />
     </div>
