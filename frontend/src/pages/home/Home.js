@@ -66,11 +66,12 @@ const Home = () => {
           <div className="search">
             <SearchIcon className="searchIcon" />
             <input
+              className="searchBox"
               type="text"
               placeholder="Search..."
               onChange={(e) => setSearch((e.target.value).toLowerCase())}
             />
-            <CloseIcon className="searchIcon" onClick={() => setSearch(null)}/>
+            <CloseIcon className="closeIcon" onClick={() => setSearch(null)}/>
           </div>
         </div>
         <div className="searchResults">
