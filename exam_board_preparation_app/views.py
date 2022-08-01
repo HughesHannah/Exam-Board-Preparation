@@ -11,6 +11,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import date
 
 
+
 ########## Get Course(s) APIs ###############################
  
 # All Courses    
@@ -138,6 +139,8 @@ def ClassHeadAPI(request):
     serializer = ClassHeadSerializer(classHeads, many=True)
     return Response(serializer.data)
     
+    
+
 ########## Uploads ###############################    
 
 # Uploading Courses    
