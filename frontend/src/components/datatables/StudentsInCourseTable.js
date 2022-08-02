@@ -3,6 +3,9 @@ import { variables } from "../../Variables.js";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import {renderGrade} from '../../utils/GradeConversion.js';
 
 const defaultColumns = [
   { field: "metriculationNumber", headerName: "Metriculation" },
@@ -15,6 +18,8 @@ const StudentInCourseTable = () => {
   const [gradeData, setGradeData] = useState([]);
   const [error, setError] = useState(null);
   const [columns, setColumns] = useState(defaultColumns);
+  const [gradeState, setGradeState] = useState('percentage');
+
 
   useEffect(() => {
     setColumns(defaultColumns);
@@ -23,7 +28,7 @@ const StudentInCourseTable = () => {
       addColumn(work);
     })
     totalsColumn();
-  }, [gradeData]);
+  }, [gradeData, gradeState]);
 
   function addColumn(work) {
     const slugName = work.replace(" ", "");
@@ -55,7 +60,7 @@ const StudentInCourseTable = () => {
           } 
         }
 
-        return finalGrade != 0 ? finalGrade : "-";
+        return finalGrade != 0 ? renderGrade(finalGrade, gradeState) : "-";
       },
     };
 
@@ -157,6 +162,16 @@ const StudentInCourseTable = () => {
 
   return (
     <div style={{ height: 700, width: "100%" }}>
+      <Select
+          id="grade-select"
+          style={{width:200}}
+          value={gradeState}
+          onChange={(e)=>{setGradeState(e.target.value)}}
+        >
+          <MenuItem value={'percentage'}>Percentage</MenuItem>
+          <MenuItem value={'band'}>Band</MenuItem>
+          <MenuItem value={'point'}>Point</MenuItem>
+        </Select>
       <DataGrid
         rows={studentData}
         columns={columns.concat(actionColumn)}
