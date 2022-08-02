@@ -12,87 +12,10 @@ from datetime import date
 from itertools import chain
 
 
-########## Get Course(s) APIs ###############################
+########## Helper Functions ###############################
 
-# All Courses
-@api_view(['GET'])
-def CourseAPI(request, id=0):
-    courses = Course.objects.all()
-    serializer = CourseSerializer(courses, many=True)
-    return Response(serializer.data)
-
-# All Courses in particular year
-
-
-@api_view(['GET'])
-def CourseYearAPI(request, year):
-    start = year.split('-')[0]
-    dbYear = Year.objects.get(yearStart=start)
-    courses = Course.objects.filter(year=dbYear.id)
-    serializer = CourseSerializer(courses, many=True)
-    return Response(serializer.data)
-
-# All courses in particular year with particular ID
-
-
-@api_view(['GET'])
-def IndividualCourseYearAPI(request, year, code):
-    start = year.split('-')[0]
-    dbYear = Year.objects.get(yearStart=start)
-    courses = Course.objects.get(year=dbYear.id, classCode=code)
-    serializer = CourseSerializer(courses, many=False)
-    return Response(serializer.data)
-
-# Get Courses for Individual Student
-
-
-@api_view(['GET'])
-def IndividualStudentCoursesAPI(request, id):
-    student = Student.objects.get(metriculationNumber=id)
-    courses = Course.objects.filter(students=student)
-    serializer = CourseSerializer(courses, many=True)
-    return Response(serializer.data)
-
-########## Get Grade(s) APIs ###############################
-
-# get all grades for a particular course
-
-
-@api_view(['GET'])
-def GradesInCourseAPI(request, year, code):
-    start = year.split('-')[0]
-    # get year, so that we can filter courses by year
-    dbYear = Year.objects.get(yearStart=start)
-    # get course so we can grab all the students off it
-    course = Course.objects.get(year=dbYear.id, classCode=code)
-    # get the graded works for that course
-    courseGrades = GradedWork.objects.filter(course=course)
-
-    serializer = GradedWorkSerializer(courseGrades, many=True)
-    return Response(serializer.data)
-
-# get all graded work information for a particular course
-
-
-@api_view(['GET'])
-def GradesInStudentAPI(request, id):
-    student = Student.objects.get(metriculationNumber=id)
-
-    # get the graded works for that course
-    studentGrades = GradedWork.objects.filter(student=student)
-
-    serializer = GradedWorkSerializer(studentGrades, many=True)
-    return Response(serializer.data)
-
-
-########## Get Student(s) APIs ###############################
-
-# All Students
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def StudentAPI(request):
+def getStudentsForUser(user):
     # get the user and classhead object
-    user = request.user
     classHead = ClassHead.objects.filter(user=user)
 
     # get the current year
@@ -123,7 +46,96 @@ def StudentAPI(request):
         bachelorStudents = Student.objects.filter(
             exitYear=exitYearForBachelor, mastersStudent=False)
         students = chain(masterStudents, bachelorStudents)
+        
+    return students
 
+    
+
+########## Get Course(s) APIs ###############################
+
+# All Courses
+@api_view(['GET'])
+def CourseAPI(request, id=0):
+    courses = Course.objects.all()
+    serializer = CourseSerializer(courses, many=True)
+    return Response(serializer.data)
+
+# All Courses in particular year
+@api_view(['GET'])
+def CourseYearAPI(request, year):
+    start = year.split('-')[0]
+    dbYear = Year.objects.get(yearStart=start)
+    courses = Course.objects.filter(year=dbYear.id)
+    serializer = CourseSerializer(courses, many=True)
+    return Response(serializer.data)
+
+# All courses in particular year with particular ID
+@api_view(['GET'])
+def IndividualCourseYearAPI(request, year, code):
+    start = year.split('-')[0]
+    dbYear = Year.objects.get(yearStart=start)
+    courses = Course.objects.get(year=dbYear.id, classCode=code)
+    serializer = CourseSerializer(courses, many=False)
+    return Response(serializer.data)
+
+# Get Courses for Individual Student
+@api_view(['GET'])
+def IndividualStudentCoursesAPI(request, id):
+    student = Student.objects.get(metriculationNumber=id)
+    courses = Course.objects.filter(students=student)
+    serializer = CourseSerializer(courses, many=True)
+    return Response(serializer.data)
+
+########## Get Grade(s) APIs ###############################
+
+# get all grades for a particular course
+@api_view(['GET'])
+def GradesInCourseAPI(request, year, code):
+    start = year.split('-')[0]
+    # get year, so that we can filter courses by year
+    dbYear = Year.objects.get(yearStart=start)
+    # get course so we can grab all the students off it
+    course = Course.objects.get(year=dbYear.id, classCode=code)
+    # get the graded works for that course
+    courseGrades = GradedWork.objects.filter(course=course)
+
+    serializer = GradedWorkSerializer(courseGrades, many=True)
+    return Response(serializer.data)
+
+# get all grades for a student
+@api_view(['GET'])
+def GradesInStudentAPI(request, id):
+    student = Student.objects.get(metriculationNumber=id)
+
+    # get the graded works for that course
+    studentGrades = GradedWork.objects.filter(student=student)
+
+    serializer = GradedWorkSerializer(studentGrades, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def allPreponderanceGradedWork(request):
+    # get the user 
+    user = request.user
+    # get students for that user
+    students = getStudentsForUser(user)
+        
+    gradedWorks = GradedWork.objects.filter(student__in = students).exclude(preponderance = 'NA') 
+    serializer = GradedWorkSerializer(gradedWorks, many=True)
+    return Response(serializer.data)   
+    
+
+########## Get Student(s) APIs ###############################
+
+# All Students
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def StudentAPI(request):
+    # get user
+    user = request.user
+    # get their students
+    students = getStudentsForUser(user)
+    # serialize and return data
     serializer = StudentSerializer(students, many=True)
     return Response(serializer.data)
 
@@ -141,8 +153,6 @@ def StudentsInCourseAPI(request, year, code):
     return Response(serializer.data)
 
 # Individual Student
-
-
 @api_view(['GET'])
 def IndividualStudentAPI(request, id):
     students = Student.objects.get(metriculationNumber=id)
@@ -159,22 +169,9 @@ def YearsAPI(request):
     serializer = YearSerializer(years, many=True)
     return Response(serializer.data)
 
-
-@api_view(['GET'])
-def currentYearAPI(request):
-    today = date.today()
-    if (today.month >= 9):
-        yearObj = Year.objects.get(yearStart=today.year)
-    else:
-        yearObj = Year.objects.get(yearEnd=today.year)
-    serializer = YearSerializer(yearObj, many=False)
-    return Response(serializer.data)
-
 ########## Get Class Head(s) APIs ###############################
 
 # Return Class Head Object for current user
-
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def ClassHeadAPI(request):
@@ -182,7 +179,6 @@ def ClassHeadAPI(request):
     classHeads = ClassHead.objects.filter(user=user)
     serializer = ClassHeadSerializer(classHeads, many=True)
     return Response(serializer.data)
-
 
 ########## Uploads ###############################
 
@@ -230,8 +226,6 @@ def UploadCoursesAPI(request):
     return JsonResponse(course_serializer.data, safe=False)
 
 # Uploading Students to Courses
-
-
 @api_view(['POST'])
 def UploadAPI(request):
 
@@ -278,8 +272,6 @@ def UploadAPI(request):
     return JsonResponse(student_serializer.data, safe=False)
 
 # Uploading Students
-
-
 @api_view(['POST'])
 def UploadStudentsAPI(request):
     # Get file
@@ -329,7 +321,7 @@ def UploadStudentsAPI(request):
 
     return JsonResponse(student_serializer.data, safe=False)
 
-
+# Uploading Grades
 @api_view(['POST'])
 def UploadGradesAPI(request):
     # Get file
@@ -408,7 +400,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token['username'] = user.username
         return token
-
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer

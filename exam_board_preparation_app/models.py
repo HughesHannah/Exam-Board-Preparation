@@ -39,7 +39,7 @@ class GradedWork(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     weighting = models.IntegerField()
     gradeMark = models.IntegerField()
-    handicap = models.DecimalField(default=1.0, decimal_places=2, max_digits=None),
+    moderation = models.DecimalField(default=1.0, decimal_places=2, max_digits=5)
     
     preponderance_choices = [
         ('NA', 'None'),

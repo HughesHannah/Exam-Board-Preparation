@@ -24,6 +24,7 @@ const StudentCoursesTable = () => {
       addColumn(work);
     });
     totalsColumn();
+    console.log(gradeData)
   }, [gradeData]);
 
   function addColumn(work) {
@@ -50,7 +51,15 @@ const StudentCoursesTable = () => {
           );
         });
 
-        return myCourseAssesment ? myCourseAssesment.gradeMark : "-";
+        let finalGrade = 0;
+        if(myCourseAssesment){
+          if(myCourseAssesment.preponderance != 'NA'){
+            finalGrade = myCourseAssesment.preponderance;
+          }else{
+            finalGrade = myCourseAssesment.gradeMark
+          } 
+        }
+        return finalGrade != 0 ? finalGrade : "-";
       },
     };
 
@@ -73,10 +82,14 @@ const StudentCoursesTable = () => {
 
         let finalGrade = 0;
         allCourseAssesment.forEach((obj) => {
-          finalGrade = finalGrade + (obj.gradeMark*obj.weighting/100)
+          if(obj.preponderance != 'NA'){
+            finalGrade = obj.preponderance;
+          }else{
+            finalGrade = finalGrade + (obj.gradeMark*obj.weighting/100)
+          } 
         })
 
-        return finalGrade ? finalGrade.toFixed(1) : "";
+        return finalGrade !=0 ? finalGrade : "-";
       },
     };
     setColumns((columns) => [...columns, newTotalCol]); // how to update state using existing!

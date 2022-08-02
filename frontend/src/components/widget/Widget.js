@@ -14,6 +14,7 @@ const Widget = ({ type }) => {
 
   const [studentData, setStudentData] = useState([]);
   const [courseData, setCourseData] = useState([]);
+  const [prepData, setPrepData] = useState([]);
 
 
   let getStudents = async () => {
@@ -32,8 +33,25 @@ const Widget = ({ type }) => {
     }
   };
 
+  let getPrep = async () => {
+    let response = await fetch(variables.API_URL + "gradesAPI/Preponderance", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
+      },
+    });
+    let data = await response.json();
+    if (response.status === 200) {
+      setPrepData(data);
+    } else if (response.statusText === "Unauthorized") {
+      logoutUser();
+    }
+  };
+
   useEffect(() => {
     getStudents();
+    getPrep();
   }, []);
 
   useEffect(() => {
@@ -45,7 +63,7 @@ const Widget = ({ type }) => {
   //temp until retrieved data
   const studentCount = studentData.length;
   const courseCount = courseData.length;
-  const preponderanceCount = 0;
+  const preponderanceCount = prepData.length;
   const issuesCount = 0;
 
   switch (type) {
@@ -69,7 +87,7 @@ const Widget = ({ type }) => {
       break;
     case "preponderanceCounter":
       data = {
-        title: "Students with Preponderance",
+        title: "Instances of Preponderance",
         link: "N/A",
         icon: <NotificationsNoneIcon className="icon" />,
         value: preponderanceCount,

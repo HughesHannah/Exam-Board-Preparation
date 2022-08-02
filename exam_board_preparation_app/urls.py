@@ -10,6 +10,8 @@ urlpatterns = [
     path('classheads', views.ClassHeadAPI),
     path('studentAPI/', views.StudentAPI),
     path('courseAPI/', views.CourseAPI),
+    path('gradesAPI/Preponderance', views.allPreponderanceGradedWork),
+    
 
     path('individualStudentAPI/<id>', views.IndividualStudentAPI),
     path('courseAPI/<year>/<code>/students', views.StudentsInCourseAPI),
@@ -22,7 +24,6 @@ urlpatterns = [
 
 
     path('yearsAPI', views.YearsAPI),
-    path('currentYearAPI', views.currentYearAPI),
     path('uploader', views.UploadAPI),
     path('courseUploader', views.UploadCoursesAPI),
     path('studentUploader', views.UploadStudentsAPI),

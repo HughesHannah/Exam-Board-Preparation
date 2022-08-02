@@ -46,7 +46,16 @@ const StudentInCourseTable = () => {
           );
         });
 
-        return myStudentAssesment ? myStudentAssesment.gradeMark : "";
+        let finalGrade = 0;
+        if(myStudentAssesment){
+          if(myStudentAssesment.preponderance != 'NA'){
+            finalGrade = myStudentAssesment.preponderance;
+          }else{
+            finalGrade = myStudentAssesment.gradeMark
+          } 
+        }
+
+        return finalGrade != 0 ? finalGrade : "-";
       },
     };
 
@@ -69,10 +78,14 @@ const StudentInCourseTable = () => {
 
         let finalGrade = 0;
         allStudentAssesment.forEach((obj) => {
-          finalGrade = finalGrade + (obj.gradeMark*obj.weighting/100)
+          if(obj.preponderance != 'NA'){
+            finalGrade = obj.preponderance;
+          }else{
+            finalGrade = finalGrade + (obj.gradeMark*obj.weighting/100)
+          } 
         })
 
-        return finalGrade ? finalGrade.toFixed(1) : "";
+        return finalGrade !=0 ? finalGrade : "-";
       },
     };
     setColumns((columns) => [...columns, newTotalCol]); // how to update state using existing!
