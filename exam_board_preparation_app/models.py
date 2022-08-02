@@ -1,4 +1,3 @@
-import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -40,6 +39,19 @@ class GradedWork(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     weighting = models.IntegerField()
     gradeMark = models.IntegerField()
+    handicap = models.DecimalField(default=1.0, decimal_places=2, max_digits=None),
+    
+    preponderance_choices = [
+        ('NA', 'None'),
+        ('MV', 'Medical Void'),
+        ('CW', 'Credit Witheld'),
+        ('CR', 'Credit Refused'),
+    ]
+    preponderance = models.CharField(
+        choices=preponderance_choices,
+        default='NA',
+        max_length=5,
+    )
     
     type_choices = [
         ('A', 'Assignment'),
@@ -53,7 +65,19 @@ class GradedWork(models.Model):
     
 class ClassHead(models.Model):
     user = models.ManyToManyField(User)
-    level = models.IntegerField(unique=True)   
+      
+    level_choices = [
+        (1, 'Level 1'),
+        (2, 'Level 2'),
+        (3, 'Level 3'),
+        (4, 'Level 4'),
+        (5, 'Level 5'),
+        (0, 'All Levels')
+    ]
+    level = models.IntegerField(
+        choices=level_choices,
+        default='0',
+    )
     
     def __str__(self): return ("Level " + str(self.level))
     

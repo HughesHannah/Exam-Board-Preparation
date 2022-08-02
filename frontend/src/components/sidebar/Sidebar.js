@@ -9,6 +9,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+import GavelIcon from '@mui/icons-material/Gavel';
 
 import { Link } from "react-router-dom";
 import AuthContext from "../../context/AuthContext.js";
@@ -37,7 +38,7 @@ const Sidebar = () => {
           </Link>
           <Link to="/grading" style={{ textDecoration: "none" }}>
             <li>
-              <SchoolIcon className="icon" />
+              <GavelIcon className="icon" />
               <span>Grading</span>
             </li>
           </Link>
@@ -47,10 +48,20 @@ const Sidebar = () => {
               <span>Students</span>
             </li>
           </Link>
-          <Link to="/courses" style={{ textDecoration: "none" }}>
+
+          {/* FUTURE WORK: Link to current year - for this project only considering one year */}
+          <Link to="/courses/2020-2021" style={{ textDecoration: "none" }}>
             <li>
               <HistoryEduIcon className="icon" />
               <span>Courses</span>
+            </li>
+          </Link>
+
+          {/* FUTURE WORK: Only show this to users who manage students in an exit year */}
+          <Link to="/export" style={{ textDecoration: "none" }}>
+            <li>
+              <SchoolIcon className="icon" />
+              <span>Classification</span>
             </li>
           </Link>
 
@@ -61,12 +72,7 @@ const Sidebar = () => {
               <span>Upload Data</span>
             </li>
           </Link>
-          <Link to="/export" style={{ textDecoration: "none" }}>
-            <li>
-              <FileDownloadIcon className="icon" />
-              <span><s>Export Views</s></span>
-            </li>
-          </Link>
+          
 
           <p className="title">USER</p>
           <Link to="/profile" style={{ textDecoration: "none" }}>

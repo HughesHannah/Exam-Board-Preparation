@@ -93,18 +93,26 @@ def StudentAPI(request):
         currentYear = Year.objects.get(yearStart=today.year)
     else: currentYear = Year.objects.get(yearEnd=today.year)
     
-    # work out exit years
-    masterExit = (5-classHead[0].level)+currentYear.yearEnd;
-    bachelorExit = (4-classHead[0].level)+currentYear.yearEnd;
+    # can they view all?
+    if (classHead[0].level == 0):
+        # view all students
+        students = Student.objects.all()
+        
+    else:
+        #view students for that level
+        # work out exit years
+        masterExit = (5-classHead[0].level)+currentYear.yearEnd;
+        bachelorExit = (4-classHead[0].level)+currentYear.yearEnd;
+        
+        # get exit year objects
+        exitYearForMasters = Year.objects.get(yearEnd=masterExit);
+        exitYearForBachelor = Year.objects.get(yearEnd=bachelorExit);
+        
+        # get students based on these exit years
+        masterStudents = Student.objects.filter(exitYear = exitYearForMasters, mastersStudent=True)
+        bachelorStudents = Student.objects.filter(exitYear = exitYearForBachelor, mastersStudent=False)
+        students = chain(masterStudents, bachelorStudents)
     
-    # get exit year objects
-    exitYearForMasters = Year.objects.get(yearEnd=masterExit);
-    exitYearForBachelor = Year.objects.get(yearEnd=bachelorExit);
-    
-    # get students based on these exit years
-    masterStudents = Student.objects.filter(exitYear = exitYearForMasters, mastersStudent=True)
-    bachelorStudents = Student.objects.filter(exitYear = exitYearForBachelor, mastersStudent=False)
-    students = chain(masterStudents, bachelorStudents)
     serializer = StudentSerializer(students, many=True)
     return Response(serializer.data)
 

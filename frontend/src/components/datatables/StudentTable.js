@@ -5,7 +5,6 @@ import AuthContext from "../../context/AuthContext.js";
 import { Link } from "react-router-dom";
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import Chip from "../../components/chip/Chip.js";
 import "./datatable.scss";
 
 const columns = [
@@ -67,9 +66,6 @@ const StudentTable = () => {
 
   return (
     <div>
-      <div className="chips">
-        {/* <Chip /> */}
-      </div>
       <div>
       <Select
           labelId="demo-simple-select-label"
