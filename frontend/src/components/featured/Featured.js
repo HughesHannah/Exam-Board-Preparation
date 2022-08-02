@@ -7,7 +7,7 @@ const Featured = () => {
   return (
     <div className="featured">
       <div className="top">
-        <h1 className="title">Average Student Grade</h1>
+        <h1 className="title"><s>Average Student Grade</s></h1>
       </div>
       <div className="bottom">
         <div className="featuredChart">

@@ -7,7 +7,6 @@ import GroupIcon from "@mui/icons-material/Group";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 
@@ -65,7 +64,7 @@ const Sidebar = () => {
           <Link to="/export" style={{ textDecoration: "none" }}>
             <li>
               <FileDownloadIcon className="icon" />
-              <span>Export Views</span>
+              <span><s>Export Views</s></span>
             </li>
           </Link>
 

@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { variables } from "../../Variables.js";
 import "./widget.scss";
+import AuthContext from "../../context/AuthContext.js";
 
 import PeopleIcon from "@mui/icons-material/People";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
@@ -9,14 +10,30 @@ import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 const Widget = ({ type }) => {
   let data;
+  let { user, authTokens, logoutUser } = useContext(AuthContext);
 
   const [studentData, setStudentData] = useState([]);
   const [courseData, setCourseData] = useState([]);
 
+
+  let getStudents = async () => {
+    let response = await fetch(variables.API_URL + "studentAPI", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
+      },
+    });
+    let data = await response.json();
+    if (response.status === 200) {
+      setStudentData(data);
+    } else if (response.statusText === "Unauthorized") {
+      logoutUser();
+    }
+  };
+
   useEffect(() => {
-    fetch(variables.API_URL + "studentAPI")
-      .then((data) => data.json())
-      .then((data) => setStudentData(data));
+    getStudents();
   }, []);
 
   useEffect(() => {

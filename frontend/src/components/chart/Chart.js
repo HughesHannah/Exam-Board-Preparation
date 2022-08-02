@@ -38,7 +38,7 @@ const chart = () => {
   return (
     <div className="chart">
       <div className="top">
-        <h1 className="title">Average Student Grade by Year</h1>
+        <h1 className="title"><s>Average Student Grade by Year</s></h1>
       </div>
       <LineChart
         width={500}

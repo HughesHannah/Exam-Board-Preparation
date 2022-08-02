@@ -9,6 +9,7 @@ from exam_board_preparation_app.models import ClassHead, GradedWork, Student, Co
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import date
+from itertools import chain
 
 
 
@@ -80,13 +81,30 @@ def GradesInStudentAPI(request, id):
 
 # All Students    
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-def StudentAPI(request, id=0):
-    # TODO: return only students accociated with user level
-    # user = request.user 
-    # classHead = ClassHead.objects.filter(user=user)
-    # students = Student.objects.filter(yearOfStudy=classHead.level)
-    students = Student.objects.all()
+@permission_classes([IsAuthenticated])
+def StudentAPI(request):
+    # get the user and classhead object
+    user = request.user
+    classHead = ClassHead.objects.filter(user=user)
+    
+    # get the current year
+    today = date.today()
+    if (today.month >= 9):
+        currentYear = Year.objects.get(yearStart=today.year)
+    else: currentYear = Year.objects.get(yearEnd=today.year)
+    
+    # work out exit years
+    masterExit = (5-classHead[0].level)+currentYear.yearEnd;
+    bachelorExit = (4-classHead[0].level)+currentYear.yearEnd;
+    
+    # get exit year objects
+    exitYearForMasters = Year.objects.get(yearEnd=masterExit);
+    exitYearForBachelor = Year.objects.get(yearEnd=bachelorExit);
+    
+    # get students based on these exit years
+    masterStudents = Student.objects.filter(exitYear = exitYearForMasters, mastersStudent=True)
+    bachelorStudents = Student.objects.filter(exitYear = exitYearForBachelor, mastersStudent=False)
+    students = chain(masterStudents, bachelorStudents)
     serializer = StudentSerializer(students, many=True)
     return Response(serializer.data)
 

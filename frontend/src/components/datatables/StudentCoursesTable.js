@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { variables } from "../../Variables.js";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 
@@ -138,6 +138,7 @@ const StudentCoursesTable = () => {
         columns={columns.concat(actionColumn)}
         pageSize={50}
         checkboxSelection
+        components={{ Toolbar: GridToolbar }}
       />
     </div>
   );

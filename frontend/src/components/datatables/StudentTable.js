@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { variables } from "../../Variables.js";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import AuthContext from "../../context/AuthContext.js";
 import { Link } from "react-router-dom";
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -19,15 +20,28 @@ const StudentTable = () => {
   const [degree, setDegree] = useState('all');
   const [tableData, setTableData] = useState([]);
   const [filteredData, setFilteredData] = useState(tableData)
+  let { user, authTokens, logoutUser } = useContext(AuthContext);
   
-  
+  let fetchStudents = async () => {
+    let response = await fetch(variables.API_URL + "studentAPI", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
+      },
+    });
+    let data = await response.json();
+    if (response.status === 200) {
+      setTableData(data);
+    } else if (response.statusText === "Unauthorized") {
+      logoutUser();
+    }
+  };
 
   useEffect(() => {
-    fetch(variables.API_URL + "studentAPI")
-      .then((data) => data.json())
-      .then((data) => setTableData(data));
+    fetchStudents();
 
-      setFilteredData(degree === 'all' ? tableData: tableData.filter(dt=>dt.degreeTitle === degree))
+    setFilteredData(degree === 'all' ? tableData: tableData.filter(dt=>dt.degreeTitle === degree))
   }, [degree]);
 
 

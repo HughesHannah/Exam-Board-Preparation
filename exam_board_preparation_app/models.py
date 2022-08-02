@@ -51,14 +51,6 @@ class GradedWork(models.Model):
         default='A',
     )
     
-# class Exam(models.Model):
-#     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-#     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-#     weighting = models.IntegerField()
-#     q1Mark = models.IntegerField(null=True, blank=True)
-#     q2Mark = models.IntegerField(null=True, blank=True)
-#     q3Mark = models.IntegerField(null=True, blank=True)
-    
 class ClassHead(models.Model):
     user = models.ManyToManyField(User)
     level = models.IntegerField(unique=True)   

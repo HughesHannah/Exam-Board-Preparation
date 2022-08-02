@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { variables } from "../../Variables.js";
 import "./home.scss";
+import AuthContext from "../../context/AuthContext.js";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from '@mui/icons-material/Close';
@@ -17,6 +18,7 @@ const Home = () => {
   const [studentData, setStudentData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const [search, setSearch] = useState(null);
+  let { user, authTokens, logoutUser } = useContext(AuthContext);
 
   const studentKeys = ["name", "metriculationNumber"];
   const courseKeys = ["classCode", "className"];
@@ -37,12 +39,25 @@ const Home = () => {
     );
   };
 
+
+  let fetchStudents = async () => {
+    let response = await fetch(variables.API_URL + "studentAPI", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
+      },
+    });
+    let data = await response.json();
+    if (response.status === 200) {
+      setStudentData(data);
+    } else if (response.statusText === "Unauthorized") {
+      logoutUser();
+    }
+  };
+
   useEffect(() => {
-    const fetchStudents = async () => {
-      const res = await fetch(variables.API_URL + "studentAPI")
-        .then((data) => data.json())
-        .then((data) => setStudentData(data));
-    };
+    
     fetchStudents();
     const fetchCourses = async () => {
       const res = await fetch(variables.API_URL + "courseAPI")
