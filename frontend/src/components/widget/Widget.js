@@ -1,5 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { variables } from "../../Variables.js";
+import { Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "./widget.scss";
 import AuthContext from "../../context/AuthContext.js";
 
@@ -11,11 +13,11 @@ import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 const Widget = ({ type }) => {
   let data;
   let { user, authTokens, logoutUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [studentData, setStudentData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const [prepData, setPrepData] = useState([]);
-
 
   let getStudents = async () => {
     let response = await fetch(variables.API_URL + "studentAPI", {
@@ -70,7 +72,7 @@ const Widget = ({ type }) => {
     case "studentCounter":
       data = {
         title: "Students",
-        link: "See student list",
+        link: "/students",
         icon: <PeopleIcon className="icon" />,
         value: studentCount,
       };
@@ -80,7 +82,7 @@ const Widget = ({ type }) => {
     case "completedCourseCounter":
       data = {
         title: "Courses",
-        link: "See course list",
+        link: "/courses/2020-2021",
         icon: <HistoryEduIcon className="icon" />,
         value: courseCount,
       };
@@ -88,7 +90,7 @@ const Widget = ({ type }) => {
     case "preponderanceCounter":
       data = {
         title: "Instances of Preponderance",
-        link: "N/A",
+        link: "/",
         icon: <NotificationsNoneIcon className="icon" />,
         value: preponderanceCount,
       };
@@ -96,7 +98,7 @@ const Widget = ({ type }) => {
     case "issueCounter":
       data = {
         title: "Potential Issues",
-        link: "N/A",
+        link: "/",
         icon: <WarningAmberIcon className="icon" />,
         value: issuesCount,
       };

@@ -35,5 +35,5 @@ export function renderGrade(percentage, gradeState) {
   if (gradeState == "point") {
     return percentageToPoint(percentage);
   }
-  return percentage;
+  return percentage.toFixed(1);
 }

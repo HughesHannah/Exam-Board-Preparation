@@ -4,6 +4,7 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import MenuItem from '@mui/material/MenuItem';
+import Tooltip from '@mui/material/Tooltip';
 import Select from '@mui/material/Select';
 import {renderGrade} from '../../utils/GradeConversion.js';
 
@@ -36,7 +37,7 @@ const StudentInCourseTable = () => {
       field: slugName,
       headerName: work,
       width: 130,
-      valueGetter: (params) => {
+      renderCell: (params) => {
         let rowStudent = studentData.find((obj) => {
           return obj.id === params.row.id;
         });
@@ -60,7 +61,7 @@ const StudentInCourseTable = () => {
           } 
         }
 
-        return finalGrade != 0 ? renderGrade(finalGrade, gradeState) : "-";
+        return finalGrade != 0 ? (<Tooltip title={myStudentAssesment.weighting + "\% weighting"}><div>{renderGrade(finalGrade, gradeState)}</div></Tooltip>) : "-";
       },
     };
 
@@ -90,7 +91,7 @@ const StudentInCourseTable = () => {
           } 
         })
 
-        return finalGrade !=0 ? finalGrade : "-";
+        return finalGrade !=0 ? renderGrade(finalGrade, gradeState) : "-";
       },
     };
     setColumns((columns) => [...columns, newTotalCol]); // how to update state using existing!
