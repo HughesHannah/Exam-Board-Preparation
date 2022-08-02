@@ -19,7 +19,7 @@ const StudentTable = () => {
   const [degree, setDegree] = useState('all');
   const [tableData, setTableData] = useState([]);
   const [filteredData, setFilteredData] = useState(tableData)
-  let { user, authTokens, logoutUser } = useContext(AuthContext);
+  let { authTokens, logoutUser } = useContext(AuthContext);
   
   let fetchStudents = async () => {
     let response = await fetch(variables.API_URL + "studentAPI", {

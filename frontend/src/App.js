@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -13,9 +13,9 @@ import CourseList from "./pages/List/CourseList.js";
 import Login from "./pages/login/Login.js";
 import Grading from "./pages/grading/Grading.js";
 import Profile from "./pages/login/Profile.js";
-import Export from "./pages/export/Export.js";
+import Classification from "./pages/classification/Classification.js";
 import Upload from "./pages/upload/Upload.js";
-import ChangeYear from "./pages/changeYear/ChangeYear.js";
+
 
 function App() {
   return (
@@ -38,10 +38,9 @@ function App() {
               </Route>
             </Route>
             <Route path="grading" element={<Grading />} />
-            <Route path="export" element={<Export />} />
+            <Route path="classification" element={<Classification />} />
             <Route path="upload" element={<Upload />} />
             <Route path="profile" element={<Profile />} />
-            <Route path="changeYear" element={<ChangeYear />} />
           </Route>
           <Route exact path='/login' element={<Login/>}/>
         </Routes>

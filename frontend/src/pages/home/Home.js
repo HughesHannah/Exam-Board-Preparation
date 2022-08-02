@@ -4,7 +4,7 @@ import "./home.scss";
 import AuthContext from "../../context/AuthContext.js";
 
 import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import Widget from "../../components/widget/Widget.js";
@@ -13,12 +13,11 @@ import Chart from "../../components/chart/Chart.js";
 import StudentSearchTable from "../../components/table/StudentSearchTable.js";
 import CourseSearchTable from "../../components/table/CourseSearchTable.js";
 
-
 const Home = () => {
   const [studentData, setStudentData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const [search, setSearch] = useState(null);
-  let { user, authTokens, logoutUser } = useContext(AuthContext);
+  let { authTokens, logoutUser } = useContext(AuthContext);
 
   const studentKeys = ["name", "metriculationNumber"];
   const courseKeys = ["classCode", "className"];
@@ -39,7 +38,6 @@ const Home = () => {
     );
   };
 
-
   let fetchStudents = async () => {
     let response = await fetch(variables.API_URL + "studentAPI", {
       method: "GET",
@@ -56,14 +54,14 @@ const Home = () => {
     }
   };
 
+  const fetchCourses = async () => {
+    const res = await fetch(variables.API_URL + "courseAPI")
+      .then((data) => data.json())
+      .then((data) => setCourseData(data));
+  };
+
   useEffect(() => {
-    
     fetchStudents();
-    const fetchCourses = async () => {
-      const res = await fetch(variables.API_URL + "courseAPI")
-        .then((data) => data.json())
-        .then((data) => setCourseData(data));
-    };
     fetchCourses();
   }, []);
 
@@ -84,9 +82,9 @@ const Home = () => {
               className="searchBox"
               type="text"
               placeholder="Search..."
-              onChange={(e) => setSearch((e.target.value).toLowerCase())}
+              onChange={(e) => setSearch(e.target.value.toLowerCase())}
             />
-            <CloseIcon className="closeIcon" onClick={() => setSearch(null)}/>
+            <CloseIcon className="closeIcon" onClick={() => setSearch(null)} />
           </div>
         </div>
         <div className="searchResults">
@@ -95,10 +93,20 @@ const Home = () => {
         </div>
         <div className="charts">
           <div className="pieChart">
-            <Featured />
+            <h1 className="title">
+              <s>Average Student Grade</s>
+            </h1>
+            <div>
+              <Featured />
+            </div>
           </div>
           <div className="lineChart">
-            <Chart />
+            <h1 className="title">
+              <s>Average Student Grade by Year</s>
+            </h1>
+            <div>
+              <Chart />
+            </div>
           </div>
         </div>
         <div className="table"></div>

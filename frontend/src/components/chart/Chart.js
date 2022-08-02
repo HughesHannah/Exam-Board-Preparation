@@ -3,43 +3,42 @@ import "./chart.scss";
 
 import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
 
+
 const chart = () => {
   const data = [
     {
       name: "2016",
-      ag: 15,
+      avg: 15,
     },
     {
       name: "2017",
-      ag: 18,
+      avg: 18,
     },
     {
       name: "2018",
-      ag: 17,
+      avg: 17,
     },
     {
       name: "2019",
-      ag: 19,
+      avg: 19,
     },
     {
       name: "2020",
-      ag: 22,
+      avg: 22,
     },
     {
       name: "2021",
-      ag: 18,
+      avg: 18,
     },
     {
       name: "2022",
-      ag: 17,
+      avg: 17,
     },
   ];
 
   return (
     <div className="chart">
-      <div className="top">
-        <h1 className="title"><s>Average Student Grade by Year</s></h1>
-      </div>
+      
       <LineChart
         width={500}
         height={240}
@@ -56,12 +55,13 @@ const chart = () => {
         <Tooltip />
         <Line
           type="monotone"
-          dataKey="ag"
+          dataKey="avg"
           stroke="#8884d8"
           activeDot={{ r: 8 }}
         />
       </LineChart>
-    </div>
+      
+      </div>
   );
 };
 

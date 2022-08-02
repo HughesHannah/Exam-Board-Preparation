@@ -12,7 +12,7 @@ urlpatterns = [
     path('courses/<year>', index),
     path('courses/<year>/<courseID>', index),
     path('grading', index),
-    path('export', index),
+    path('classification', index),
     path('upload', index),
-    path('changeYear', index),
+
 ]

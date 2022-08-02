@@ -58,7 +58,7 @@ const Sidebar = () => {
           </Link>
 
           {/* FUTURE WORK: Only show this to users who manage students in an exit year */}
-          <Link to="/export" style={{ textDecoration: "none" }}>
+          <Link to="/classification" style={{ textDecoration: "none" }}>
             <li>
               <SchoolIcon className="icon" />
               <span>Classification</span>
