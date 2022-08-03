@@ -7,6 +7,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
+import {values} from "../../utils/GradeConversion.js"
+
 function createData(band, gp, upperp, lowerp) {
   return { band, gp, upperp, lowerp };
 }
@@ -40,27 +42,22 @@ const rows = [
 export default function BasicTable() {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Band</TableCell>
-            <TableCell align="right">Grade Point</TableCell>
-            <TableCell align="right">Upper Percentage</TableCell>
-            <TableCell align="right">Lower Percentage</TableCell>
+            <TableCell align = "center">Percentage Range</TableCell>
+            <TableCell align = "center">Band</TableCell>
+            <TableCell align = "center">Point</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {values.map((value) => (
             <TableRow
-              key={row.band}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              key={value.minValue}
             >
-              <TableCell component="th" scope="row">
-                {row.band}
-              </TableCell>
-              <TableCell align="right">{row.gp}</TableCell>
-              <TableCell align="right">{row.upperp}</TableCell>
-              <TableCell align="right">{row.lowerp}</TableCell>
+              <TableCell align = "center">{value.minValue} - {value.maxValue}%</TableCell>
+              <TableCell align = "center">{value.band}</TableCell>
+              <TableCell align = "center">{value.point}</TableCell>
             </TableRow>
           ))}
         </TableBody>
