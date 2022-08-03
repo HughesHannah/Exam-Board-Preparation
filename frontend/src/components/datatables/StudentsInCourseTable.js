@@ -85,7 +85,7 @@ const StudentInCourseTable = () => {
         let finalGrade = 0;
         allStudentAssesment.forEach((obj) => {
           if(obj.preponderance != 'NA'){
-            finalGrade = obj.preponderance;
+            finalGrade += obj.weighting/100;
           }else{
             finalGrade = finalGrade + (obj.gradeMark*obj.weighting/100)
           } 
