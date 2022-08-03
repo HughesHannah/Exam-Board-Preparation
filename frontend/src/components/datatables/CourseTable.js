@@ -8,6 +8,7 @@ const columns = [
   { field: "classCode", headerName: "Code", width: 200 },
   { field: "className", headerName: "Course Name", width: 200},
   { field: "credits", headerName: "Credits" },
+  { field: "year", headerName: "Year", valueGetter: (params) => {return params.row.year.year}}
     // TODO add count of students?
 ];
 
