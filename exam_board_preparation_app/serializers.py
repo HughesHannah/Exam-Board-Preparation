@@ -30,4 +30,33 @@ class GradedWorkSerializer(serializers.ModelSerializer):
     class Meta:
         model = GradedWork
         fields = ('__all__')         
+
+ 
+# class SimpleCourseSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Course
+#         fields = ('id', 'classCode', 'credits')   
         
+        
+class SimpleGradedWorkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GradedWork
+        fields = ('__all__')          
+        
+class CoursesToGradesSerializer(serializers.ModelSerializer):
+    work_course = SimpleGradedWorkSerializer(many=True)
+    class Meta:
+        model = Course
+        fields = ('id', 'classCode', 'credits', 'work_course')        
+        
+class StudentsToCoursesSerializer(serializers.ModelSerializer):
+    course_students = CoursesToGradesSerializer(many=True, read_only=True)
+    class Meta:
+        model = Student
+        fields = ('__all__')  
+        
+      
+        
+         
+        
+    

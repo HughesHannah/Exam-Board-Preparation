@@ -23,6 +23,8 @@ urlpatterns = [
     path('studentCoursesAPI/<id>/grades', views.GradesInStudentAPI),
 
 
+    path('studentsToGradesAPI', views.studentsToGradesAPI),
+
     path('yearsAPI', views.YearsAPI),
     path('uploader', views.UploadAPI),
     path('courseUploader', views.UploadCoursesAPI),

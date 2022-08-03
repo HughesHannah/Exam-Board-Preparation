@@ -26,7 +26,7 @@ class Course(models.Model):
     classCode = models.CharField(max_length=11)
     className = models.CharField(max_length=255, null=True)  
     credits = models.PositiveIntegerField()  
-    students = models.ManyToManyField(Student, blank = True)
+    students = models.ManyToManyField(Student, blank = True, related_name="course_students")
     year = models.ForeignKey(Year, null=True, on_delete=models.SET_NULL)
     isTaught = models.BooleanField(default=True)
     lecturerComments = models.TextField(max_length=500, null=True)
@@ -35,8 +35,8 @@ class Course(models.Model):
     
 class GradedWork(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="work_course")
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="work_student")
     weighting = models.IntegerField()
     gradeMark = models.IntegerField()
     moderation = models.DecimalField(default=1.0, decimal_places=2, max_digits=5)

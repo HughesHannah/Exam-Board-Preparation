@@ -4,12 +4,19 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib import messages
 import pandas as pd
-from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, GradedWorkSerializer, StudentSerializer, YearSerializer
+from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, GradedWorkSerializer, StudentSerializer, StudentsToCoursesSerializer, YearSerializer
 from exam_board_preparation_app.models import ClassHead, GradedWork, Student, Course, Year
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import date
 from itertools import chain
+from django.db.models import Max, Count
+
+
+# Testing
+
+
+    
 
 
 ########## Helper Functions ###############################
@@ -139,7 +146,6 @@ def StudentAPI(request):
     serializer = StudentSerializer(students, many=True)
     return Response(serializer.data)
 
-
 @api_view(['GET'])
 def StudentsInCourseAPI(request, year, code):
     start = year.split('-')[0]
@@ -159,6 +165,16 @@ def IndividualStudentAPI(request, id):
     serializer = StudentSerializer(students, many=False)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def studentsToGradesAPI(request):
+    students = getStudentsForUser(request.user)
+
+    # grade_serializer = GradedWorkSerializer(grades, many=True)
+    student_serializer = StudentsToCoursesSerializer(students, many=True)
+    
+    return Response(
+        student_serializer.data
+    )
 
 ########## Get Year(s) APIs ###############################
 
