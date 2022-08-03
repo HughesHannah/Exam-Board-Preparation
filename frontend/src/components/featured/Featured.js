@@ -1,14 +1,14 @@
 import React from "react";
 import "./featured.scss";
 
-import GradesPieChartExample from "./GradesPieChart.js";
+import GradesPieChart from "../chart/GradesPieChart.js";
 
 const Featured = () => {
   return (
     <div className="featured">
       <div className="bottom">
         <div className="featuredChart">
-          <GradesPieChartExample />
+          <GradesPieChart />
         </div>
       </div>
     </div>
