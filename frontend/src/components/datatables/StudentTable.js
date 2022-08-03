@@ -41,7 +41,7 @@ const StudentTable = () => {
     fetchStudents();
 
     setFilteredData(degree === 'all' ? tableData: tableData.filter(dt=>dt.degreeTitle === degree))
-  }, [degree]);
+  }, [tableData, degree]);
 
 
   const actionColumn = [
