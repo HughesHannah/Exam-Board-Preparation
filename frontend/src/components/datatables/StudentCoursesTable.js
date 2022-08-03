@@ -7,6 +7,7 @@ import {renderGrade} from '../../utils/GradeConversion.js';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Select from '@mui/material/Select';
+import './datatable.scss';
 
 const defaultColumns = [
   { field: "classCode", headerName: "Code", width: 200 },
@@ -57,14 +58,17 @@ const StudentCoursesTable = () => {
         });
 
         let finalGrade = 0;
+        let status = 'NONE'
         if(myCourseAssesment){
           if(myCourseAssesment.preponderance != 'NA'){
             finalGrade = myCourseAssesment.preponderance;
+            status = 'PREP'
           }else{
             finalGrade = myCourseAssesment.gradeMark
+            status = 'GRADE'
           } 
         }
-        return finalGrade != 0 ? (<Tooltip title={myCourseAssesment.weighting + "\% weighting"}><div>{renderGrade(finalGrade, gradeState)}</div></Tooltip>) : "-";
+        return finalGrade != 0 ? (<Tooltip title={myCourseAssesment.weighting + "\% weighting"}><div className={`status ${status}`}>{renderGrade(finalGrade, gradeState)}</div></Tooltip>) : "-";
       },
     };
 
@@ -150,7 +154,7 @@ const StudentCoursesTable = () => {
   ];
 
   return (
-    <div style={{ height: 700, width: "100%" }}>
+    <div style={{ height: 700, width: "100%" }} className='datatable'>
       <Select
           id="grade-select"
           style={{width:200}}

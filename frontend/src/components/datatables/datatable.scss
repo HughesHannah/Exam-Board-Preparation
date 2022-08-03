@@ -9,8 +9,18 @@
       padding: 2px 5px;
       border-radius: 5px;
       color: darkblue;
-      background-color: rgba(173, 216, 230, 0.424);
+      
       cursor: pointer;
+    }
+  }
+
+  .status{
+    padding: 5px;
+    border-radius: 5px;
+
+    &.PREP {
+      color: orange;
+      background-color: rgba(255, 166, 0, 0.192);
     }
   }
 }

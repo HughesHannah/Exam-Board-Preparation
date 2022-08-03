@@ -7,6 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Select from '@mui/material/Select';
 import {renderGrade} from '../../utils/GradeConversion.js';
+import './datatable.scss';
 
 const defaultColumns = [
   { field: "metriculationNumber", headerName: "Metriculation" },
@@ -53,15 +54,18 @@ const StudentInCourseTable = () => {
         });
 
         let finalGrade = 0;
+        let status = 'NONE'
         if(myStudentAssesment){
           if(myStudentAssesment.preponderance != 'NA'){
             finalGrade = myStudentAssesment.preponderance;
+            status = 'PREP'
           }else{
             finalGrade = myStudentAssesment.gradeMark
+            status = 'GRADE'
           } 
         }
 
-        return finalGrade != 0 ? (<Tooltip title={myStudentAssesment.weighting + "\% weighting"}><div>{renderGrade(finalGrade, gradeState)}</div></Tooltip>) : "-";
+        return finalGrade != 0 ? (<Tooltip title={myStudentAssesment.weighting + "\% weighting"}><div className={`status ${status}`}>{renderGrade(finalGrade, gradeState)}</div></Tooltip>) : "-";
       },
     };
 
@@ -73,7 +77,7 @@ const StudentInCourseTable = () => {
       field: 'totalGrade',
       headerName: "Final Grade",
       width: 130,
-      valueGetter: (params) => {
+      renderCell: (params) => {
         let rowStudent = studentData.find((obj) => {
           return obj.id === params.row.id;
         });
@@ -162,7 +166,7 @@ const StudentInCourseTable = () => {
   ];
 
   return (
-    <div style={{ height: 700, width: "100%" }}>
+    <div style={{ height: 700, width: "100%" }} className='datatable'>
       <Select
           id="grade-select"
           style={{width:200}}
