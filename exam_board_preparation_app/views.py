@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib import messages
 import pandas as pd
-from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, GradedWorkSerializer, StudentSerializer, StudentsToCoursesSerializer, StudentsToGradesSerializer, YearSerializer
+from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, GradedWorkSerializer, OverallGradeCourseSerializer, SimpleCourseSerializer, StudentSerializer, StudentsToCoursesSerializer, StudentsToGradesSerializer, YearSerializer
 from exam_board_preparation_app.models import ClassHead, GradedWork, Student, Course, Year
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -17,21 +17,41 @@ from itertools import chain
 
 
 
+
     
 
 
 ########## Helper Functions ###############################
 
-def getStudentsForUser(user):
-    # get the user and classhead object
-    classHead = ClassHead.objects.filter(user=user)
-
+def getStudentsByLevel(level):
     # get the current year
     today = date.today()
     if (today.month >= 9):
         currentYear = Year.objects.get(yearStart=today.year)
     else:
         currentYear = Year.objects.get(yearEnd=today.year)
+    
+    # view students for that level
+    # work out exit years
+    masterExit = (5-level)+currentYear.yearEnd
+    bachelorExit = (4-level)+currentYear.yearEnd
+
+    # get exit year objects
+    exitYearForMasters = Year.objects.get(yearEnd=masterExit)
+    exitYearForBachelor = Year.objects.get(yearEnd=bachelorExit)
+
+    # get students based on these exit years
+    masterStudents = Student.objects.filter(
+        exitYear=exitYearForMasters, mastersStudent=True)
+    bachelorStudents = Student.objects.filter(
+        exitYear=exitYearForBachelor, mastersStudent=False)
+    students = chain(masterStudents, bachelorStudents) 
+    
+    return students
+    
+def getStudentsForUser(user):
+    # get the user and classhead object
+    classHead = ClassHead.objects.filter(user=user)
 
     # can they view all?
     if (classHead[0].level == 0):
@@ -39,25 +59,50 @@ def getStudentsForUser(user):
         students = Student.objects.all()
 
     else:
-        # view students for that level
-        # work out exit years
-        masterExit = (5-classHead[0].level)+currentYear.yearEnd
-        bachelorExit = (4-classHead[0].level)+currentYear.yearEnd
-
-        # get exit year objects
-        exitYearForMasters = Year.objects.get(yearEnd=masterExit)
-        exitYearForBachelor = Year.objects.get(yearEnd=bachelorExit)
-
-        # get students based on these exit years
-        masterStudents = Student.objects.filter(
-            exitYear=exitYearForMasters, mastersStudent=True)
-        bachelorStudents = Student.objects.filter(
-            exitYear=exitYearForBachelor, mastersStudent=False)
-        students = chain(masterStudents, bachelorStudents)
+        students = getStudentsByLevel(classHead[0].level)
         
     return students
-
     
+    
+def getStudentsbyLevelandDegree(level, degree):  
+    # get the current year
+    today = date.today()
+    if (today.month >= 9):
+        currentYear = Year.objects.get(yearStart=today.year)
+    else:
+        currentYear = Year.objects.get(yearEnd=today.year)
+    
+    # view students for that level
+    # work out exit years
+    masterExit = (5-level)+currentYear.yearEnd
+    bachelorExit = (4-level)+currentYear.yearEnd
+
+    # get exit year objects
+    exitYearForMasters = Year.objects.get(yearEnd=masterExit)
+    exitYearForBachelor = Year.objects.get(yearEnd=bachelorExit)
+
+    # get students based on these exit years
+    masterStudents = Student.objects.filter(
+        exitYear=exitYearForMasters, mastersStudent=True, degreeTitle=degree)
+    bachelorStudents = Student.objects.filter(
+        exitYear=exitYearForBachelor, mastersStudent=False, degreeTitle=degree)
+    students = chain(masterStudents, bachelorStudents) 
+    
+    return students  
+    
+def getStudentsByUserandDegree(user, degree):
+    # get the user and classhead object
+    classHead = ClassHead.objects.filter(user=user)
+
+    # can they view all?
+    if (classHead[0].level == 0):
+        # view all students
+        students = Student.objects.filter(degreeTitle=degree)
+
+    else:
+        students = getStudentsbyLevelandDegree(classHead[0].level, degree)
+        
+    return students
 
 ########## Get Course(s) APIs ###############################
 
@@ -66,6 +111,12 @@ def getStudentsForUser(user):
 def CourseAPI(request, id=0):
     courses = Course.objects.all()
     serializer = CourseSerializer(courses, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def simpleCourseAPI(request, id=0):
+    courses = Course.objects.all()
+    serializer = SimpleCourseSerializer(courses, many=True)
     return Response(serializer.data)
 
 # All Courses in particular year
@@ -95,6 +146,16 @@ def IndividualStudentCoursesAPI(request, id):
     return Response(serializer.data)
 
 ########## Get Grade(s) APIs ###############################
+
+# get all grades 
+@api_view(['GET'])
+def GradesAPI(request, degree):
+    students = getStudentsByUserandDegree(request.user, degree)
+    
+    grades = GradedWork.objects.filter(student__in=students)
+
+    serializer = GradedWorkSerializer(grades, many=True)
+    return Response(serializer.data)
 
 # get all grades for a particular course
 @api_view(['GET'])
@@ -159,6 +220,13 @@ def StudentsInCourseAPI(request, year, code):
     serializer = StudentSerializer(students, many=True)
     return Response(serializer.data)
 
+# get All Students and their Grades
+@api_view(['GET'])
+def studentsAndGradesAPI(request, degree):
+    students = getStudentsByUserandDegree(request.user, degree)
+    serializer = StudentsToGradesSerializer(students, many=True)
+    return Response(serializer.data)
+
 # get Students and their Grades for a Course
 @api_view(['GET'])
 def studentsAndGradesForCourseAPI(request, year, code):
@@ -177,16 +245,6 @@ def IndividualStudentAPI(request, id):
     serializer = StudentSerializer(students, many=False)
     return Response(serializer.data)
 
-# @api_view(['GET'])
-# def studentsToGradesAPI(request):
-#     students = getStudentsForUser(request.user)
-
-#     # grade_serializer = GradedWorkSerializer(grades, many=True)
-#     student_serializer = StudentsToCoursesSerializer(students, many=True)
-    
-#     return Response(
-#         student_serializer.data
-#     )
 
 ########## Get Year(s) APIs ###############################
 

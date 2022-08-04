@@ -23,6 +23,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ('__all__')
+              
         
 class GradedWorkSerializer(serializers.ModelSerializer):
     student = StudentSerializer()
@@ -35,7 +36,7 @@ class GradedWorkSerializer(serializers.ModelSerializer):
 class SimpleCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ('id', 'classCode', 'credits')   
+        fields = ('id', 'classCode', 'className', 'credits')   
         
         
 class SimpleGradedWorkSerializer(serializers.ModelSerializer):
@@ -58,19 +59,21 @@ class StudentsToCoursesSerializer(serializers.ModelSerializer):
         fields = ('__all__')  
         
 class StudentsToGradesSerializer(serializers.ModelSerializer):
-    # work_student = serializers.SerializerMethodField()
+    
     work_student = SimpleGradedWorkSerializer(many=True)
     class Meta:
         model = Student
         fields = ('id', 'metriculationNumber', 'name', 'degreeTitle', 'work_student')     
         
-    # def get_work_student(self, object):
-    #     try:
-    #         work = object.work_student.filter(course = 1)
-    #         return GradedWorkSerializer(work).data
-    #     except GradedWork.DoesNotExist:
-    #         return None      
+
+class OverallGradeCourseSerializer(serializers.ModelSerializer):
+    work_course = SimpleGradedWorkSerializer(many=True)
+
+    class Meta:
+        model = Course
+        fields = ('__all__')    
         
+     
          
         
     
