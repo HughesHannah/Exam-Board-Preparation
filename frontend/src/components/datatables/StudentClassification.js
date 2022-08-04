@@ -48,7 +48,6 @@ const StudentClassification = () => {
 
     // get the names of each course
     const courseNames = [...new Set(courseData.map((item) => item.className))];
-    console.log(courseNames);
 
     // add calculated columns
     projectGradeColumn();
@@ -64,14 +63,11 @@ const StudentClassification = () => {
       valueGetter: (params) => {
       
       const studentWorks = params.row.work_student.filter(work => !work.course.className.includes("project"))
-      console.log(studentWorks)
 
       let weightedCourseMarks = {}
 
       studentWorks.forEach(work => weightedCourseMarks[work.course.className] = [])
       studentWorks.forEach(work => weightedCourseMarks[work.course.className].push((work.gradeMark * work.weighting)/100) )
-      
-      console.log(weightedCourseMarks)
 
       let percentagesByCourse = {}
 
@@ -79,24 +75,20 @@ const StudentClassification = () => {
         const [key, value] = entry;
         percentagesByCourse[key] = sumArray(value);
       })
-      console.log(percentagesByCourse)
 
       let creditsByCourse = {}
       studentWorks.forEach(work => creditsByCourse[work.course.className] = work.course.credits )
-      console.log(creditsByCourse)
 
       let numCredits = 0
       Object.values(creditsByCourse).forEach(val => numCredits += val)
-      console.log(numCredits)
 
       let totalWeighted = 0
       Object.entries(percentagesByCourse).forEach(entry => {
         const [courseName, percentage] = entry;
         totalWeighted += (percentage * creditsByCourse[courseName])
       })
-      console.log(totalWeighted)
 
-      return (totalWeighted/numCredits).toFixed(2)
+      return renderGrade((totalWeighted/numCredits), gradeState)
       },
     };
     // add to list of columns
@@ -110,7 +102,7 @@ const StudentClassification = () => {
       width: 130,
       valueGetter: (params) => {
         const projectWork = params.row.work_student.find(work => work.course.className.includes("project"))
-        return projectWork.gradeMark
+        return renderGrade(projectWork.gradeMark, gradeState)
       },
     };
     // add to list of columns
@@ -123,25 +115,42 @@ const StudentClassification = () => {
       headerName: "Final Grade",
       width: 130,
       valueGetter: (params) => {
-        return 'todo'
-      },
-    };
-    // add to list of columns
-    setColumns((columns) => [...columns, newTotalCol]);
-  }
+      
+        const studentWorks = params.row.work_student
+  
+        let weightedCourseMarks = {}
+  
+        studentWorks.forEach(work => weightedCourseMarks[work.course.className] = [])
+        studentWorks.forEach(work => weightedCourseMarks[work.course.className].push((work.gradeMark * work.weighting)/100) )
+  
+        let percentagesByCourse = {}
+  
+        Object.entries(weightedCourseMarks).forEach(entry => {
+          const [key, value] = entry;
+          percentagesByCourse[key] = sumArray(value);
+        })
+  
+        let creditsByCourse = {}
+        studentWorks.forEach(work => creditsByCourse[work.course.className] = work.course.credits )
+  
+        let numCredits = 0
+        Object.values(creditsByCourse).forEach(val => numCredits += val)
+  
+        let totalWeighted = 0
+        Object.entries(percentagesByCourse).forEach(entry => {
+          const [courseName, percentage] = entry;
+          totalWeighted += (percentage * creditsByCourse[courseName])
+        })
+  
+        return renderGrade((totalWeighted/numCredits), gradeState)
+        },
+      };
+      // add to list of columns
+      setColumns((columns) => [...columns, newTotalCol]);
+    } 
 
-  function finalGradeColumn() {
-    const newTotalCol = {
-      field: "finalGrade",
-      headerName: "Final Grade",
-      width: 130,
-      valueGetter: (params) => {
-        return 'todo'
-      },
-    };
-    // add to list of columns
-    setColumns((columns) => [...columns, newTotalCol]);
-  }
+
+  
 
   const fetchDataHandler = useCallback(async () => {
     setError(null);
