@@ -41,7 +41,7 @@ const StudentClassification = () => {
         ? studentData
         : studentData.filter((dt) => dt.degreeTitle === degree)
     );
-  }, [degree]);
+  }, [studentData, degree]);
 
   return (
     <div style={{ height: 700, width: "100%" }}>

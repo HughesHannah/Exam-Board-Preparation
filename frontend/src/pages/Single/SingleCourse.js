@@ -10,6 +10,11 @@ import ScatterChartExample from "../../components/chart/Scatter.js";
 
 const SingleCourse = () => {
   const [courseData, setCourseData] = useState([]);
+  const [gradeData, setGradeData] = useState([])
+  const [isModerated, setIsModerated] = useState(false);
+  const [selectedAssignment, setSelectedAssignment] = useState()
+  const [works, setWorks] = useState([]);
+  const [moderation, setModeration] = useState(1.0);
 
   const path = useParams();
 
@@ -17,8 +22,15 @@ const SingleCourse = () => {
     fetch(variables.API_URL + "courseAPI/" + path.year + "/" + path.courseID)
       .then((data) => data.json())
       .then((data) => setCourseData(data));
+
+    fetch(variables.API_URL + "courseAPI/" + path.year + "/" + path.courseID + "/students/grades")
+      .then((data) => data.json())
+      .then((data) => setGradeData(data));  
   }, []);
 
+  useEffect(() => {
+    setWorks([...new Set(gradeData.map((item) => item.name))]);
+  }, [gradeData])
 
   return (
     <div className="single">
@@ -45,6 +57,10 @@ const SingleCourse = () => {
                 <span className="itemKey">Average Grade:</span>
                 <span className="itemValue">CALCULATE</span>
               </div>
+              <div className="detailItem">
+                <span className="itemKey">Moderated:</span>
+                <span className="itemValue">{isModerated ? "Yes" : "No"}</span>
+              </div>
             </div>
           </div>
           <div className="right">
@@ -65,6 +81,36 @@ const SingleCourse = () => {
         <div className="bottom">
           <h1 className="title">Student Grades</h1>
           <StudentsInCourseTable />
+        </div>
+        <div className="moderation">
+          <h1 className="title">Course Moderation</h1>
+          <div>
+            <p>Current Moderation:</p>
+            <ul>
+              <li>None</li>
+            </ul>
+          </div>
+          <div>
+            <p>
+              Add Moderation:
+            </p>
+            <select id="Assignment" name="Assignment" onChange={(e) => setSelectedAssignment(e.target.value)}>
+              <option>Please Select</option>
+              {works.map((eachWork) => (
+                <option key={eachWork} value={eachWork}>
+                  {eachWork}
+                </option>
+              ))}
+            </select>
+            <p>Moderation:</p>
+            <input
+              type='number'
+              step='any'
+              onChange={(e) => setModeration(e.target.value)}
+              value={moderation}
+            />
+            <button>Submit</button>
+            </div>
         </div>
       </div>
     </div>

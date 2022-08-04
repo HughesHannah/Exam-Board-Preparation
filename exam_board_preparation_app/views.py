@@ -10,19 +10,11 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import date
 from itertools import chain
-from django.db.models import Max, Count
 
 
 # Testing
-@api_view(['GET'])
-def testAPI(request, year, code):
-    start = year.split('-')[0]
-    dbYear = Year.objects.get(yearStart=start)
-    course = Course.objects.get(year=dbYear.id, classCode=code)
-    students = course.students.all()
-    
-    serializer = StudentsToGradesSerializer(students, many=True)
-    return Response(serializer.data)
+
+
 
 
     
@@ -167,6 +159,17 @@ def StudentsInCourseAPI(request, year, code):
     serializer = StudentSerializer(students, many=True)
     return Response(serializer.data)
 
+# get Students and their Grades for a Course
+@api_view(['GET'])
+def studentsAndGradesForCourseAPI(request, year, code):
+    start = year.split('-')[0]
+    dbYear = Year.objects.get(yearStart=start)
+    course = Course.objects.get(year=dbYear.id, classCode=code)
+    students = course.students.all()
+    
+    serializer = StudentsToGradesSerializer(students, many=True)
+    return Response(serializer.data)
+
 # Individual Student
 @api_view(['GET'])
 def IndividualStudentAPI(request, id):
@@ -174,16 +177,16 @@ def IndividualStudentAPI(request, id):
     serializer = StudentSerializer(students, many=False)
     return Response(serializer.data)
 
-@api_view(['GET'])
-def studentsToGradesAPI(request):
-    students = getStudentsForUser(request.user)
+# @api_view(['GET'])
+# def studentsToGradesAPI(request):
+#     students = getStudentsForUser(request.user)
 
-    # grade_serializer = GradedWorkSerializer(grades, many=True)
-    student_serializer = StudentsToCoursesSerializer(students, many=True)
+#     # grade_serializer = GradedWorkSerializer(grades, many=True)
+#     student_serializer = StudentsToCoursesSerializer(students, many=True)
     
-    return Response(
-        student_serializer.data
-    )
+#     return Response(
+#         student_serializer.data
+#     )
 
 ########## Get Year(s) APIs ###############################
 

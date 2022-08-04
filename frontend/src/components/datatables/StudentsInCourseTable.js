@@ -249,7 +249,12 @@ const StudentInCourseTable = () => {
 
     try {
       const studentgradeResponse = await fetch(
-        variables.API_URL + "testAPI/" + path.year + "/" + path.courseID
+        variables.API_URL +
+          "courseAPI/" +
+          path.year +
+          "/" +
+          path.courseID +
+          "/students"
       );
       if (!studentgradeResponse.ok) {
         throw new Error("Something went wrong!");
