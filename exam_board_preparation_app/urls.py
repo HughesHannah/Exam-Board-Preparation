@@ -22,7 +22,7 @@ urlpatterns = [
     path('studentCoursesAPI/<id>', views.IndividualStudentCoursesAPI),
     path('studentCoursesAPI/<id>/grades', views.GradesInStudentAPI),
 
-
+    path('testAPI/<year>/<code>', views.testAPI),
     path('studentsToGradesAPI', views.studentsToGradesAPI),
 
     path('yearsAPI', views.YearsAPI),

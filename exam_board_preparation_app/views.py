@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib import messages
 import pandas as pd
-from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, GradedWorkSerializer, StudentSerializer, StudentsToCoursesSerializer, YearSerializer
+from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, GradedWorkSerializer, StudentSerializer, StudentsToCoursesSerializer, StudentsToGradesSerializer, YearSerializer
 from exam_board_preparation_app.models import ClassHead, GradedWork, Student, Course, Year
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -14,6 +14,15 @@ from django.db.models import Max, Count
 
 
 # Testing
+@api_view(['GET'])
+def testAPI(request, year, code):
+    start = year.split('-')[0]
+    dbYear = Year.objects.get(yearStart=start)
+    course = Course.objects.get(year=dbYear.id, classCode=code)
+    students = course.students.all()
+    
+    serializer = StudentsToGradesSerializer(students, many=True)
+    return Response(serializer.data)
 
 
     

@@ -3,127 +3,188 @@ import { variables } from "../../Variables.js";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import MenuItem from '@mui/material/MenuItem';
-import Tooltip from '@mui/material/Tooltip';
-import Select from '@mui/material/Select';
-import {renderGrade} from '../../utils/GradeConversion.js';
-import './datatable.scss';
+import MenuItem from "@mui/material/MenuItem";
+import Tooltip from "@mui/material/Tooltip";
+import Select from "@mui/material/Select";
+import { renderGrade } from "../../utils/GradeConversion.js";
+import "./datatable.scss";
 
 const defaultColumns = [
-  { field: "metriculationNumber", headerName: "Metriculation" },
-  { field: "name", headerName: "Student Name", width: 200 },
-  { field: "degreeTitle", headerName: "Degree", width: 200 },
+  {
+    field: "metriculationNumber",
+    headerName: "Metriculation",
+    valueGetter: (params) => {
+      return params.row.metriculationNumber;
+    },
+  },
+  {
+    field: "name",
+    headerName: "Student Name",
+    valueGetter: (params) => {
+      return params.row.name;
+    },
+  },
+  {
+    field: "degreeTitle",
+    headerName: "Degree",
+    valueGetter: (params) => {
+      return params.row.degreeTitle;
+    },
+  },
 ];
 
 const StudentInCourseTable = () => {
-  const [studentData, setStudentData] = useState([]);
   const [gradeData, setGradeData] = useState([]);
   const [error, setError] = useState(null);
   const [columns, setColumns] = useState(defaultColumns);
-  const [gradeState, setGradeState] = useState('percentage');
-
+  const [gradeState, setGradeState] = useState("percentage");
+  const [tableData, setTableData] = useState([]);
+  const path = useParams();
 
   useEffect(() => {
+    // reset columns so we dont infinately add to them
     setColumns(defaultColumns);
+
+    // get the names of each graded work
     const works = [...new Set(gradeData.map((item) => item.name))];
     works.forEach((work) => {
-      addColumn(work);
-    })
-    totalsColumn();
-  }, [gradeData, gradeState]);
+      addGradedWorkColumn(work);
+    });
 
-  function addColumn(work) {
+    // calculate final exam grade
+    finalExamGradeColumn();
+
+    //calculate final grade
+    finalGradeColumn();
+
+  }, [tableData, gradeState]);
+
+
+  function addGradedWorkColumn(work) {
     const slugName = work.replace(" ", "");
     const newCol = {
       field: slugName,
       headerName: work,
       width: 130,
       renderCell: (params) => {
-        let rowStudent = studentData.find((obj) => {
-          return obj.id === params.row.id;
+        // find the students work for this class
+        let worksForClass = params.row.work_student.filter((obj) => {
+          return obj.course.classCode === path.courseID;
         });
 
-        let allStudentAssesment = gradeData.filter((obj) => {
+        // find the students work for this column
+        let individualWork = worksForClass.find((obj) => {
           return obj.name === work;
         });
 
-        let myStudentAssesment = allStudentAssesment.find((obj) => {
-          return (
-            obj.student.metriculationNumber === rowStudent.metriculationNumber
-          );
-        });
-
+        // formatting and check for preponderance
         let finalGrade = 0;
-        let status = 'NONE'
-        if(myStudentAssesment){
-          if(myStudentAssesment.preponderance != 'NA'){
-            finalGrade = myStudentAssesment.preponderance;
-            status = 'PREP'
-          }else{
-            finalGrade = myStudentAssesment.gradeMark
-            status = 'GRADE'
-          } 
+        let status = "NONE";
+        if (individualWork) {
+          if (individualWork.preponderance != "NA") {
+            finalGrade = individualWork.preponderance;
+            status = "PREP";
+          } else {
+            finalGrade = individualWork.gradeMark;
+            status = "GRADE";
+          }
         }
 
-        return finalGrade != 0 ? (<Tooltip title={myStudentAssesment.weighting + "\% weighting"}><div className={`status ${status}`}>{renderGrade(finalGrade, gradeState)}</div></Tooltip>) : "-";
+        // return the result with a hover over weighting
+        return finalGrade != 0 ? (
+          <Tooltip title={individualWork.weighting + "% weighting"}>
+            <div className={`status ${status}`}>
+              {renderGrade(finalGrade, gradeState)}
+            </div>
+          </Tooltip>
+        ) : (
+          "-"
+        );
       },
     };
-
+    // add the new column to the list of columns
     setColumns((columns) => [...columns, newCol]); // how to update state using existing!
   }
 
-  function totalsColumn() {
+  function finalExamGradeColumn(){
+    const examCol = {
+      field: 'examGrade',
+      headerName: "Exam Grade",
+      width: 130,
+      renderCell: (params) => {
+        // find the students work for this class
+        let worksForClass = params.row.work_student.filter((obj) => {
+          return obj.course.classCode === path.courseID;
+        });
+
+        let examGrade = 0;
+        let examWeight = 0;
+        let status = 'NONE'
+        worksForClass.forEach((obj) => {
+          if(obj.type == 'E'){
+            if(obj.preponderance != 'NA'){
+              examGrade = obj.preponderance;
+              status = 'PREP'
+            }else {
+              // if a previous exam Q was marked as MV, examGrade will not be integer
+              if (!(examGrade instanceof String)){
+                examGrade = examGrade + (obj.gradeMark*obj.weighting/100)
+                status = 'GRADE'
+              }
+            }
+            examWeight += obj.weighting;
+          }
+        })
+
+        let examFinalGrade = (examGrade/examWeight) *100
+        
+        // return the result with a hover over weighting
+        return examFinalGrade != 0 ? (
+          <Tooltip title={examWeight + "% weighting"}>
+            <div className={`status ${status}`}>
+              {renderGrade(examFinalGrade, gradeState)}
+            </div>
+          </Tooltip>
+        ) : (
+          "-"
+        );
+      },
+    };
+    // add to list of columns
+    setColumns((columns) => [...columns, examCol]);
+  }
+
+  function finalGradeColumn() {
     const newTotalCol = {
-      field: 'totalGrade',
+      field: 'finalGrade',
       headerName: "Final Grade",
       width: 130,
       renderCell: (params) => {
-        let rowStudent = studentData.find((obj) => {
-          return obj.id === params.row.id;
-        });
-
-        let allStudentAssesment = gradeData.filter((obj) => {
-          return obj.student.metriculationNumber === rowStudent.metriculationNumber;
+        // find the students work for this class
+        let worksForClass = params.row.work_student.filter((obj) => {
+          return obj.course.classCode === path.courseID;
         });
 
         let finalGrade = 0;
-        allStudentAssesment.forEach((obj) => {
+        worksForClass.forEach((obj) => {
           if(obj.preponderance != 'NA'){
             finalGrade += obj.weighting/100;
           }else{
             finalGrade = finalGrade + (obj.gradeMark*obj.weighting/100)
-          } 
+          }
         })
 
         return finalGrade !=0 ? renderGrade(finalGrade, gradeState) : "-";
       },
     };
-    setColumns((columns) => [...columns, newTotalCol]); // how to update state using existing!
+    // add to list of columns
+    setColumns((columns) => [...columns, newTotalCol]); 
   }
-
-  const path = useParams();
 
   const fetchDataHandler = useCallback(async () => {
     setError(null);
     try {
-      const response = await fetch(
-        variables.API_URL +
-          "courseAPI/" +
-          path.year +
-          "/" +
-          path.courseID +
-          "/students"
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
-      const data = await response.json();
-      setStudentData(data);
-    } catch (error) {
-      setError(error.message);
-    }
-    try {
-      const response2 = await fetch(
+      const gradeResponse = await fetch(
         variables.API_URL +
           "courseAPI/" +
           path.year +
@@ -131,11 +192,24 @@ const StudentInCourseTable = () => {
           path.courseID +
           "/students/grades"
       );
-      if (!response2.ok) {
+      if (!gradeResponse.ok) {
         throw new Error("Something went wrong!");
       }
-      const data2 = await response2.json();
-      setGradeData(data2);
+      const gradedata = await gradeResponse.json();
+      setGradeData(gradedata);
+    } catch (error) {
+      setError(error.message);
+    }
+
+    try {
+      const studentgradeResponse = await fetch(
+        variables.API_URL + "testAPI/" + path.year + "/" + path.courseID
+      );
+      if (!studentgradeResponse.ok) {
+        throw new Error("Something went wrong!");
+      }
+      const studentgradeData = await studentgradeResponse.json();
+      setTableData(studentgradeData);
     } catch (error) {
       setError(error.message);
     }
@@ -166,19 +240,21 @@ const StudentInCourseTable = () => {
   ];
 
   return (
-    <div style={{ height: 700, width: "100%" }} className='datatable'>
+    <div style={{ height: 700, width: "100%" }} className="datatable">
       <Select
-          id="grade-select"
-          style={{width:200}}
-          value={gradeState}
-          onChange={(e)=>{setGradeState(e.target.value)}}
-        >
-          <MenuItem value={'percentage'}>Percentage</MenuItem>
-          <MenuItem value={'band'}>Band</MenuItem>
-          <MenuItem value={'point'}>Point</MenuItem>
-        </Select>
+        id="grade-select"
+        style={{ width: 200 }}
+        value={gradeState}
+        onChange={(e) => {
+          setGradeState(e.target.value);
+        }}
+      >
+        <MenuItem value={"percentage"}>Percentage</MenuItem>
+        <MenuItem value={"band"}>Band</MenuItem>
+        <MenuItem value={"point"}>Point</MenuItem>
+      </Select>
       <DataGrid
-        rows={studentData}
+        rows={tableData}
         columns={columns.concat(actionColumn)}
         pageSize={50}
         checkboxSelection
