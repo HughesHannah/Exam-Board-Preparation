@@ -56,9 +56,7 @@ const StudentInCourseTable = () => {
 
     //calculate final grade
     finalGradeColumn();
-
   }, [tableData, gradeState]);
-
 
   function addGradedWorkColumn(work) {
     const slugName = work.replace(" ", "");
@@ -66,7 +64,7 @@ const StudentInCourseTable = () => {
       field: slugName,
       headerName: work,
       width: 130,
-      renderCell: (params) => {
+      valueGetter: (params) => {
         // find the students work for this class
         let worksForClass = params.row.work_student.filter((obj) => {
           return obj.course.classCode === path.courseID;
@@ -91,11 +89,34 @@ const StudentInCourseTable = () => {
         }
 
         // return the result with a hover over weighting
-        return finalGrade != 0 ? (
+        return finalGrade != 0 ? renderGrade(finalGrade, gradeState) : "-";
+      },
+      renderCell: (params) => {
+        const valueOfCell = params.value;
+
+        let worksForClass = params.row.work_student.filter((obj) => {
+          return obj.course.classCode === path.courseID;
+        });
+
+        // find the students work for this column
+        let individualWork = worksForClass.find((obj) => {
+          return obj.name === work;
+        });
+
+        // formatting and check for preponderance
+        let status = "NONE";
+        if (individualWork) {
+          if (individualWork.preponderance != "NA") {
+            status = "PREP";
+          } else {
+            status = "GRADE";
+          }
+        }
+
+        // return the result with a hover over weighting
+        return params.value != 0 ? (
           <Tooltip title={individualWork.weighting + "% weighting"}>
-            <div className={`status ${status}`}>
-              {renderGrade(finalGrade, gradeState)}
-            </div>
+            <div className={`status ${status}`}>{valueOfCell}</div>
           </Tooltip>
         ) : (
           "-"
@@ -106,12 +127,12 @@ const StudentInCourseTable = () => {
     setColumns((columns) => [...columns, newCol]); // how to update state using existing!
   }
 
-  function finalExamGradeColumn(){
+  function finalExamGradeColumn() {
     const examCol = {
-      field: 'examGrade',
+      field: "examGrade",
       headerName: "Exam Grade",
       width: 130,
-      renderCell: (params) => {
+      valueGetter: (params) => {
         // find the students work for this class
         let worksForClass = params.row.work_student.filter((obj) => {
           return obj.course.classCode === path.courseID;
@@ -119,31 +140,56 @@ const StudentInCourseTable = () => {
 
         let examGrade = 0;
         let examWeight = 0;
-        let status = 'NONE'
+
         worksForClass.forEach((obj) => {
-          if(obj.type == 'E'){
-            if(obj.preponderance != 'NA'){
+          if (obj.type == "E") {
+            if (obj.preponderance != "NA") {
               examGrade = obj.preponderance;
-              status = 'PREP'
-            }else {
+            } else {
               // if a previous exam Q was marked as MV, examGrade will not be integer
-              if (!(examGrade instanceof String)){
-                examGrade = examGrade + (obj.gradeMark*obj.weighting/100)
-                status = 'GRADE'
+              if (!(examGrade instanceof String)) {
+                examGrade = examGrade + (obj.gradeMark * obj.weighting) / 100;
               }
             }
             examWeight += obj.weighting;
           }
-        })
+        });
 
-        let examFinalGrade = (examGrade/examWeight) *100
-        
+        let examFinalGrade = (examGrade / examWeight) * 100;
+
         // return the result with a hover over weighting
-        return examFinalGrade != 0 ? (
-          <Tooltip title={examWeight + "% weighting"}>
-            <div className={`status ${status}`}>
-              {renderGrade(examFinalGrade, gradeState)}
-            </div>
+        return examFinalGrade != 0
+          ? renderGrade(examFinalGrade, gradeState)
+          : "-";
+      },
+      renderCell: (params) => {
+        const cellValue = params.value;
+
+        // find the students work for this class
+        let worksForClass = params.row.work_student.filter((obj) => {
+          return obj.course.classCode === path.courseID;
+        });
+
+        let examWeight = 0;
+        let status = "NONE";
+        worksForClass.forEach((obj) => {
+          if (obj.type == "E") {
+            if (obj.preponderance != "NA") {
+              status = "PREP";
+            } else {
+              // if a previous exam Q was marked as MV, examGrade will not be integer
+              if (!(cellValue instanceof String)) {
+                status = "GRADE";
+              }
+            }
+            examWeight += obj.weighting;
+          }
+        });
+
+        // return the result with a hover over weighting
+        return cellValue != 0 ? (
+          <Tooltip title={examWeight + "%  exam total weighting"}>
+            <div className={`status ${status}`}>{cellValue}</div>
           </Tooltip>
         ) : (
           "-"
@@ -156,10 +202,10 @@ const StudentInCourseTable = () => {
 
   function finalGradeColumn() {
     const newTotalCol = {
-      field: 'finalGrade',
+      field: "finalGrade",
       headerName: "Final Grade",
       width: 130,
-      renderCell: (params) => {
+      valueGetter: (params) => {
         // find the students work for this class
         let worksForClass = params.row.work_student.filter((obj) => {
           return obj.course.classCode === path.courseID;
@@ -167,18 +213,18 @@ const StudentInCourseTable = () => {
 
         let finalGrade = 0;
         worksForClass.forEach((obj) => {
-          if(obj.preponderance != 'NA'){
-            finalGrade += obj.weighting/100;
-          }else{
-            finalGrade = finalGrade + (obj.gradeMark*obj.weighting/100)
+          if (obj.preponderance != "NA") {
+            finalGrade += obj.weighting / 100;
+          } else {
+            finalGrade = finalGrade + (obj.gradeMark * obj.weighting) / 100;
           }
-        })
+        });
 
-        return finalGrade !=0 ? renderGrade(finalGrade, gradeState) : "-";
+        return finalGrade != 0 ? renderGrade(finalGrade, gradeState) : "-";
       },
     };
     // add to list of columns
-    setColumns((columns) => [...columns, newTotalCol]); 
+    setColumns((columns) => [...columns, newTotalCol]);
   }
 
   const fetchDataHandler = useCallback(async () => {
