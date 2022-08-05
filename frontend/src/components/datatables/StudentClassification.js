@@ -5,7 +5,10 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { renderGrade } from "../../utils/GradeConversion.js";
+import {
+  renderGrade,
+  getWeightedGradeFromWorks,
+} from "../../utils/GradeConversion.js";
 import "./datatable.scss";
 import AuthContext from "../../context/AuthContext.js";
 import DegreePicker from "../picker/DegreePicker.js";
@@ -22,14 +25,14 @@ const defaultColumns = [
 ];
 
 function sumArray(array) {
-  let sum = 0
-  array.forEach(val => sum = sum + val)
-  return sum.toFixed(2)
+  let sum = 0;
+  array.forEach((val) => (sum = sum + val));
+  return sum.toFixed(2);
 }
 
 const StudentClassification = () => {
   const [gradeData, setGradeData] = useState([]);
-  const [courseData, setCourseData] = useState([])
+  const [courseData, setCourseData] = useState([]);
   const [error, setError] = useState(null);
   const [columns, setColumns] = useState(defaultColumns);
   const [gradeState, setGradeState] = useState("percentage");
@@ -37,23 +40,37 @@ const StudentClassification = () => {
   const [loading, setLoading] = useState(true);
   const path = useParams();
   let { authTokens, logoutUser } = useContext(AuthContext);
-  
 
   useEffect(() => {
     // reset columns so we dont infinately add to them
     setColumns(defaultColumns);
 
-    // get the names of each graded work
-    const works = [...new Set(gradeData.map((item) => item.name))];
-
-    // get the names of each course
-    const courseNames = [...new Set(courseData.map((item) => item.className))];
-
     // add calculated columns
+    creditsTakenColumn();
     projectGradeColumn();
     taughtGradeColumn();
     finalGradeColumn();
   }, [tableData, gradeState]);
+
+  function creditsTakenColumn() {
+    const newCreditCol = {
+      field: "creditsTaken",
+      headerName: "Credits",
+      width: 130,
+      valueGetter: (params) => {
+        const studentWorks = params.row.work_student;
+        let creditsByCourse = {};
+        studentWorks.forEach(
+          (work) =>
+            (creditsByCourse[work.course.className] = work.course.credits)
+        );
+        let numCredits = 0;
+        Object.values(creditsByCourse).forEach((val) => (numCredits += val));
+        return numCredits;
+      },
+    };
+    setColumns((columns) => [...columns, newCreditCol]);
+  }
 
   function taughtGradeColumn() {
     const newTaughtCol = {
@@ -61,34 +78,10 @@ const StudentClassification = () => {
       headerName: "Taught Grade",
       width: 130,
       valueGetter: (params) => {
-      
-      const studentWorks = params.row.work_student.filter(work => !work.course.className.includes("project"))
-
-      let weightedCourseMarks = {}
-
-      studentWorks.forEach(work => weightedCourseMarks[work.course.className] = [])
-      studentWorks.forEach(work => weightedCourseMarks[work.course.className].push((work.gradeMark * work.weighting)/100) )
-
-      let percentagesByCourse = {}
-
-      Object.entries(weightedCourseMarks).forEach(entry => {
-        const [key, value] = entry;
-        percentagesByCourse[key] = sumArray(value);
-      })
-
-      let creditsByCourse = {}
-      studentWorks.forEach(work => creditsByCourse[work.course.className] = work.course.credits )
-
-      let numCredits = 0
-      Object.values(creditsByCourse).forEach(val => numCredits += val)
-
-      let totalWeighted = 0
-      Object.entries(percentagesByCourse).forEach(entry => {
-        const [courseName, percentage] = entry;
-        totalWeighted += (percentage * creditsByCourse[courseName])
-      })
-
-      return renderGrade((totalWeighted/numCredits), gradeState)
+        const studentWorks = params.row.work_student.filter(
+          (work) => !work.course.className.includes("project")
+        );
+        return renderGrade(getWeightedGradeFromWorks(studentWorks), gradeState);
       },
     };
     // add to list of columns
@@ -101,8 +94,10 @@ const StudentClassification = () => {
       headerName: "Project Grade",
       width: 130,
       valueGetter: (params) => {
-        const projectWork = params.row.work_student.find(work => work.course.className.includes("project"))
-        return renderGrade(projectWork.gradeMark, gradeState)
+        const projectWork = params.row.work_student.find((work) =>
+          work.course.className.includes("project")
+        );
+        return renderGrade(projectWork.gradeMark, gradeState);
       },
     };
     // add to list of columns
@@ -115,49 +110,19 @@ const StudentClassification = () => {
       headerName: "Final Grade",
       width: 130,
       valueGetter: (params) => {
-      
-        const studentWorks = params.row.work_student
-  
-        let weightedCourseMarks = {}
-  
-        studentWorks.forEach(work => weightedCourseMarks[work.course.className] = [])
-        studentWorks.forEach(work => weightedCourseMarks[work.course.className].push((work.gradeMark * work.weighting)/100) )
-  
-        let percentagesByCourse = {}
-  
-        Object.entries(weightedCourseMarks).forEach(entry => {
-          const [key, value] = entry;
-          percentagesByCourse[key] = sumArray(value);
-        })
-  
-        let creditsByCourse = {}
-        studentWorks.forEach(work => creditsByCourse[work.course.className] = work.course.credits )
-  
-        let numCredits = 0
-        Object.values(creditsByCourse).forEach(val => numCredits += val)
-  
-        let totalWeighted = 0
-        Object.entries(percentagesByCourse).forEach(entry => {
-          const [courseName, percentage] = entry;
-          totalWeighted += (percentage * creditsByCourse[courseName])
-        })
-  
-        return renderGrade((totalWeighted/numCredits), gradeState)
-        },
-      };
-      // add to list of columns
-      setColumns((columns) => [...columns, newTotalCol]);
-    } 
-
-
-  
+        const studentWorks = params.row.work_student;
+        return renderGrade(getWeightedGradeFromWorks(studentWorks), gradeState);
+      },
+    };
+    // add to list of columns
+    setColumns((columns) => [...columns, newTotalCol]);
+  }
 
   const fetchDataHandler = useCallback(async () => {
     setError(null);
     try {
       const courseResponse = await fetch(
-        variables.API_URL +
-          "courseAPI/simple" 
+        variables.API_URL + "courseAPI/simple"
       );
       if (!courseResponse.ok) {
         throw new Error("Something went wrong!");
@@ -170,14 +135,14 @@ const StudentClassification = () => {
 
     try {
       const gradeResponse = await fetch(
-        variables.API_URL +
-          "gradesAPI/" + path.degree, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + String(authTokens.access),
-            },
-          }
+        variables.API_URL + "gradesAPI/" + path.degree,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + String(authTokens.access),
+          },
+        }
       );
       if (!gradeResponse.ok) {
         throw new Error("Something went wrong!");
@@ -190,19 +155,21 @@ const StudentClassification = () => {
 
     try {
       const studentgradeResponse = await fetch(
-        variables.API_URL +
-          "studentAPI/grades/" + path.degree, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + String(authTokens.access),
-            },
-          }
+        variables.API_URL + "studentAPI/grades/" + path.degree,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + String(authTokens.access),
+          },
+        }
       );
       if (!studentgradeResponse.ok) {
         throw new Error("Something went wrong!");
       }
-      const studentgradeData = await studentgradeResponse.json().then(setLoading(false));
+      const studentgradeData = await studentgradeResponse
+        .json()
+        .then(setLoading(false));
       setTableData(studentgradeData);
     } catch (error) {
       setError(error.message);
@@ -233,8 +200,9 @@ const StudentClassification = () => {
     },
   ];
 
-  let dataTableSection = (<>
-  {/* <Select
+  let dataTableSection = (
+    <>
+      {/* <Select
       id="degree-select"
       style={{ width: 200 }}
       value={degree}
@@ -248,32 +216,32 @@ const StudentClassification = () => {
       
     </Select> */}
 
-    <DegreePicker />
-    <Select
-      id="grade-select"
-      style={{ width: 200 }}
-      value={gradeState}
-      onChange={(e) => {
-        setGradeState(e.target.value);
-      }}
-    >
-      <MenuItem value={"percentage"}>Percentage</MenuItem>
-      <MenuItem value={"band"}>Band</MenuItem>
-      <MenuItem value={"point"}>Point</MenuItem>
-    </Select>
-    <DataGrid
-      rows={tableData}
-      columns={columns.concat(actionColumn)}
-      pageSize={50}
-      checkboxSelection
-      components={{ Toolbar: GridToolbar }}
-    /></>)
+      <DegreePicker />
+      <Select
+        id="grade-select"
+        style={{ width: 200 }}
+        value={gradeState}
+        onChange={(e) => {
+          setGradeState(e.target.value);
+        }}
+      >
+        <MenuItem value={"percentage"}>Percentage</MenuItem>
+        <MenuItem value={"band"}>Band</MenuItem>
+        <MenuItem value={"point"}>Point</MenuItem>
+      </Select>
+      <DataGrid
+        rows={tableData}
+        columns={columns.concat(actionColumn)}
+        pageSize={50}
+        checkboxSelection
+        components={{ Toolbar: GridToolbar }}
+      />
+    </>
+  );
 
   return (
     <div style={{ height: 700, width: "100%" }} className="datatable">
-      {loading ? (<TableSkeletons />):   (
-      dataTableSection
-      ) }
+      {loading ? <TableSkeletons /> : dataTableSection}
     </div>
   );
 };

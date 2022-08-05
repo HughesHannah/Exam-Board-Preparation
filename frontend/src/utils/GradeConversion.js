@@ -58,6 +58,40 @@ export function renderGrade(percentage, gradeState) {
   return percentage.toFixed(0);
 }
 
+function sumArray(array) {
+  let sum = 0
+  array.forEach(val => sum = sum + val)
+  return sum.toFixed(2)
+}
+
+export function getWeightedGradeFromWorks(studentWorks){
+  let weightedCourseMarks = {}
+
+      studentWorks.forEach(work => weightedCourseMarks[work.course.className] = [])
+      studentWorks.forEach(work => weightedCourseMarks[work.course.className].push((work.gradeMark * work.weighting)/100) )
+
+      let percentagesByCourse = {}
+
+      Object.entries(weightedCourseMarks).forEach(entry => {
+        const [key, value] = entry;
+        percentagesByCourse[key] = sumArray(value);
+      })
+
+      let creditsByCourse = {}
+      studentWorks.forEach(work => creditsByCourse[work.course.className] = work.course.credits )
+
+      let numCredits = 0
+      Object.values(creditsByCourse).forEach(val => numCredits += val)
+
+      let totalWeighted = 0
+      Object.entries(percentagesByCourse).forEach(entry => {
+        const [courseName, percentage] = entry;
+        totalWeighted += (percentage * creditsByCourse[courseName])
+      })
+
+      return (totalWeighted/numCredits)
+}
+
 export function countBands(dataItems) {
   let countA = 0;
   let countB = 0;
