@@ -8,6 +8,7 @@ import Select from "@mui/material/Select";
 import {
   renderGrade,
   getWeightedGradeFromWorks,
+  creditsAtBands,
 } from "../../utils/GradeConversion.js";
 import "./datatable.scss";
 import AuthContext from "../../context/AuthContext.js";
@@ -47,6 +48,13 @@ const StudentClassification = () => {
 
     // add calculated columns
     creditsTakenColumn();
+
+    creditsAtBand('A');
+    creditsAtBand('B');
+    creditsAtBand('C');
+    creditsAtBand('D');
+    creditsAtBand('Fail');
+
     projectGradeColumn();
     taughtGradeColumn();
     finalGradeColumn();
@@ -70,6 +78,20 @@ const StudentClassification = () => {
       },
     };
     setColumns((columns) => [...columns, newCreditCol]);
+  }
+
+  function creditsAtBand(bandLetter) {
+    const newBandCol = {
+      field: "credits"+bandLetter,
+      headerName: "Band "+bandLetter,
+      width: 130,
+      valueGetter: (params) => {
+        const studentWorks = params.row.work_student;
+        const creditsByGradeData = creditsAtBands(studentWorks)
+        return creditsByGradeData[bandLetter]
+      },
+    };
+    setColumns((columns) => [...columns, newBandCol]);
   }
 
   function taughtGradeColumn() {
@@ -202,20 +224,6 @@ const StudentClassification = () => {
 
   let dataTableSection = (
     <>
-      {/* <Select
-      id="degree-select"
-      style={{ width: 200 }}
-      value={degree}
-      onChange={(e) => {
-        setDegree(e.target.value);
-        setLoading(true);
-      }}
-    >
-      <MenuItem value={"Computing Science"}>Computing Science</MenuItem>
-      <MenuItem value={"Software Engineering"}>SoftwareEngineering</MenuItem>
-      
-    </Select> */}
-
       <DegreePicker />
       <Select
         id="grade-select"

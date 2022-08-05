@@ -1,3 +1,5 @@
+import { ContactsOutlined } from "@material-ui/icons";
+
 export const values = [
   { minValue: 91, maxValue: 100, point: "22", band: "A1" },
   { minValue: 84, maxValue: 91, point: "21", band: "A2" },
@@ -24,14 +26,6 @@ export const values = [
   { minValue: 0, maxValue: 10, point: "0", band: "H" },
 ];
 
-const broadBands = [
-  { minValue: 91, broadBand: "A" },
-  { minValue: 91, broadBand: "B" },
-  { minValue: 91, broadBand: "C" },
-  { minValue: 91, broadBand: "D" },
-  { minValue: 91, broadBand: "Fail" },
-];
-
 function percentageToPoint(percentage) {
   for (const value of values) {
     if (percentage >= value.minValue) {
@@ -48,6 +42,22 @@ function percentageToBand(percentage) {
   }
 }
 
+const broadBands = [
+  { minValue: 70, band: "A" },
+  { minValue: 60, band: "B" },
+  { minValue: 50, band: "C" },
+  { minValue: 40, band: "D" },
+  { minValue: 0, band: "Fail" },
+];
+
+function percentageToBroadBand(percentage) {
+  for (const broadBand of broadBands) {
+    if (percentage >= broadBand.minValue) {
+      return broadBand.band;
+    }
+  }
+}
+
 export function renderGrade(percentage, gradeState) {
   if (gradeState == "band") {
     return percentageToBand(percentage);
@@ -59,37 +69,87 @@ export function renderGrade(percentage, gradeState) {
 }
 
 function sumArray(array) {
-  let sum = 0
-  array.forEach(val => sum = sum + val)
-  return sum.toFixed(2)
+  let sum = 0;
+  array.forEach((val) => (sum = sum + val));
+  return sum.toFixed(2);
 }
 
-export function getWeightedGradeFromWorks(studentWorks){
-  let weightedCourseMarks = {}
+export function getWeightedGradeFromWorks(studentWorks) {
+  let weightedCourseMarks = {};
 
-      studentWorks.forEach(work => weightedCourseMarks[work.course.className] = [])
-      studentWorks.forEach(work => weightedCourseMarks[work.course.className].push((work.gradeMark * work.weighting)/100) )
+  studentWorks.forEach(
+    (work) => (weightedCourseMarks[work.course.className] = [])
+  );
+  studentWorks.forEach((work) =>
+    weightedCourseMarks[work.course.className].push(
+      (work.gradeMark * work.weighting) / 100
+    )
+  );
 
-      let percentagesByCourse = {}
+  let percentagesByCourse = {};
 
-      Object.entries(weightedCourseMarks).forEach(entry => {
-        const [key, value] = entry;
-        percentagesByCourse[key] = sumArray(value);
-      })
+  Object.entries(weightedCourseMarks).forEach((entry) => {
+    const [key, value] = entry;
+    percentagesByCourse[key] = sumArray(value);
+  });
 
-      let creditsByCourse = {}
-      studentWorks.forEach(work => creditsByCourse[work.course.className] = work.course.credits )
+  let creditsByCourse = {};
+  studentWorks.forEach(
+    (work) => (creditsByCourse[work.course.className] = work.course.credits)
+  );
 
-      let numCredits = 0
-      Object.values(creditsByCourse).forEach(val => numCredits += val)
+  let numCredits = 0;
+  Object.values(creditsByCourse).forEach((val) => (numCredits += val));
 
-      let totalWeighted = 0
-      Object.entries(percentagesByCourse).forEach(entry => {
-        const [courseName, percentage] = entry;
-        totalWeighted += (percentage * creditsByCourse[courseName])
-      })
+  let totalWeighted = 0;
+  Object.entries(percentagesByCourse).forEach((entry) => {
+    const [courseName, percentage] = entry;
+    totalWeighted += percentage * creditsByCourse[courseName];
+  });
 
-      return (totalWeighted/numCredits)
+  return totalWeighted / numCredits;
+}
+
+export function creditsAtBands(studentWorks) {
+  // get weighted course marks
+  let weightedCourseMarks = {};
+  studentWorks.forEach(
+    (work) => (weightedCourseMarks[work.course.className] = [])
+  );
+  studentWorks.forEach((work) =>
+    weightedCourseMarks[work.course.className].push(
+      (work.gradeMark * work.weighting) / 100
+    )
+  );
+
+  // get overall marks per course
+  let bandsByCourse = {};
+
+  Object.entries(weightedCourseMarks).forEach((entry) => {
+    const [key, value] = entry;
+    bandsByCourse[key] = percentageToBroadBand(parseFloat(sumArray(value)));
+  });
+
+  // Get credits by course.
+  let creditsByCourse = {};
+  studentWorks.forEach(
+    (work) => (creditsByCourse[work.course.className] = work.course.credits)
+  );
+
+  let bands = {
+    "A": 0,
+    "B": 0,
+    "C": 0,
+    "D": 0,
+    "Fail": 0
+  }
+
+  // for each course in bands by course
+  Object.entries(bandsByCourse).forEach((entry) => {
+    const [course, band] = entry;
+    bands[band] += creditsByCourse[course]
+  })
+  return bands
 }
 
 export function countBands(dataItems) {
