@@ -3,7 +3,7 @@ import "./list.scss";
 
 import AllCoursesTable from "../../components/datatables/AllCoursesTable.js";
 import Sidebar from "../../components/sidebar/Sidebar.js";
-import YearPicker from "../../components/yearPicker/YearPicker.js";
+import YearPicker from "../../components/picker/YearPicker.js";
 
 const AllCourseList = () => {
   return (

@@ -4,11 +4,12 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
-import Tooltip from "@mui/material/Tooltip";
 import Select from "@mui/material/Select";
 import { renderGrade } from "../../utils/GradeConversion.js";
 import "./datatable.scss";
 import AuthContext from "../../context/AuthContext.js";
+import DegreePicker from "../picker/DegreePicker.js";
+import TableSkeletons from "../datatables/TableSkeleton.js";
 
 const defaultColumns = [
   {
@@ -27,7 +28,6 @@ function sumArray(array) {
 }
 
 const StudentClassification = () => {
-  const [degree, setDegree] = useState("Computing Science");
   const [gradeData, setGradeData] = useState([]);
   const [courseData, setCourseData] = useState([])
   const [error, setError] = useState(null);
@@ -171,7 +171,7 @@ const StudentClassification = () => {
     try {
       const gradeResponse = await fetch(
         variables.API_URL +
-          "gradesAPI/" + degree, {
+          "gradesAPI/" + path.degree, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -191,7 +191,7 @@ const StudentClassification = () => {
     try {
       const studentgradeResponse = await fetch(
         variables.API_URL +
-          "studentAPI/grades/" + degree, {
+          "studentAPI/grades/" + path.degree, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -211,7 +211,7 @@ const StudentClassification = () => {
 
   useEffect(() => {
     fetchDataHandler();
-  }, [fetchDataHandler, degree]);
+  }, [fetchDataHandler]);
 
   const actionColumn = [
     {
@@ -234,7 +234,7 @@ const StudentClassification = () => {
   ];
 
   let dataTableSection = (<>
-  <Select
+  {/* <Select
       id="degree-select"
       style={{ width: 200 }}
       value={degree}
@@ -246,7 +246,9 @@ const StudentClassification = () => {
       <MenuItem value={"Computing Science"}>Computing Science</MenuItem>
       <MenuItem value={"Software Engineering"}>SoftwareEngineering</MenuItem>
       
-    </Select>
+    </Select> */}
+
+    <DegreePicker />
     <Select
       id="grade-select"
       style={{ width: 200 }}
@@ -269,7 +271,7 @@ const StudentClassification = () => {
 
   return (
     <div style={{ height: 700, width: "100%" }} className="datatable">
-      {loading ? (<p>Loading...</p>):   (
+      {loading ? (<TableSkeletons />):   (
       dataTableSection
       ) }
     </div>

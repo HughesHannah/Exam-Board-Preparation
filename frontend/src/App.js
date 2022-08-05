@@ -28,7 +28,7 @@ function App() {
             <Route exact path='/' element={<Home/>}/>
             <Route path="students">
               <Route index element={<StudentList />} />
-              <Route path=":studentID" element={<SingleStudent id="hello"/>} />
+              <Route path=":studentID" element={<SingleStudent />} />
             </Route>
             <Route path="courses">
               <Route index element={<CourseList />} />
@@ -38,7 +38,10 @@ function App() {
               </Route>
             </Route>
             <Route path="grading" element={<Grading />} />
-            <Route path="classification" element={<Classification />} />
+            <Route path="classification">
+              <Route path=":degree" element={<Classification />} />
+            </Route>
+            
             <Route path="upload" element={<Upload />} />
             <Route path="profile" element={<Profile />} />
           </Route>
