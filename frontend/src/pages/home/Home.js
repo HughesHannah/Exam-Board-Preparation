@@ -8,7 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import Widget from "../../components/widget/Widget.js";
-import Featured from "../../components/featured/Featured.js";
+import GradesPieChart from "../../components/chart/GradesPieChart.js";
 import Chart from "../../components/chart/Chart.js";
 import StudentSearchTable from "../../components/table/StudentSearchTable.js";
 import CourseSearchTable from "../../components/table/CourseSearchTable.js";
@@ -94,10 +94,10 @@ const Home = () => {
         <div className="charts">
           <div className="pieChart">
             <h1 className="title">
-              <s>Average Student Grade</s>
+              Student Grades
             </h1>
             <div>
-              <Featured />
+              <GradesPieChart />
             </div>
           </div>
           <div className="lineChart">

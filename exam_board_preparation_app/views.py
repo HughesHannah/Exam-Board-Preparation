@@ -147,16 +147,6 @@ def IndividualStudentCoursesAPI(request, id):
 
 ########## Get Grade(s) APIs ###############################
 
-# get all grades 
-@api_view(['GET'])
-def GradesAPI(request, degree):
-    students = getStudentsByUserandDegree(request.user, degree)
-    
-    grades = GradedWork.objects.filter(student__in=students)
-
-    serializer = GradedWorkSerializer(grades, many=True)
-    return Response(serializer.data)
-
 # get all grades for a particular course
 @api_view(['GET'])
 def GradesInCourseAPI(request, year, code):
@@ -222,7 +212,14 @@ def StudentsInCourseAPI(request, year, code):
 
 # get All Students and their Grades
 @api_view(['GET'])
-def studentsAndGradesAPI(request, degree):
+def studentsAndGradesAPI(request):
+    students = getStudentsForUser(request.user)
+    serializer = StudentsToGradesSerializer(students, many=True)
+    return Response(serializer.data)
+
+# get All Students for a degree and their Grades
+@api_view(['GET'])
+def studentsAndGradesForDegreeAPI(request, degree):
     students = getStudentsByUserandDegree(request.user, degree)
     serializer = StudentsToGradesSerializer(students, many=True)
     return Response(serializer.data)

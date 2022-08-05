@@ -152,41 +152,36 @@ export function creditsAtBands(studentWorks) {
   return bands
 }
 
-export function countBands(dataItems) {
-  let countA = 0;
-  let countB = 0;
-  let countC = 0;
-  let countD = 0;
-  let countFail = 0;
-
-  for (dataItem in dataItems) {
-    // find total
-    let total;
-
-    // calculate band
-    for (const broadBand of broadBands) {
-      if (total >= broadBand.minValue) {
-        const band = broadBand.broadBand;
-        if (band == "A") {
-          countA += 1;
-        } else if (band == "B") {
-          countB += 1;
-        } else if (band == "C") {
-          countC += 1;
-        } else if (band == "D") {
-          countD += 1;
-        } else {
-          countFail += 1;
-        }
-      }
-    }
+export function countBands(studentsAndWorks) {
+  let bands = {
+    "A": 0,
+    "B": 0,
+    "C": 0,
+    "D": 0,
+    "Fail": 0
   }
 
-  return [
-    { countA: countA },
-    { countB: countB },
-    { countC: countC },
-    { countD: countD },
-    { countFail: countFail },
-  ];
+  //for each student
+  studentsAndWorks.forEach((student) => {
+    // calculate final grade = sum(mark*weighting*coursecredits)/totalcredits
+    let totalGrade = 0;
+    student.work_student.forEach((work) => {
+      totalGrade += work.gradeMark*work.weighting*work.course.credits/100;
+    })
+    totalGrade = totalGrade/120;
+    
+    // get band for final grade
+    let studentBand = percentageToBroadBand(totalGrade);
+    // add that band to a count 
+    bands[studentBand] += 1
+  })
+  
+  let returnArray = [];
+
+  Object.entries(bands).forEach((entry) => {
+    const [grade, number] = entry;
+    returnArray.push({name: "Band "+ grade, value: number })
+  });
+
+  return returnArray;
 }

@@ -1,25 +1,15 @@
-import React, { PureComponent } from "react";
-import {
-  PieChart,
-  Pie,
-  Sector,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import React, { useContext, useState, useEffect } from "react";
+import { variables } from "../../Variables.js";
+import { countBands } from "../../utils/GradeConversion.js";
+import AuthContext from "../../context/AuthContext.js";
 
-const data = [
-  { name: "Band A", value: 400 },
-  { name: "Band B", value: 300 },
-  { name: "Band C", value: 300 },
-  { name: "Band D", value: 200 },
-  { name: "Fail", value: 100 },
-];
+import { PieChart, Pie, Sector, Cell, Tooltip } from "recharts";
+
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#800080"];
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
-  
+
   const {
     cx,
     cy,
@@ -33,7 +23,7 @@ const renderActiveShape = (props) => {
     percent,
     value,
   } = props;
-  
+
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
   const sx = cx + (outerRadius + 10) * cos;
@@ -86,43 +76,65 @@ const renderActiveShape = (props) => {
     </g>
   );
 };
+
 const initialState = {
   activeIndex: 0,
 };
 
-export default class GradesPieChart extends PureComponent {
-  constructor() {
-    super();
-    this.state = initialState;
-  }
+export default function GradesPieChart(props) {
+  const [pieState, setPieState] = useState(initialState);
+  const [studentGrades, setStudentGrades] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState([]);
+  let { authTokens, logoutUser } = useContext(AuthContext);
 
-  onPieEnter = (data, index) => {
-    this.setState({
-      activeIndex: index,
-    });
+  useEffect(() => {
+    fetch(variables.API_URL + "studentAPI/grades", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
+      },
+    })
+      .then((data) => data.json())
+      .then((data) => setStudentGrades(data))
+      .then(setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    console.log(studentGrades);
+    let result = countBands(studentGrades);
+    console.log(result);
+    setData(result);
+  }, [studentGrades]);
+
+  const onPieEnter = (data, index) => {
+    setPieState({ activeIndex: index });
   };
 
-  render() {
-    return (
-      <PieChart width={400} height={250} onMouseEnter={this.onPieEnter}>
-        <Pie
-          activeIndex={this.state.activeIndex}
-          activeShape={renderActiveShape}
-          data={data}
-          cx={195}
-          cy={100}
-          innerRadius={60}
-          outerRadius={80}
-          onMouseEnter={this.onPieEnter}
-          dataKey="value"
-        >
+  const pieRender = (
+    <PieChart width={400} height={250} onMouseEnter={onPieEnter}>
+      <Pie
+        activeIndex={pieState.activeIndex}
+        activeShape={renderActiveShape}
+        data={data}
+        cx={195}
+        cy={100}
+        innerRadius={60}
+        outerRadius={80}
+        onMouseEnter={onPieEnter}
+        dataKey="value"
+      >
+        {data.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+        ))}
+        <Tooltip />
+      </Pie>
+    </PieChart>
+  );
 
-          {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-          <Tooltip />
-        </Pie>
-      </PieChart>
-    );
-  }
+  const loadingText = <p>Loading</p>;
+
+  return <div>{loading ? loadingText : pieRender}</div>;
 }

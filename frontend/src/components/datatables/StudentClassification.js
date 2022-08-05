@@ -32,7 +32,6 @@ function sumArray(array) {
 }
 
 const StudentClassification = () => {
-  const [gradeData, setGradeData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const [error, setError] = useState(null);
   const [columns, setColumns] = useState(defaultColumns);
@@ -151,26 +150,6 @@ const StudentClassification = () => {
       }
       const coursedata = await courseResponse.json();
       setCourseData(coursedata);
-    } catch (error) {
-      setError(error.message);
-    }
-
-    try {
-      const gradeResponse = await fetch(
-        variables.API_URL + "gradesAPI/" + path.degree,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + String(authTokens.access),
-          },
-        }
-      );
-      if (!gradeResponse.ok) {
-        throw new Error("Something went wrong!");
-      }
-      const gradedata = await gradeResponse.json();
-      setGradeData(gradedata);
     } catch (error) {
       setError(error.message);
     }
