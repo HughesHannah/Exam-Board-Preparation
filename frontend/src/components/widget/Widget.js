@@ -4,17 +4,18 @@ import { Link } from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
 import "./widget.scss";
 import AuthContext from "../../context/AuthContext.js";
+import {averageGrade} from "../../utils/GradeConversion.js";
 
 import PeopleIcon from "@mui/icons-material/People";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
 const Widget = ({ type }) => {
   let data;
   let { user, authTokens, logoutUser } = useContext(AuthContext);
   const navigate = useNavigate();
-
+  const [studentGrades, setStudentGrades] = useState([]);
   const [studentData, setStudentData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const [prepData, setPrepData] = useState([]);
@@ -33,6 +34,18 @@ const Widget = ({ type }) => {
     } else if (response.statusText === "Unauthorized") {
       logoutUser();
     }
+  };
+
+  const fetchGrades = async () => {
+    const res = await fetch(variables.API_URL + "studentAPI/grades", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
+      },
+    })
+      .then((data) => data.json())
+      .then((data) => setStudentGrades(data))
   };
 
   let getPrep = async () => {
@@ -54,6 +67,7 @@ const Widget = ({ type }) => {
   useEffect(() => {
     getStudents();
     getPrep();
+    fetchGrades();
   }, []);
 
   useEffect(() => {
@@ -97,10 +111,10 @@ const Widget = ({ type }) => {
       break;
     case "issueCounter":
       data = {
-        title: "Potential Issues",
+        title: "Average Grade",
         link: "/",
-        icon: <WarningAmberIcon className="icon" />,
-        value: issuesCount,
+        icon: <DriveFileRenameOutlineIcon className="icon" />,
+        value: averageGrade(studentGrades, "band"),
       };
   }
 

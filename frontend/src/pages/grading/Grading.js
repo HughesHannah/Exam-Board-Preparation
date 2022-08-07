@@ -11,7 +11,7 @@ const Grading = () => {
       <div className="mainContainer">
         <h3 className="title">Grading Rules</h3>
         <div className="tableOfGrades">
-          <div className="editButton">Edit</div>
+          {/* <div className="editButton">Edit</div> */}
           <div className="titleOfSection">Table of Grades</div>
           <Table />
         </div>

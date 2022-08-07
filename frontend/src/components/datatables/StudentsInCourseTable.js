@@ -8,6 +8,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Select from "@mui/material/Select";
 import { renderGrade } from "../../utils/GradeConversion.js";
 import "./datatable.scss";
+import TableSkeleton from "./TableSkeleton.js";
 
 const defaultColumns = [
   {
@@ -39,6 +40,7 @@ const StudentInCourseTable = () => {
   const [columns, setColumns] = useState(defaultColumns);
   const [gradeState, setGradeState] = useState("percentage");
   const [courseData, setCourseData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const path = useParams();
 
   useEffect(() => {
@@ -56,6 +58,8 @@ const StudentInCourseTable = () => {
 
     //calculate final grade
     finalGradeColumn();
+
+    setIsLoading(false)
   }, [courseData, gradeState]);
 
   function addGradedWorkColumn(work) {
@@ -71,12 +75,14 @@ const StudentInCourseTable = () => {
         });
 
         // find the students work for this column
-        let individualWork
-        if(worksForClass.length>1){ //more than one assignment type, find correct one
+        let individualWork;
+        if (worksForClass.length > 1) {
+          //more than one assignment type, find correct one
           individualWork = worksForClass.find((obj) => {
             return obj.name === work;
           });
-        }else{ // only one assignment type, set it to this one
+        } else {
+          // only one assignment type, set it to this one
           individualWork = worksForClass[0];
         }
 
@@ -103,15 +109,17 @@ const StudentInCourseTable = () => {
           return obj.course.classCode === path.courseID;
         });
         // find the students work for this column
-        let individualWork
-        if(worksForClass.length>1){ //more than one assignment type, find correct one
+        let individualWork;
+        if (worksForClass.length > 1) {
+          //more than one assignment type, find correct one
           individualWork = worksForClass.find((obj) => {
             return obj.name === work;
           });
-        }else{ // only one assignment type, set it to this one
+        } else {
+          // only one assignment type, set it to this one
           individualWork = worksForClass[0];
         }
-      
+
         // formatting and check for preponderance
         let status = "NONE";
         if (individualWork) {
@@ -262,7 +270,8 @@ const StudentInCourseTable = () => {
           "courseAPI/" +
           path.year +
           "/" +
-          path.courseID + "/grades"
+          path.courseID +
+          "/grades"
       );
       if (!courseResponse.ok) {
         throw new Error("Something went wrong!");
@@ -298,8 +307,8 @@ const StudentInCourseTable = () => {
     },
   ];
 
-  return (
-    <div style={{ height: 700, width: "100%" }} className="datatable">
+  let table = (
+    <>
       <Select
         id="grade-select"
         style={{ width: 200 }}
@@ -318,8 +327,16 @@ const StudentInCourseTable = () => {
         pageSize={50}
         checkboxSelection
         components={{ Toolbar: GridToolbar }}
-        componentsProps={{ toolbar: { printOptions: { disableToolbarButton: true } } }}
+        componentsProps={{
+          toolbar: { printOptions: { disableToolbarButton: true } },
+        }}
       />
+    </>
+  );
+
+  return (
+    <div style={{ height: 700, width: "100%" }} className="datatable">
+      {isLoading? <TableSkeleton /> : table}
     </div>
   );
 };

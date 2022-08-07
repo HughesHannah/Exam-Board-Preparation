@@ -16,6 +16,7 @@ import CourseSearchTable from "../../components/table/CourseSearchTable.js";
 const Home = () => {
   const [studentData, setStudentData] = useState([]);
   const [courseData, setCourseData] = useState([]);
+  const [studentGrades, setStudentGrades] = useState([]);
   const [search, setSearch] = useState(null);
   let { authTokens, logoutUser } = useContext(AuthContext);
 
@@ -97,7 +98,7 @@ const Home = () => {
               Student Grades
             </h1>
             <div>
-              <GradesPieChart />
+              <GradesPieChart/>
             </div>
           </div>
           <div className="lineChart">
