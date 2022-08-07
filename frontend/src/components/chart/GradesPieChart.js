@@ -80,30 +80,30 @@ const initialState = {
   activeIndex: 0,
 };
 
-export default function GradesPieChart(props) {
+export default function GradesPieChart({inputData}) {
   const [pieState, setPieState] = useState(initialState);
-  const [studentGrades, setStudentGrades] = useState([]);
+  // const [studentGrades, setStudentGrades] = useState([]);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
   let { authTokens, logoutUser } = useContext(AuthContext);
  
 
-  useEffect(() => {
-    fetch(variables.API_URL + "studentAPI/grades", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + String(authTokens.access),
-      },
-    })
-      .then((data) => data.json())
-      .then((data) => setStudentGrades(data))
-  }, []);
+  // useEffect(() => {
+  //   fetch(variables.API_URL + "studentAPI/grades", {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: "Bearer " + String(authTokens.access),
+  //     },
+  //   })
+  //     .then((data) => data.json())
+  //     .then((data) => setStudentGrades(data))
+  // }, []);
 
   useEffect(() => {
-    let result = countBands(studentGrades);
+    let result = countBands(inputData);
     setData(result);
-  }, [studentGrades]);
+  }, []);
 
   const onPieEnter = (data, index) => {
     setPieState({ activeIndex: index });

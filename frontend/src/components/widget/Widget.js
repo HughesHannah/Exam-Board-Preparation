@@ -11,14 +11,15 @@ import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 
-const Widget = ({ type }) => {
-  let data;
+const Widget = ({ type, data }) => {
+  let widgetData;
   let { user, authTokens, logoutUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [studentGrades, setStudentGrades] = useState([]);
   const [studentData, setStudentData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const [prepData, setPrepData] = useState([]);
+
 
   let getStudents = async () => {
     let response = await fetch(variables.API_URL + "studentAPI", {
@@ -34,18 +35,6 @@ const Widget = ({ type }) => {
     } else if (response.statusText === "Unauthorized") {
       logoutUser();
     }
-  };
-
-  const fetchGrades = async () => {
-    const res = await fetch(variables.API_URL + "studentAPI/grades", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + String(authTokens.access),
-      },
-    })
-      .then((data) => data.json())
-      .then((data) => setStudentGrades(data))
   };
 
   let getPrep = async () => {
@@ -67,7 +56,6 @@ const Widget = ({ type }) => {
   useEffect(() => {
     getStudents();
     getPrep();
-    fetchGrades();
   }, []);
 
   useEffect(() => {
@@ -79,11 +67,11 @@ const Widget = ({ type }) => {
   const studentCount = studentData.length;
   const courseCount = courseData.length;
   const preponderanceCount = prepData.length;
-  const averageStudentGrade = averageGrade(studentGrades, "band");
+  const averageStudentGrade = averageGrade(data, "band");
 
   switch (type) {
     case "studentCounter":
-      data = {
+      widgetData = {
         title: "Students",
         link: "/students",
         icon: <PeopleIcon className="icon" />,
@@ -93,7 +81,7 @@ const Widget = ({ type }) => {
     default:
       break;
     case "completedCourseCounter":
-      data = {
+      widgetData = {
         title: "Courses",
         link: "/courses/2020-2021",
         icon: <HistoryEduIcon className="icon" />,
@@ -101,7 +89,7 @@ const Widget = ({ type }) => {
       };
       break;
     case "preponderanceCounter":
-      data = {
+      widgetData = {
         title: "Instances of Preponderance",
         link: "/",
         icon: <NotificationsNoneIcon className="icon" />,
@@ -109,7 +97,7 @@ const Widget = ({ type }) => {
       };
       break;
     case "issueCounter":
-      data = {
+      widgetData = {
         title: "Average Grade",
         link: "/",
         icon: <DriveFileRenameOutlineIcon className="icon" />,
@@ -120,10 +108,10 @@ const Widget = ({ type }) => {
   return (
     <div className="widget">
       <div className="left">
-        <span className="counter">{data.value}</span>
-        <span className="title">{data.title}</span>
+        <span className="counter">{widgetData.value}</span>
+        <span className="title">{widgetData.title}</span>
       </div>
-      <div className="right">{data.icon}</div>
+      <div className="right">{widgetData.icon}</div>
     </div>
   );
 };

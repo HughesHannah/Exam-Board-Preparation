@@ -6,9 +6,9 @@ import { variables } from "../../Variables.js";
 import AuthContext from "../../context/AuthContext.js";
 
 
-const AverageGradeLineChart = () => {
+const AverageGradeLineChart = ({inputData}) => {
   let { user, authTokens, logoutUser } = useContext(AuthContext);
-  const [studentGrades, setStudentGrades] = useState([]);
+  // const [studentGrades, setStudentGrades] = useState([]);
   const data = [
     {
       name: "2016",
@@ -36,24 +36,24 @@ const AverageGradeLineChart = () => {
     },
     {
       name: "2022",
-      avg: averageGrade(studentGrades, "point"),
+      avg: averageGrade(inputData, "point"),
     },
   ];
 
-  const fetchGrades = async () => {
-    const res = await fetch(variables.API_URL + "studentAPI/grades", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + String(authTokens.access),
-      },
-    })
-      .then((data) => data.json())
-      .then((data) => setStudentGrades(data))
-  };
+  // const fetchGrades = async () => {
+  //   const res = await fetch(variables.API_URL + "studentAPI/grades", {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: "Bearer " + String(authTokens.access),
+  //     },
+  //   })
+  //     .then((data) => data.json())
+  //     .then((data) => setStudentGrades(data))
+  // };
 
   useEffect(() => {
-    fetchGrades();
+    // fetchGrades();
   }, []);
 
   return (

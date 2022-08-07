@@ -16,7 +16,9 @@ import CourseSearchTable from "../../components/table/CourseSearchTable.js";
 const Home = () => {
   const [studentData, setStudentData] = useState([]);
   const [courseData, setCourseData] = useState([]);
+  const [studentGrades, setStudentGrades] = useState([]);
   const [search, setSearch] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   let { authTokens, logoutUser } = useContext(AuthContext);
 
   const studentKeys = ["name", "metriculationNumber"];
@@ -60,9 +62,26 @@ const Home = () => {
       .then((data) => setCourseData(data));
   };
 
+  const fetchGrades = async () => {
+    // console.log(isLoading)
+    const res = await fetch(variables.API_URL + "studentAPI/grades", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + String(authTokens.access),
+      },
+    })
+      .then((data) => data.json())
+      .then((data) => setStudentGrades(data))
+      .then(setIsLoading(false))
+      .then(console.log(studentGrades))
+      
+  };
+
   useEffect(() => {
     fetchStudents();
     fetchCourses();
+    fetchGrades();
   }, []);
 
   return (
@@ -70,10 +89,10 @@ const Home = () => {
       <Sidebar />
       <div className="homeContainer">
         <div className="widgets">
-          <Widget type="studentCounter" />
-          <Widget type="completedCourseCounter" />
-          <Widget type="preponderanceCounter" />
-          <Widget type="issueCounter" />
+         {(studentGrades.length == 0) ? (<p>Hi</p>): <Widget type="studentCounter" data={studentGrades}/>}
+         {(studentGrades.length == 0) ? (<p>Hi</p>): <Widget type="completedCourseCounter" data={studentGrades}/>}
+         {(studentGrades.length == 0) ? (<p>Hi</p>):<Widget type="preponderanceCounter" data={studentGrades}/>}
+         {(studentGrades.length == 0) ? (<p>Hi</p>): <Widget type="issueCounter" data={studentGrades}/>}
         </div>
         <div className="searchdiv">
           <div className="search">
@@ -97,7 +116,8 @@ const Home = () => {
               Student Grades
             </h1>
             <div>
-              <GradesPieChart/>
+            {(studentGrades.length == 0) ? (<p>Loading</p>): <GradesPieChart inputData={studentGrades}/>}
+              
             </div>
           </div>
           <div className="lineChart">
@@ -105,7 +125,7 @@ const Home = () => {
               Average Student Grade by Year
             </h1>
             <div>
-              <AverageGradeLineChart />
+              {(studentGrades.length == 0) ? (<p>Loading</p>): <AverageGradeLineChart inputData={studentGrades}/>}
             </div>
           </div>
         </div>
