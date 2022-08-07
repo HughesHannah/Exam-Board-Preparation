@@ -38,15 +38,16 @@ const StudentInCourseTable = () => {
   const [error, setError] = useState(null);
   const [columns, setColumns] = useState(defaultColumns);
   const [gradeState, setGradeState] = useState("percentage");
-  const [tableData, setTableData] = useState([]);
+  const [courseData, setCourseData] = useState([]);
   const path = useParams();
 
   useEffect(() => {
     // reset columns so we dont infinately add to them
     setColumns(defaultColumns);
 
+    console.log(courseData)
     // get the names of each graded work
-    const works = [...new Set(gradeData.map((item) => item.name))];
+    const works = [...new Set(courseData.map((item) => item.name))];
     works.forEach((work) => {
       addGradedWorkColumn(work);
     });
@@ -56,7 +57,7 @@ const StudentInCourseTable = () => {
 
     //calculate final grade
     finalGradeColumn();
-  }, [tableData, gradeState]);
+  }, [courseData, gradeState]);
 
   function addGradedWorkColumn(work) {
     const slugName = work.replace(" ", "");
@@ -71,9 +72,14 @@ const StudentInCourseTable = () => {
         });
 
         // find the students work for this column
-        let individualWork = worksForClass.find((obj) => {
-          return obj.name === work;
-        });
+        let individualWork
+        if(worksForClass.length>1){ //more than one assignment type, find correct one
+          individualWork = worksForClass.find((obj) => {
+            return obj.name === work;
+          });
+        }else{ // only one assignment type, set it to this one
+          individualWork = worksForClass[0];
+        }
 
         // formatting and check for preponderance
         let finalGrade = 0;
@@ -97,12 +103,16 @@ const StudentInCourseTable = () => {
         let worksForClass = params.row.work_student.filter((obj) => {
           return obj.course.classCode === path.courseID;
         });
-
         // find the students work for this column
-        let individualWork = worksForClass.find((obj) => {
-          return obj.name === work;
-        });
-
+        let individualWork
+        if(worksForClass.length>1){ //more than one assignment type, find correct one
+          individualWork = worksForClass.find((obj) => {
+            return obj.name === work;
+          });
+        }else{ // only one assignment type, set it to this one
+          individualWork = worksForClass[0];
+        }
+      
         // formatting and check for preponderance
         let status = "NONE";
         if (individualWork) {
@@ -248,19 +258,18 @@ const StudentInCourseTable = () => {
     }
 
     try {
-      const studentgradeResponse = await fetch(
+      const courseResponse = await fetch(
         variables.API_URL +
           "courseAPI/" +
           path.year +
           "/" +
-          path.courseID +
-          "/students"
+          path.courseID + "/grades"
       );
-      if (!studentgradeResponse.ok) {
+      if (!courseResponse.ok) {
         throw new Error("Something went wrong!");
       }
-      const studentgradeData = await studentgradeResponse.json();
-      setTableData(studentgradeData);
+      const coursedata = await courseResponse.json();
+      setCourseData(coursedata);
     } catch (error) {
       setError(error.message);
     }
@@ -305,7 +314,7 @@ const StudentInCourseTable = () => {
         <MenuItem value={"point"}>Point</MenuItem>
       </Select>
       <DataGrid
-        rows={tableData}
+        rows={gradeData}
         columns={columns.concat(actionColumn)}
         pageSize={50}
         checkboxSelection

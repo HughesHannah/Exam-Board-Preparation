@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import StudentsInCourseTable from "../../components/dataTables/StudentsInCourseTable.js";
-import GradesPieChart from "../../components/chart/GradesPieChart.js";
+import CourseGradesPieChart from "../../components/chart/CourseGradesPieChart.js";
 import ScatterChartExample from "../../components/chart/Scatter.js";
 
 const SingleCourse = () => {
@@ -71,7 +71,7 @@ const SingleCourse = () => {
         <div className="middle">
           <div className="left">
             <h1 className="title">Grade Distribution</h1>
-            <GradesPieChart />
+            <CourseGradesPieChart />
           </div>
           <div className="right">
             <h1 className="title">Scatter Chart</h1>

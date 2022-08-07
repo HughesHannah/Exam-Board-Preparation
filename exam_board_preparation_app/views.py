@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib import messages
 import pandas as pd
-from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, GradedWorkSerializer, OverallGradeCourseSerializer, SimpleCourseSerializer, StudentSerializer, StudentsToCoursesSerializer, StudentsToGradesSerializer, YearSerializer
+from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, CoursesToGradesSerializer, GradedWorkSerializer, OverallGradeCourseSerializer, SimpleCourseSerializer, StudentSerializer, StudentsToCoursesSerializer, StudentsToGradesSerializer, YearSerializer
 from exam_board_preparation_app.models import ClassHead, GradedWork, Student, Course, Year
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -155,10 +155,21 @@ def GradesInCourseAPI(request, year, code):
     dbYear = Year.objects.get(yearStart=start)
     # get course so we can grab all the students off it
     course = Course.objects.get(year=dbYear.id, classCode=code)
-    # get the graded works for that course
-    courseGrades = GradedWork.objects.filter(course=course)
-
-    serializer = GradedWorkSerializer(courseGrades, many=True)
+    
+    students = course.students.all()
+    serializer = StudentsToGradesSerializer(students, many=True)
+    return Response(serializer.data)
+    
+# get all grades for a particular course
+@api_view(['GET'])
+def WorksInCourseAPI(request, year, code):
+    start = year.split('-')[0]
+    # get year, so that we can filter courses by year
+    dbYear = Year.objects.get(yearStart=start)
+    # get course so we can grab all the students off it
+    course = Course.objects.get(year=dbYear.id, classCode=code)
+    works = GradedWork.objects.filter(course=course)
+    serializer = GradedWorkSerializer(works, many=True)
     return Response(serializer.data)
 
 # get all grades for a student

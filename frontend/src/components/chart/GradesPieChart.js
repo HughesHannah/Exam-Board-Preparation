@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import { variables } from "../../Variables.js";
 import { countBands } from "../../utils/GradeConversion.js";
 import AuthContext from "../../context/AuthContext.js";
-
 import { PieChart, Pie, Sector, Cell, Tooltip } from "recharts";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#800080"];
@@ -84,10 +83,10 @@ const initialState = {
 export default function GradesPieChart(props) {
   const [pieState, setPieState] = useState(initialState);
   const [studentGrades, setStudentGrades] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
   let { authTokens, logoutUser } = useContext(AuthContext);
+ 
 
   useEffect(() => {
     fetch(variables.API_URL + "studentAPI/grades", {
@@ -99,13 +98,10 @@ export default function GradesPieChart(props) {
     })
       .then((data) => data.json())
       .then((data) => setStudentGrades(data))
-      .then(setLoading(false));
   }, []);
 
   useEffect(() => {
-    console.log(studentGrades);
     let result = countBands(studentGrades);
-    console.log(result);
     setData(result);
   }, [studentGrades]);
 
@@ -134,7 +130,5 @@ export default function GradesPieChart(props) {
     </PieChart>
   );
 
-  const loadingText = <p>Loading</p>;
-
-  return <div>{loading ? loadingText : pieRender}</div>;
+  return <div>{pieRender}</div>;
 }
