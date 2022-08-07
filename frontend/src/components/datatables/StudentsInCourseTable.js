@@ -45,7 +45,6 @@ const StudentInCourseTable = () => {
     // reset columns so we dont infinately add to them
     setColumns(defaultColumns);
 
-    console.log(courseData)
     // get the names of each graded work
     const works = [...new Set(courseData.map((item) => item.name))];
     works.forEach((work) => {
@@ -319,6 +318,7 @@ const StudentInCourseTable = () => {
         pageSize={50}
         checkboxSelection
         components={{ Toolbar: GridToolbar }}
+        componentsProps={{ toolbar: { printOptions: { disableToolbarButton: true } } }}
       />
     </div>
   );

@@ -7,6 +7,7 @@ import Sidebar from "../../components/sidebar/Sidebar.js";
 import StudentsInCourseTable from "../../components/dataTables/StudentsInCourseTable.js";
 import CourseGradesPieChart from "../../components/chart/CourseGradesPieChart.js";
 import ScatterChartExample from "../../components/chart/Scatter.js";
+import {averageGrade} from "../../utils/GradeConversion.js";
 
 const SingleCourse = () => {
   const [courseData, setCourseData] = useState([]);
@@ -55,7 +56,7 @@ const SingleCourse = () => {
               </div>
               <div className="detailItem">
                 <span className="itemKey">Average Grade:</span>
-                <span className="itemValue">CALCULATE</span>
+                <span className="itemValue">{averageGrade(gradeData, "band")}</span>
               </div>
               <div className="detailItem">
                 <span className="itemKey">Moderated:</span>

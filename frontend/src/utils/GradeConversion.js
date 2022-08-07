@@ -185,3 +185,26 @@ export function countBands(studentsAndWorks) {
 
   return returnArray;
 }
+
+export function averageGrade(studentsAndWorks, gradeState) {
+  let classTotalGrade = 0;
+  let classCountOfStudents = 0;
+
+  //for each student
+  studentsAndWorks.forEach((student) => {
+    // calculate final grade = sum(mark*weighting*coursecredits)/totalcredits
+    let studentTotalGrade = 0;
+    student.work_student.forEach((work) => {
+      studentTotalGrade += work.gradeMark*work.weighting*work.course.credits/100;
+    })
+    studentTotalGrade = studentTotalGrade/120;
+
+    // add to class total and class count of students
+    classTotalGrade += studentTotalGrade;
+    classCountOfStudents += 1;
+  })
+
+  const classAverage = classTotalGrade / classCountOfStudents;
+
+  return renderGrade(classAverage, gradeState)
+}
