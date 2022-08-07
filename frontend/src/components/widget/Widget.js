@@ -76,11 +76,10 @@ const Widget = ({ type }) => {
       .then((data) => setCourseData(data));
   }, []);
 
-  //temp until retrieved data
   const studentCount = studentData.length;
   const courseCount = courseData.length;
   const preponderanceCount = prepData.length;
-  const issuesCount = 0;
+  const averageStudentGrade = averageGrade(studentGrades, "band");
 
   switch (type) {
     case "studentCounter":
@@ -114,7 +113,7 @@ const Widget = ({ type }) => {
         title: "Average Grade",
         link: "/",
         icon: <DriveFileRenameOutlineIcon className="icon" />,
-        value: averageGrade(studentGrades, "band"),
+        value: averageStudentGrade,
       };
   }
 

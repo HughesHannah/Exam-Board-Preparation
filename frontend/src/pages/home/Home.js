@@ -9,14 +9,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import Widget from "../../components/widget/Widget.js";
 import GradesPieChart from "../../components/chart/GradesPieChart.js";
-import Chart from "../../components/chart/Chart.js";
+import AverageGradeLineChart from "../../components/chart/AverageGradeLineChart.js";
 import StudentSearchTable from "../../components/table/StudentSearchTable.js";
 import CourseSearchTable from "../../components/table/CourseSearchTable.js";
 
 const Home = () => {
   const [studentData, setStudentData] = useState([]);
   const [courseData, setCourseData] = useState([]);
-  const [studentGrades, setStudentGrades] = useState([]);
   const [search, setSearch] = useState(null);
   let { authTokens, logoutUser } = useContext(AuthContext);
 
@@ -103,10 +102,10 @@ const Home = () => {
           </div>
           <div className="lineChart">
             <h1 className="title">
-              <s>Average Student Grade by Year</s>
+              Average Student Grade by Year
             </h1>
             <div>
-              <Chart />
+              <AverageGradeLineChart />
             </div>
           </div>
         </div>
