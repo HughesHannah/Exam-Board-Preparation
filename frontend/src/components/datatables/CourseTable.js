@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { variables } from "../../Variables.js";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 
@@ -9,7 +9,6 @@ const columns = [
   { field: "className", headerName: "Course Name", width: 200},
   { field: "credits", headerName: "Credits" },
   { field: "year", headerName: "Year", valueGetter: (params) => {return params.row.year.year}}
-    // TODO add count of students?
 ];
 
 const CourseTable = () => {

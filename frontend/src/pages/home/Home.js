@@ -22,7 +22,6 @@ const Home = () => {
   const [courseData, setCourseData] = useState([]);
   const [studentGrades, setStudentGrades] = useState([]);
   const [search, setSearch] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   let { authTokens, logoutUser } = useContext(AuthContext);
 
   const studentKeys = ["name", "metriculationNumber"];
@@ -67,7 +66,6 @@ const Home = () => {
   };
 
   const fetchGrades = async () => {
-    // console.log(isLoading)
     const res = await fetch(variables.API_URL + "studentAPI/grades", {
       method: "GET",
       headers: {
@@ -77,9 +75,6 @@ const Home = () => {
     })
       .then((data) => data.json())
       .then((data) => setStudentGrades(data))
-      .then(setIsLoading(false))
-      .then(console.log(studentGrades))
-      
   };
 
   useEffect(() => {

@@ -25,12 +25,6 @@ const defaultColumns = [
   },
 ];
 
-function sumArray(array) {
-  let sum = 0;
-  array.forEach((val) => (sum = sum + val));
-  return sum.toFixed(2);
-}
-
 const StudentClassification = () => {
   const [courseData, setCourseData] = useState([]);
   const [error, setError] = useState(null);
