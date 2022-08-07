@@ -1,9 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
-import { variables } from "../../Variables.js";
 import { countBands } from "../../utils/GradeConversion.js";
-import AuthContext from "../../context/AuthContext.js";
 import { PieChart, Pie, Sector, Cell, Tooltip } from "recharts";
-import { useParams } from "react-router-dom";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#800080"];
 
@@ -81,29 +78,14 @@ const initialState = {
   activeIndex: 0,
 };
 
-export default function CourseGradesPieChart(props) {
+const CourseGradesPieChart = ({ inputData }) => {
   const [pieState, setPieState] = useState(initialState);
-  const [studentGrades, setStudentGrades] = useState([]);
   const [data, setData] = useState([]);
-  let { authTokens, logoutUser } = useContext(AuthContext);
-  const path = useParams();
 
   useEffect(() => {
-    fetch(variables.API_URL + "courseAPI/" + path.year +"/" + path.courseID +"/students/grades", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + String(authTokens.access),
-      },
-    })
-      .then((data) => data.json())
-      .then((data) => setStudentGrades(data))
-  }, []);
-
-  useEffect(() => {
-    let result = countBands(studentGrades);
+    let result = countBands(inputData);
     setData(result);
-  }, [studentGrades]);
+  }, []);
 
   const onPieEnter = (data, index) => {
     setPieState({ activeIndex: index });
@@ -132,3 +114,5 @@ export default function CourseGradesPieChart(props) {
 
   return <div>{pieRender}</div>;
 }
+
+export default CourseGradesPieChart;

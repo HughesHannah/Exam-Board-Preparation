@@ -8,7 +8,6 @@ import Tooltip from "@mui/material/Tooltip";
 import Select from "@mui/material/Select";
 import { renderGrade } from "../../utils/GradeConversion.js";
 import "./datatable.scss";
-import TableSkeleton from "./TableSkeleton.js";
 
 const defaultColumns = [
   {
@@ -34,13 +33,11 @@ const defaultColumns = [
   },
 ];
 
-const StudentInCourseTable = () => {
-  const [gradeData, setGradeData] = useState([]);
+const StudentInCourseTable = ({inputGradeData}) => {
   const [error, setError] = useState(null);
   const [columns, setColumns] = useState(defaultColumns);
   const [gradeState, setGradeState] = useState("percentage");
   const [courseData, setCourseData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const path = useParams();
 
   useEffect(() => {
@@ -59,7 +56,6 @@ const StudentInCourseTable = () => {
     //calculate final grade
     finalGradeColumn();
 
-    setIsLoading(false)
   }, [courseData, gradeState]);
 
   function addGradedWorkColumn(work) {
@@ -246,23 +242,7 @@ const StudentInCourseTable = () => {
 
   const fetchDataHandler = useCallback(async () => {
     setError(null);
-    try {
-      const gradeResponse = await fetch(
-        variables.API_URL +
-          "courseAPI/" +
-          path.year +
-          "/" +
-          path.courseID +
-          "/students/grades"
-      );
-      if (!gradeResponse.ok) {
-        throw new Error("Something went wrong!");
-      }
-      const gradedata = await gradeResponse.json();
-      setGradeData(gradedata);
-    } catch (error) {
-      setError(error.message);
-    }
+    
 
     try {
       const courseResponse = await fetch(
@@ -307,8 +287,8 @@ const StudentInCourseTable = () => {
     },
   ];
 
-  let table = (
-    <>
+  return (
+    <div style={{ height: 700, width: "100%" }} className="datatable">
       <Select
         id="grade-select"
         style={{ width: 200 }}
@@ -322,7 +302,7 @@ const StudentInCourseTable = () => {
         <MenuItem value={"point"}>Point</MenuItem>
       </Select>
       <DataGrid
-        rows={gradeData}
+        rows={inputGradeData}
         columns={columns.concat(actionColumn)}
         pageSize={50}
         checkboxSelection
@@ -331,12 +311,6 @@ const StudentInCourseTable = () => {
           toolbar: { printOptions: { disableToolbarButton: true } },
         }}
       />
-    </>
-  );
-
-  return (
-    <div style={{ height: 700, width: "100%" }} className="datatable">
-      {isLoading? <TableSkeleton /> : table}
     </div>
   );
 };

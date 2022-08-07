@@ -9,6 +9,10 @@ import CourseGradesPieChart from "../../components/chart/CourseGradesPieChart.js
 import ScatterChartExample from "../../components/chart/Scatter.js";
 import {averageGrade} from "../../utils/GradeConversion.js";
 
+import TableSkeleton from "../../components/skeletons/TableSkeleton.js";
+import PieChartSkeleton from "../../components/skeletons/PieChartSkeleton.js";
+import ScatterChartSkeleton from "../../components/skeletons/ScatterChartSkeleton.js";
+
 const SingleCourse = () => {
   const [courseData, setCourseData] = useState([]);
   const [gradeData, setGradeData] = useState([])
@@ -77,16 +81,16 @@ const SingleCourse = () => {
         <div className="middle">
           <div className="left">
             <h1 className="title">Grade Distribution</h1>
-            <CourseGradesPieChart />
+            {(gradeData.length == 0) ? <PieChartSkeleton />: <CourseGradesPieChart inputData={gradeData}/>}
           </div>
           <div className="right">
             <h1 className="title">Scatter Chart</h1>
-            <ScatterChartExample />
+            {(gradeData.length == 0) ? <ScatterChartSkeleton />: <ScatterChartExample inputData={gradeData}/>}
           </div>
         </div>
         <div className="bottom">
           <h1 className="title">Student Grades</h1>
-          <StudentsInCourseTable />
+          {(gradeData.length == 0) ? <TableSkeleton />: <StudentsInCourseTable inputGradeData={gradeData}/>}
         </div>
         <div className="moderation">
           <h1 className="title">Course Moderation</h1>
@@ -96,7 +100,7 @@ const SingleCourse = () => {
               <li>None</li>
             </ul>
           </div>
-          <div>
+          {/* <div>
             <p>
               Add Moderation:
             </p>
@@ -116,7 +120,7 @@ const SingleCourse = () => {
               value={moderation}
             />
             <button>Submit</button>
-            </div>
+            </div> */}
         </div>
       </div>
     </div>

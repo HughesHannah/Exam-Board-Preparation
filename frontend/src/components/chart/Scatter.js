@@ -1,4 +1,7 @@
-import React, { PureComponent } from "react";
+import React from "react";
+import { renderGrade } from "../../utils/GradeConversion.js";
+import { useParams } from "react-router-dom";
+
 import {
   ScatterChart,
   Scatter,
@@ -6,19 +9,48 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { x: 100, y: 200, z: 200 },
-  { x: 120, y: 100, z: 260 },
-  { x: 170, y: 300, z: 400 },
-  { x: 140, y: 250, z: 280 },
-  { x: 150, y: 400, z: 500 },
-  { x: 110, y: 280, z: 200 },
-];
+const ScatterChartExample = ({ inputData }) => {
+  const path = useParams();
+  const gradeState = "percentage"
+  const scale = [0,100];
+  const unit = "%";
 
-const ScatterChartExample = () => {
+  let graphData = [];
+
+  let classCode = path.courseID;
+  // for each student
+  inputData.forEach((student) => {
+    let otherClasses = 0;
+    let thisClass = 0;
+    let classes = [];
+
+    // for each work
+    student.work_student.forEach((work) => {
+      // if the coursework does not belong to this class
+      if (work.course.classCode != classCode) {
+        // add mark to class total
+        otherClasses += (work.gradeMark * work.weighting) / 100;
+
+        // check if course is in list of courses and add it if it is not
+        if (!classes.includes(work.course.classCode)) {
+          classes.push(work.course.classCode);
+        }
+
+        // else the coursework belongs to this class
+      } else {
+        // add mark to this class total
+        thisClass += (work.gradeMark * work.weighting) / 100;
+      }
+    });
+
+    let xValue = renderGrade(thisClass, gradeState);
+    let yValue = renderGrade((otherClasses / classes.length), gradeState);
+
+    graphData.push({ x: xValue, y: yValue });
+  });
+
   return (
     <div>
       <ScatterChart
@@ -32,10 +64,10 @@ const ScatterChartExample = () => {
         }}
       >
         <CartesianGrid />
-        <XAxis type="number" dataKey="x" name="stature" unit="cm" />
-        <YAxis type="number" dataKey="y" name="weight" unit="kg" />
+        <XAxis type="number" dataKey="x" name="This Class" unit={unit} domain={scale}/>
+        <YAxis type="number" dataKey="y" name="Other Classes" unit={unit} domain={scale}/>
         <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-        <Scatter name="A school" data={data} fill="#8884d8" />
+        <Scatter name="CourseGradeComparison" data={graphData} fill="#8884d8" />
       </ScatterChart>
     </div>
   );

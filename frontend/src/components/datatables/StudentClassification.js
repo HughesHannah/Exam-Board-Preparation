@@ -13,7 +13,7 @@ import {
 import "./datatable.scss";
 import AuthContext from "../../context/AuthContext.js";
 import DegreePicker from "../picker/DegreePicker.js";
-import TableSkeletons from "../datatables/TableSkeleton.js";
+import TableSkeletons from "../skeletons/TableSkeleton.js";
 
 const defaultColumns = [
   {

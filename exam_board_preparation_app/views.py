@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib import messages
 import pandas as pd
-from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, CoursesToGradesSerializer, GradedWorkSerializer, OverallGradeCourseSerializer, SimpleCourseSerializer, StudentSerializer, StudentsToCoursesSerializer, StudentsToGradesSerializer, YearSerializer
+from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, CoursesToGradesSerializer, GradedWorkSerializer, OverallGradeCourseSerializer, SimpleCourseSerializer, SimpleGradedWorkSerializer, StudentSerializer, StudentsToCoursesSerializer, StudentsToGradesSerializer, YearSerializer
 from exam_board_preparation_app.models import ClassHead, GradedWork, Student, Course, Year
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -169,7 +169,7 @@ def WorksInCourseAPI(request, year, code):
     # get course so we can grab all the students off it
     course = Course.objects.get(year=dbYear.id, classCode=code)
     works = GradedWork.objects.filter(course=course)
-    serializer = GradedWorkSerializer(works, many=True)
+    serializer = SimpleGradedWorkSerializer(works, many=True)
     return Response(serializer.data)
 
 # get all grades for a student
