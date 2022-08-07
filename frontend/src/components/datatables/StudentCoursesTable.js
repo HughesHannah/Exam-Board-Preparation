@@ -171,6 +171,9 @@ const StudentCoursesTable = () => {
         pageSize={50}
         checkboxSelection
         components={{ Toolbar: GridToolbar }}
+        componentsProps={{
+          toolbar: { printOptions: { disableToolbarButton: true } },
+        }}
       />
     </div>
   );

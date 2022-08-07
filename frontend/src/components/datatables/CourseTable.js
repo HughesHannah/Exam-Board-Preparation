@@ -48,6 +48,10 @@ const CourseTable = () => {
         columns={columns.concat(actionColumn)}
         pageSize={25}
         checkboxSelection
+        components={{ Toolbar: GridToolbar }}
+          componentsProps={{
+            toolbar: { printOptions: { disableToolbarButton: true } },
+          }}
       />
     </div>
   );

@@ -87,6 +87,9 @@ const StudentTable = () => {
           checkboxSelection
           rowsPerPageOptions={[10, 50, 100]}
           components={{ Toolbar: GridToolbar }}
+          componentsProps={{
+            toolbar: { printOptions: { disableToolbarButton: true } },
+          }}
         />
       </div>
     </div>
