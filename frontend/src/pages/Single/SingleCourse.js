@@ -31,6 +31,11 @@ const SingleCourse = () => {
 
   useEffect(() => {
     setWorks([...new Set(gradeData.map((item) => item.name))]);
+    gradeData.map((item) => {
+      if (item.moderation >1 || item.moderation < 1){
+        setIsModerated(true);
+      }
+    })
   }, [gradeData])
 
   return (
