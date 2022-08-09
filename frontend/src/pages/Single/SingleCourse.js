@@ -3,7 +3,6 @@ import "./single.scss";
 import { variables } from "../../Variables";
 import { averageGrade } from "../../utils/GradeConversion.js";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import StudentsInCourseTable from "../../components/dataTables/StudentsInCourseTable.js";
@@ -12,15 +11,15 @@ import ScatterChartExample from "../../components/chart/Scatter.js";
 import TableSkeleton from "../../components/skeletons/TableSkeleton.js";
 import PieChartSkeleton from "../../components/skeletons/PieChartSkeleton.js";
 import ScatterChartSkeleton from "../../components/skeletons/ScatterChartSkeleton.js";
+import Moderation from "../../components/moderation/Moderation.js";
+import ModerationSkeleton from "../../components/skeletons/ModerationSkeleton.js";
 
 const SingleCourse = () => {
   const [courseData, setCourseData] = useState([]);
   const [gradeData, setGradeData] = useState([]);
-  const [isModerated, setIsModerated] = useState(false);
-  const [selectedAssignment, setSelectedAssignment] = useState();
+  const [isModerated, setIsModerated] = useState("");
   const [works, setWorks] = useState([]);
   const [modifiedWorks, setModifiedWorks] = useState([]);
-  const [moderation, setModeration] = useState(1.0);
 
   const path = useParams();
 
@@ -42,85 +41,23 @@ const SingleCourse = () => {
   }, []);
 
   useEffect(() => {
-    console.log("inside use effect");
     if (gradeData.length != 0) {
       setWorks([
         ...new Set(gradeData[0].work_student.map((item) => item.name)),
       ]);
 
+      setIsModerated("No");
       gradeData[0].work_student.map((item) => {
         if (item.moderation > 1 || item.moderation < 1) {
-          setModifiedWorks([...modifiedWorks, {name: item.name, moderation: item.moderation}]);
-          setIsModerated(true);
+          setModifiedWorks([
+            ...modifiedWorks,
+            { name: item.name, moderation: item.moderation },
+          ]);
+          setIsModerated("Yes");
         }
       });
     }
   }, [gradeData]);
-
-  const handleWorkModerationSubmission = async (e) => {
-    // e.preventDefault();
-    const formData = new FormData();
-    let response;
-
-    if (selectedAssignment == "All") {
-      formData.append("moderation", moderation);
-
-      try {
-        response = axios.post(
-          variables.API_URL +
-            "courseAPI/" +
-            path.year +
-            "/" +
-            path.courseID +
-            "/moderateAll",
-          formData,
-          {
-            headers: {
-              "content-type": "multipart/form-data",
-            },
-          }
-        );
-        alert("moderation applied");
-      } catch (error) {
-        console.log(error.response.data);
-      }
-    } else {
-      formData.append("work", selectedAssignment);
-      formData.append("moderation", moderation);
-
-      try {
-        response = axios.post(
-          variables.API_URL +
-            "courseAPI/" +
-            path.year +
-            "/" +
-            path.courseID +
-            "/moderateWork",
-          formData,
-          {
-            headers: {
-              "content-type": "multipart/form-data",
-            },
-          }
-        );
-        alert("moderation applied");
-      } catch (error) {
-        console.log(error.response.data);
-      }
-    }
-  };
-
-  function getListOfModified() {
-    if (modifiedWorks.length != 0) {
-      return modifiedWorks.map((work) => (
-        <li key={work} value={work}>
-          {work.name} - {work.moderation}
-        </li>
-      ));
-    } else {
-      return <li>None</li>;
-    }
-  }
 
   return (
     <div className="single">
@@ -151,7 +88,7 @@ const SingleCourse = () => {
               </div>
               <div className="detailItem">
                 <span className="itemKey">Moderated:</span>
-                <span className="itemValue">{isModerated ? "Yes" : "No"}</span>
+                <span className="itemValue">{isModerated}</span>
               </div>
             </div>
           </div>
@@ -186,43 +123,14 @@ const SingleCourse = () => {
             <StudentsInCourseTable inputGradeData={gradeData} />
           )}
         </div>
-        <div className="moderation">
+        <div className="moderationSection">
           <h1 className="title">Course Moderation</h1>
-          <div>
-            <p>Current Moderation:</p>
-            <ul>
-              {getListOfModified()}
-            </ul>
-          </div>
-          <div>
-            <p>Add Moderation:</p>
-            <select
-              id="Assignment"
-              name="Assignment"
-              onChange={(e) => setSelectedAssignment(e.target.value)}
-            >
-              <option>Please Select</option>
-              <option value="All">All</option>
-              {works.map((eachWork) => (
-                <option key={eachWork} value={eachWork}>
-                  {eachWork}
-                </option>
-              ))}
-            </select>
-            <p>Moderation:</p>
-            <input
-              type="number"
-              step="any"
-              onChange={(e) => setModeration(e.target.value)}
-              value={moderation}
-            />
-            <button
-              onClick={handleWorkModerationSubmission}
-              disabled={!selectedAssignment && !moderation}
-            >
-              Submit
-            </button>
-          </div>
+          {gradeData.length == 0 ? (
+              <ModerationSkeleton />
+            ) : (
+              <Moderation modifiedWorks={modifiedWorks} works={works}/>
+            )}
+          
         </div>
       </div>
     </div>
