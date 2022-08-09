@@ -168,7 +168,24 @@ def ModerateGradedWorkAPI(request, year, code):
 
     return JsonResponse("Success", safe=False)
 
+# Moderate a Coursework
+@api_view(['POST'])
+def ModerateCourseAPI(request, year, code):
 
+    # get data from request
+    newModeration = request.data['moderation']
+    
+    yearStart = year.split('-')[0]
+
+    y = Year.objects.get(yearStart=yearStart)
+    c = Course.objects.get(classCode=code, year=y)
+    works = GradedWork.objects.filter(course = c)
+    
+    for work in works:
+        work.moderation=newModeration
+        work.save()
+
+    return JsonResponse("Success", safe=False)
 
 ########## Get Grade(s) APIs ###############################
 

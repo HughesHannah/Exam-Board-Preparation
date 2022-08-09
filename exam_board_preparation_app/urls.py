@@ -19,7 +19,7 @@ urlpatterns = [
     path('courseAPI/<year>/<code>/grades', views.WorksInCourseAPI),
     path('courseAPI/<year>/<code>', views.IndividualCourseYearAPI),
     path('courseAPI/<year>/<code>/moderateWork', views.ModerateGradedWorkAPI),
-    
+    path('courseAPI/<year>/<code>/moderateAll', views.ModerateCourseAPI),
 
     path('courseAPI/<year>', views.CourseYearAPI),
     

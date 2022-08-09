@@ -49,20 +49,42 @@ const SingleCourse = () => {
   const handleWorkModerationSubmission = async (e) => {
     // e.preventDefault();
     const formData = new FormData();
-    formData.append("work", selectedAssignment);
-    formData.append("moderation", moderation);
-
     let response;
-    try {
-      response = axios.post(variables.API_URL + "courseAPI/" + path.year + "/" + path.courseID + "/moderateWork", formData, {
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      });
-      alert("moderation applied");
-    } catch (error) {
-      console.log(error.response.data);
+
+    if(selectedAssignment=="All"){
+      formData.append("moderation", moderation);
+
+      try {
+        response = axios.post(variables.API_URL + "courseAPI/" + path.year + "/" + path.courseID + "/moderateAll", formData, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        });
+        alert("moderation applied");
+      } catch (error) {
+        console.log(error.response.data);
+      }
+
+    }else{
+      formData.append("work", selectedAssignment);
+      formData.append("moderation", moderation);
+
+      try {
+        response = axios.post(variables.API_URL + "courseAPI/" + path.year + "/" + path.courseID + "/moderateWork", formData, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        });
+        alert("moderation applied");
+      } catch (error) {
+        console.log(error.response.data);
+      }
+
     }
+
+    
+
+    
   };
 
   return (
@@ -129,6 +151,7 @@ const SingleCourse = () => {
             </p>
             <select id="Assignment" name="Assignment" onChange={(e) => setSelectedAssignment(e.target.value)}>
               <option>Please Select</option>
+              <option value="All">All</option>
               {works.map((eachWork) => (
                 <option key={eachWork} value={eachWork}>
                   {eachWork}
