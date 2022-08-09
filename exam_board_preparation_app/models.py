@@ -81,6 +81,11 @@ class ClassHead(models.Model):
     
     def __str__(self): return ("Level " + str(self.level))
     
-    
 
+# class StudentComment(models.Model):
+#     student = models.ForeignKey(Student, on_delete=models.CASCADE)
+#     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+#     date = models.DateTimeField(auto_now_add=True)
+#     subjectLine = models.CharField(max_length=255)
+#     comment = models.TextField(blank=True, null=True)
     

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect} from "react";
 import { variables } from "../../Variables.js";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
@@ -15,13 +15,9 @@ const defaultColumns = [
   { field: "credits", headerName: "Credits" },
 ];
 
-const CoursesInStudentTable = () => {
-  const [courseData, setCourseData] = useState([]);
-  const [gradeData, setGradeData] = useState([]);
+const CoursesInStudentTable = ({courseData, gradeData}) => {
   const [columns, setColumns] = useState(defaultColumns);
-  const [error, setError] = useState(null);
   const [gradeState, setGradeState] = useState("percentage");
-  const path = useParams();
 
   useEffect(() => {
     setColumns(defaultColumns);
@@ -133,38 +129,6 @@ const CoursesInStudentTable = () => {
     };
     setColumns((columns) => [...columns, newTotalCol]); // how to update state using existing!
   }
-
-  const fetchDataHandler = useCallback(async () => {
-    setError(null);
-    try {
-      const response = await fetch(
-        variables.API_URL + "studentCoursesAPI/" + path.studentID
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
-      const data = await response.json();
-      setCourseData(data);
-    } catch (error) {
-      setError(error.message);
-    }
-    try {
-      const response2 = await fetch(
-        variables.API_URL + "studentCoursesAPI/" + path.studentID + "/grades"
-      );
-      if (!response2.ok) {
-        throw new Error("Something went wrong!");
-      }
-      const data2 = await response2.json();
-      setGradeData(data2);
-    } catch (error) {
-      setError(error.message);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchDataHandler();
-  }, [fetchDataHandler]);
 
   const actionColumn = [
     {

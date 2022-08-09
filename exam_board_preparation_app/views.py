@@ -222,7 +222,7 @@ def GradesInStudentAPI(request, id):
     # get the graded works for that course
     studentGrades = GradedWork.objects.filter(student=student)
 
-    serializer = GradedWorkSerializer(studentGrades, many=True)
+    serializer = SimpleGradedWorkSerializer(studentGrades, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])

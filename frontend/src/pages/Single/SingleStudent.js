@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { variables } from "../../Variables";
+import { averageGrade } from "../../utils/GradeConversion.js";
 import { useParams } from "react-router-dom";
 
 import "./single.scss";
@@ -7,19 +8,61 @@ import "./single.scss";
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import Comments from "../../components/comments/Comments.js";
 import CoursesInStudentTable from "../../components/datatables/CoursesInStudentTable.js";
+import Preponderance from "../../components/preponderance/Preponderance.js";
+import TableSkeleton from "../../components/skeletons/TableSkeleton.js";
+import ModerationSkeleton from "../../components/skeletons/ModerationSkeleton.js";
 
-const SingleStudent = ({ id }) => {
+const SingleStudent = () => {
   const [studentData, setStudentData] = useState([]);
-
+  const [courseData, setCourseData] = useState([]);
+  const [gradeData, setGradeData] = useState([]);
+  const [error, setError] = useState(null);
   const path = useParams();
 
-  useEffect(() => {
-    fetch(variables.API_URL + "individualStudentAPI/" + path.studentID)
-      .then((data) => data.json())
-      .then((data) => setStudentData(data));
+  const fetchDataHandler = useCallback(async () => {
+    setError(null);
+    try {
+      const response = await fetch(
+        variables.API_URL + "individualStudentAPI/" + path.studentID
+      );
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
+      const data = await response.json();
+      setStudentData(data);
+    } catch (error) {
+      setError(error.message);
+    }
+
+    try {
+      const response = await fetch(
+        variables.API_URL + "studentCoursesAPI/" + path.studentID
+      );
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
+      const data = await response.json();
+      setCourseData(data);
+    } catch (error) {
+      setError(error.message);
+    }
+    try {
+      const response2 = await fetch(
+        variables.API_URL + "studentCoursesAPI/" + path.studentID + "/grades"
+      );
+      if (!response2.ok) {
+        throw new Error("Something went wrong!");
+      }
+      const data2 = await response2.json();
+      setGradeData(data2);
+    } catch (error) {
+      setError(error.message);
+    }
   }, []);
 
-
+  useEffect(() => {
+    fetchDataHandler();
+  }, [fetchDataHandler]);
 
   return (
     <div className="single">
@@ -38,19 +81,20 @@ const SingleStudent = ({ id }) => {
               </div>
               <div className="detailItem">
                 <span className="itemKey">Year:</span>
-                <span className="itemValue">{studentData.yearOfStudy}</span>
+                <span className="itemValue">CALCULATE</span>
               </div>
               <div className="detailItem">
                 <span className="itemKey">Degree:</span>
                 <span className="itemValue">
-                    {studentData.mastersStudent ? "MSci ":"BSc "} 
-                    {studentData.degreeTitle} 
-                    {studentData.fastRouteStudent ? " FR":""}
-                  </span>
+                  {studentData.mastersStudent ? "MSci " : "BSc "}
+                  {studentData.degreeTitle}
+                  {studentData.fastRouteStudent ? " FR" : ""}
+                </span>
               </div>
               <div className="detailItem">
                 <span className="itemKey">Average Grade:</span>
                 <span className="itemValue">CALCULATE</span>
+                {/* <span className="itemValue">{averageGrade(gradeData, "band")}</span> */}
               </div>
             </div>
           </div>
@@ -62,7 +106,22 @@ const SingleStudent = ({ id }) => {
         </div>
         <div className="bottom">
           <h1 className="title">Student Grades</h1>
-          <CoursesInStudentTable />
+          {gradeData.length == 0 ? (
+            <TableSkeleton />
+          ) : (
+            <CoursesInStudentTable
+            courseData={courseData}
+            gradeData={gradeData}
+          />
+          )}
+        </div>
+        <div className="preponderanceSection">
+          <h1 className="title">Student Preponderance</h1>
+          {gradeData.length == 0 ? (
+            <ModerationSkeleton /> // just using moderation skeleton because its similar
+          ) : (
+            <Preponderance />
+          )}
         </div>
       </div>
     </div>
