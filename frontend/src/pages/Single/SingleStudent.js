@@ -6,7 +6,7 @@ import "./single.scss";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import Comments from "../../components/comments/Comments.js";
-import StudentCoursesTable from "../../components/datatables/StudentCoursesTable.js";
+import CoursesInStudentTable from "../../components/datatables/CoursesInStudentTable.js";
 
 const SingleStudent = ({ id }) => {
   const [studentData, setStudentData] = useState([]);
@@ -62,7 +62,7 @@ const SingleStudent = ({ id }) => {
         </div>
         <div className="bottom">
           <h1 className="title">Student Grades</h1>
-          <StudentCoursesTable />
+          <CoursesInStudentTable />
         </div>
       </div>
     </div>

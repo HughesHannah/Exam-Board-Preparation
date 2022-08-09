@@ -2,25 +2,25 @@ import React, { useState, useEffect, useCallback } from "react";
 import { variables } from "../../Variables.js";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
-import { useParams } from 'react-router-dom';
-import {renderGrade} from '../../utils/GradeConversion.js';
-import MenuItem from '@mui/material/MenuItem';
-import Tooltip from '@mui/material/Tooltip';
-import Select from '@mui/material/Select';
-import './datatable.scss';
+import { useParams } from "react-router-dom";
+import { renderGrade } from "../../utils/GradeConversion.js";
+import MenuItem from "@mui/material/MenuItem";
+import Tooltip from "@mui/material/Tooltip";
+import Select from "@mui/material/Select";
+import "./datatable.scss";
 
 const defaultColumns = [
   { field: "classCode", headerName: "Code", width: 200 },
-  { field: "className", headerName: "Course Name", width: 200},
+  { field: "className", headerName: "Course Name", width: 200 },
   { field: "credits", headerName: "Credits" },
 ];
 
-const StudentCoursesTable = () => {
+const CoursesInStudentTable = () => {
   const [courseData, setCourseData] = useState([]);
   const [gradeData, setGradeData] = useState([]);
   const [columns, setColumns] = useState(defaultColumns);
   const [error, setError] = useState(null);
-  const [gradeState, setGradeState] = useState('percentage');
+  const [gradeState, setGradeState] = useState("percentage");
   const path = useParams();
 
   useEffect(() => {
@@ -30,7 +30,6 @@ const StudentCoursesTable = () => {
       addColumn(work);
     });
     totalsColumn();
-    
   }, [gradeData, gradeState]);
 
   function addColumn(work) {
@@ -39,7 +38,7 @@ const StudentCoursesTable = () => {
       field: slugName,
       headerName: work,
       width: 130,
-      renderCell: (params) => {
+      valueGetter: (params) => {
         // get course object
         let rowCourse = courseData.find((obj) => {
           return obj.id === params.row.id;
@@ -52,23 +51,52 @@ const StudentCoursesTable = () => {
 
         // get specific grade for that course assignment
         let myCourseAssesment = allCourseAssesment.find((obj) => {
-          return (
-            obj.course.classCode === rowCourse.classCode
-          );
+          return obj.course.classCode === rowCourse.classCode;
         });
 
         let finalGrade = 0;
-        let status = 'NONE'
-        if(myCourseAssesment){
-          if(myCourseAssesment.preponderance != 'NA'){
+        if (myCourseAssesment) {
+          if (myCourseAssesment.preponderance != "NA") {
             finalGrade = myCourseAssesment.preponderance;
-            status = 'PREP'
-          }else{
-            finalGrade = (myCourseAssesment.gradeMark*myCourseAssesment.moderation)
-            status = 'GRADE'
-          } 
+          } else {
+            finalGrade =
+              myCourseAssesment.gradeMark * myCourseAssesment.moderation;
+          }
         }
-        return finalGrade != 0 ? (<Tooltip title={myCourseAssesment.weighting + "\% weighting"}><div className={`status ${status}`}>{renderGrade(finalGrade, gradeState)}</div></Tooltip>) : "-";
+        return finalGrade != 0 ? renderGrade(finalGrade, gradeState) : "-";
+      },
+      renderCell: (params) => {
+        const cellValue = params.value;
+        // get course object
+        let rowCourse = courseData.find((obj) => {
+          return obj.id === params.row.id;
+        });
+
+        // get all grades for that course
+        let allCourseAssesment = gradeData.filter((obj) => {
+          return obj.name === work;
+        });
+
+        // get specific grade for that course assignment
+        let myCourseAssesment = allCourseAssesment.find((obj) => {
+          return obj.course.classCode === rowCourse.classCode;
+        });
+
+        let status = "NONE";
+        if (myCourseAssesment) {
+          if (myCourseAssesment.preponderance != "NA") {
+            status = "PREP";
+          } else {
+            status = "GRADE";
+          }
+        }
+        return cellValue != "-" ? (
+          <Tooltip title={myCourseAssesment.weighting + "% weighting"}>
+            <div className={`status ${status}`}>{cellValue}</div>
+          </Tooltip>
+        ) : (
+          "-"
+        );
       },
     };
 
@@ -77,7 +105,7 @@ const StudentCoursesTable = () => {
 
   function totalsColumn() {
     const newTotalCol = {
-      field: 'totalGrade',
+      field: "totalGrade",
       headerName: "Final Grade",
       width: 130,
       valueGetter: (params) => {
@@ -91,14 +119,16 @@ const StudentCoursesTable = () => {
 
         let finalGrade = 0;
         allCourseAssesment.forEach((obj) => {
-          if(obj.preponderance != 'NA'){
-            finalGrade = finalGrade + obj.weighting/100;
-          }else{
-            finalGrade = finalGrade + ((obj.gradeMark*obj.moderation)*obj.weighting/100)
-          } 
-        })
+          if (obj.preponderance != "NA") {
+            finalGrade = finalGrade + obj.weighting / 100;
+          } else {
+            finalGrade =
+              finalGrade +
+              (obj.gradeMark * obj.moderation * obj.weighting) / 100;
+          }
+        });
 
-        return finalGrade !=0 ? renderGrade(finalGrade, gradeState) : "-";
+        return finalGrade != 0 ? renderGrade(finalGrade, gradeState) : "-";
       },
     };
     setColumns((columns) => [...columns, newTotalCol]); // how to update state using existing!
@@ -108,7 +138,7 @@ const StudentCoursesTable = () => {
     setError(null);
     try {
       const response = await fetch(
-        variables.API_URL + "studentCoursesAPI/"+path.studentID
+        variables.API_URL + "studentCoursesAPI/" + path.studentID
       );
       if (!response.ok) {
         throw new Error("Something went wrong!");
@@ -120,7 +150,7 @@ const StudentCoursesTable = () => {
     }
     try {
       const response2 = await fetch(
-        variables.API_URL + "studentCoursesAPI/"+path.studentID + "/grades"
+        variables.API_URL + "studentCoursesAPI/" + path.studentID + "/grades"
       );
       if (!response2.ok) {
         throw new Error("Something went wrong!");
@@ -144,7 +174,15 @@ const StudentCoursesTable = () => {
       renderCell: (cellValues) => {
         return (
           <div className="cellAction">
-            <Link to={"/courses/" + cellValues.row.year.year + "/" + cellValues.row.classCode} style={{ textDecoration: "none" }}>
+            <Link
+              to={
+                "/courses/" +
+                cellValues.row.year.year +
+                "/" +
+                cellValues.row.classCode
+              }
+              style={{ textDecoration: "none" }}
+            >
               <div className="viewButton">View</div>
             </Link>
           </div>
@@ -154,17 +192,19 @@ const StudentCoursesTable = () => {
   ];
 
   return (
-    <div style={{ height: 700, width: "100%" }} className='datatable'>
+    <div style={{ height: 700, width: "100%" }} className="datatable">
       <Select
-          id="grade-select"
-          style={{width:200}}
-          value={gradeState}
-          onChange={(e)=>{setGradeState(e.target.value)}}
-        >
-          <MenuItem value={'percentage'}>Percentage</MenuItem>
-          <MenuItem value={'band'}>Band</MenuItem>
-          <MenuItem value={'point'}>Point</MenuItem>
-        </Select>
+        id="grade-select"
+        style={{ width: 200 }}
+        value={gradeState}
+        onChange={(e) => {
+          setGradeState(e.target.value);
+        }}
+      >
+        <MenuItem value={"percentage"}>Percentage</MenuItem>
+        <MenuItem value={"band"}>Band</MenuItem>
+        <MenuItem value={"point"}>Point</MenuItem>
+      </Select>
       <DataGrid
         rows={courseData}
         columns={columns.concat(actionColumn)}
@@ -179,4 +219,4 @@ const StudentCoursesTable = () => {
   );
 };
 
-export default StudentCoursesTable;
+export default CoursesInStudentTable;
