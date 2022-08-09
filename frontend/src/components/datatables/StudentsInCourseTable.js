@@ -90,7 +90,7 @@ const StudentInCourseTable = ({inputGradeData}) => {
             finalGrade = individualWork.preponderance;
             status = "PREP";
           } else {
-            finalGrade = individualWork.gradeMark;
+            finalGrade = (individualWork.gradeMark*individualWork.moderation);
             status = "GRADE";
           }
         }
@@ -161,7 +161,7 @@ const StudentInCourseTable = ({inputGradeData}) => {
             } else {
               // if a previous exam Q was marked as MV, examGrade will not be integer
               if (!(examGrade instanceof String)) {
-                examGrade = examGrade + (obj.gradeMark * obj.weighting) / 100;
+                examGrade = examGrade + ((obj.gradeMark*obj.moderation) * obj.weighting) / 100;
               }
             }
             examWeight += obj.weighting;
@@ -229,7 +229,7 @@ const StudentInCourseTable = ({inputGradeData}) => {
           if (obj.preponderance != "NA") {
             finalGrade += obj.weighting / 100;
           } else {
-            finalGrade = finalGrade + (obj.gradeMark * obj.weighting) / 100;
+            finalGrade = finalGrade + ((obj.gradeMark*obj.moderation) * obj.weighting) / 100;
           }
         });
 

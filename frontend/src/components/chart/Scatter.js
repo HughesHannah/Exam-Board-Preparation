@@ -31,7 +31,7 @@ const ScatterChartExample = ({ inputData }) => {
       // if the coursework does not belong to this class
       if (work.course.classCode != classCode) {
         // add mark to class total
-        otherClasses += (work.gradeMark * work.weighting) / 100;
+        otherClasses += ((work.gradeMark*work.moderation) * work.weighting) / 100;
 
         // check if course is in list of courses and add it if it is not
         if (!classes.includes(work.course.classCode)) {
@@ -41,7 +41,7 @@ const ScatterChartExample = ({ inputData }) => {
         // else the coursework belongs to this class
       } else {
         // add mark to this class total
-        thisClass += (work.gradeMark * work.weighting) / 100;
+        thisClass += ((work.gradeMark*work.moderation) * work.weighting) / 100;
       }
     });
 

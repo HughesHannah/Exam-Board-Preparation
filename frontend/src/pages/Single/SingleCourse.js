@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./single.scss";
 import { variables } from "../../Variables";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import StudentsInCourseTable from "../../components/dataTables/StudentsInCourseTable.js";
@@ -34,13 +35,35 @@ const SingleCourse = () => {
   }, []);
 
   useEffect(() => {
-    setWorks([...new Set(gradeData.map((item) => item.name))]);
+    if(gradeData.length != 0){
+      setWorks([...new Set(gradeData[0].work_student.map((item) => item.name))]);
+    }
+    
     gradeData.map((item) => {
       if (item.moderation >1 || item.moderation < 1){
         setIsModerated(true);
       }
     })
   }, [gradeData])
+
+  const handleWorkModerationSubmission = async (e) => {
+    // e.preventDefault();
+    const formData = new FormData();
+    formData.append("work", selectedAssignment);
+    formData.append("moderation", moderation);
+
+    let response;
+    try {
+      response = axios.post(variables.API_URL + "courseAPI/" + path.year + "/" + path.courseID + "/moderateWork", formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      });
+      alert("moderation applied");
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
 
   return (
     <div className="single">
@@ -100,7 +123,7 @@ const SingleCourse = () => {
               <li>None</li>
             </ul>
           </div>
-          {/* <div>
+          <div>
             <p>
               Add Moderation:
             </p>
@@ -119,8 +142,8 @@ const SingleCourse = () => {
               onChange={(e) => setModeration(e.target.value)}
               value={moderation}
             />
-            <button>Submit</button>
-            </div> */}
+            <button onClick={handleWorkModerationSubmission} disabled={!selectedAssignment && !moderation}>Submit</button>
+            </div>
         </div>
       </div>
     </div>

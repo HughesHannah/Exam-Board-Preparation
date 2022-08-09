@@ -64,7 +64,7 @@ const StudentCoursesTable = () => {
             finalGrade = myCourseAssesment.preponderance;
             status = 'PREP'
           }else{
-            finalGrade = myCourseAssesment.gradeMark
+            finalGrade = (myCourseAssesment.gradeMark*myCourseAssesment.moderation)
             status = 'GRADE'
           } 
         }
@@ -94,7 +94,7 @@ const StudentCoursesTable = () => {
           if(obj.preponderance != 'NA'){
             finalGrade = finalGrade + obj.weighting/100;
           }else{
-            finalGrade = finalGrade + (obj.gradeMark*obj.weighting/100)
+            finalGrade = finalGrade + ((obj.gradeMark*obj.moderation)*obj.weighting/100)
           } 
         })
 

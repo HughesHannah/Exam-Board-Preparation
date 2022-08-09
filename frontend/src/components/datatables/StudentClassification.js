@@ -112,7 +112,7 @@ const StudentClassification = () => {
         const projectWork = params.row.work_student.find((work) =>
           work.course.className.includes("project")
         );
-        return renderGrade(projectWork.gradeMark, gradeState);
+        return renderGrade((projectWork.gradeMark*projectWork.moderation), gradeState);
       },
     };
     // add to list of columns

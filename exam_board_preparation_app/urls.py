@@ -18,7 +18,7 @@ urlpatterns = [
     path('courseAPI/<year>/<code>/students/grades', views.GradesInCourseAPI),
     path('courseAPI/<year>/<code>/grades', views.WorksInCourseAPI),
     path('courseAPI/<year>/<code>', views.IndividualCourseYearAPI),
-    
+    path('courseAPI/<year>/<code>/moderateWork', views.ModerateGradedWorkAPI),
     
 
     path('courseAPI/<year>', views.CourseYearAPI),

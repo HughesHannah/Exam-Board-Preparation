@@ -1,5 +1,3 @@
-import { ContactsOutlined } from "@material-ui/icons";
-
 export const values = [
   { minValue: 91, maxValue: 100, point: "22", band: "A1" },
   { minValue: 84, maxValue: 91, point: "21", band: "A2" },
@@ -82,7 +80,7 @@ export function getWeightedGradeFromWorks(studentWorks) {
   );
   studentWorks.forEach((work) =>
     weightedCourseMarks[work.course.className].push(
-      (work.gradeMark * work.weighting) / 100
+      ((work.gradeMark*work.moderation) * work.weighting) / 100
     )
   );
 
@@ -118,7 +116,7 @@ export function creditsAtBands(studentWorks) {
   );
   studentWorks.forEach((work) =>
     weightedCourseMarks[work.course.className].push(
-      (work.gradeMark * work.weighting) / 100
+      ((work.gradeMark*work.moderation) * work.weighting) / 100
     )
   );
 
@@ -166,7 +164,7 @@ export function countBands(studentsAndWorks) {
     // calculate final grade = sum(mark*weighting*coursecredits)/totalcredits
     let totalGrade = 0;
     student.work_student.forEach((work) => {
-      totalGrade += work.gradeMark*work.weighting*work.course.credits/100;
+      totalGrade += (work.gradeMark*work.moderation)*work.weighting*work.course.credits/100;
     })
     totalGrade = totalGrade/120;
     
@@ -195,7 +193,7 @@ export function averageGrade(studentsAndWorks, gradeState) {
     // calculate final grade = sum(mark*weighting*coursecredits)/totalcredits
     let studentTotalGrade = 0;
     student.work_student.forEach((work) => {
-      studentTotalGrade += work.gradeMark*work.weighting*work.course.credits/100;
+      studentTotalGrade += (work.gradeMark*work.moderation)*work.weighting*work.course.credits/100;
     })
     studentTotalGrade = studentTotalGrade/120;
 

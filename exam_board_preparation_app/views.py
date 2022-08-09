@@ -145,6 +145,31 @@ def IndividualStudentCoursesAPI(request, id):
     serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data)
 
+
+### Course Moderation ###
+
+# Moderate a Coursework
+@api_view(['POST'])
+def ModerateGradedWorkAPI(request, year, code):
+
+    # get data from request
+    gradedWorkToModerate = request.data['work']
+    newModeration = request.data['moderation']
+    
+    yearStart = year.split('-')[0]
+
+    y = Year.objects.get(yearStart=yearStart)
+    c = Course.objects.get(classCode=code, year=y)
+    works = GradedWork.objects.filter(name=gradedWorkToModerate, course = c)
+    
+    for work in works:
+        work.moderation=newModeration
+        work.save()
+
+    return JsonResponse("Success", safe=False)
+
+
+
 ########## Get Grade(s) APIs ###############################
 
 # get all grades for a particular course
@@ -273,6 +298,7 @@ def ClassHeadAPI(request):
     classHeads = ClassHead.objects.filter(user=user)
     serializer = ClassHeadSerializer(classHeads, many=True)
     return Response(serializer.data)
+
 
 ########## Uploads ###############################
 
