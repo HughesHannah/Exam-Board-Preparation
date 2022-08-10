@@ -150,6 +150,14 @@ export function creditsAtBands(studentWorks) {
     const [course, band] = entry;
     bands[band] += creditsByCourse[course]
   })
+
+  
+  // this could be done much better with case switching (and not including break statements)
+  bands['Fail']= bands['A'] + bands['B'] + bands['C'] + bands['D'] + bands['Fail']
+  bands['D']= bands['A'] + bands['B'] + bands['C'] + bands['D']
+  bands['C']= bands['A'] + bands['B'] + bands['C']
+  bands['B']= bands['A'] + bands['B']
+
   return bands
 }
 

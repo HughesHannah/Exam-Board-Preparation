@@ -56,7 +56,7 @@ const StudentClassification = () => {
   function creditsTakenColumn() {
     const newCreditCol = {
       field: "creditsTaken",
-      headerName: "Credits",
+      headerName: "Total Credits",
       width: 130,
       valueGetter: (params) => {
         const studentWorks = params.row.work_student;
@@ -76,7 +76,7 @@ const StudentClassification = () => {
   function creditsAtBand(bandLetter) {
     const newBandCol = {
       field: "credits"+bandLetter,
-      headerName: "Band "+bandLetter,
+      headerName: "Credits ("+bandLetter+")",
       width: 130,
       valueGetter: (params) => {
         const studentWorks = params.row.work_student;
