@@ -64,6 +64,7 @@ const SingleStudent = () => {
     fetchDataHandler();
   }, [fetchDataHandler]);
 
+
   return (
     <div className="single">
       <Sidebar />
@@ -80,8 +81,8 @@ const SingleStudent = () => {
                 </span>
               </div>
               <div className="detailItem">
-                <span className="itemKey">Year:</span>
-                <span className="itemValue">CALCULATE</span>
+                <span className="itemKey">Exit Year:</span>
+                <span className="itemValue">{studentData.length != 0? studentData.exitYear.year:""}</span>
               </div>
               <div className="detailItem">
                 <span className="itemKey">Degree:</span>
