@@ -168,7 +168,7 @@ def ModerateGradedWorkAPI(request, year, code):
 
     return JsonResponse("Success", safe=False)
 
-# Moderate a Coursework
+# Moderate a Course
 @api_view(['POST'])
 def ModerateCourseAPI(request, year, code):
 
@@ -295,6 +295,26 @@ def IndividualStudentAPI(request, id):
     serializer = StudentSerializer(students, many=False)
     return Response(serializer.data)
 
+### Add Preponderance ###
+@api_view(['POST'])
+def AddPreponderanceAPI(request, id):
+
+    # get data from request
+    courseFromRequest = request.data['course']
+    courseYearStartFromRequest = request.data['courseYearStart']
+    assignmentFromRequest = request.data['assignment']
+    preponderanceFromRequest = request.data['preponderance']
+
+    y = Year.objects.get(yearStart=courseYearStartFromRequest)
+    c = Course.objects.get(className=courseFromRequest, year=y)
+    s = Student.objects.get(metriculationNumber=id)
+    work = GradedWork.objects.get(course = c, name=assignmentFromRequest, student=s)
+    
+    
+    work.preponderance=preponderanceFromRequest
+    work.save()
+
+    return JsonResponse("Success", safe=False)
 
 ########## Get Year(s) APIs ###############################
 

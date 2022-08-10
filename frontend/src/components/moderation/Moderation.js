@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { variables } from "../../Variables.js";
 import { useParams } from "react-router-dom";
 
 function getListOfModified(modifiedWorks) {

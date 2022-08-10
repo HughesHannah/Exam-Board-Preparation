@@ -24,6 +24,7 @@ urlpatterns = [
     path('courseAPI/<year>', views.CourseYearAPI),
     
     path('individualStudentAPI/<id>', views.IndividualStudentAPI),
+    path('preponderanceAPI/<id>', views.AddPreponderanceAPI),
     path('studentCoursesAPI/<id>', views.IndividualStudentCoursesAPI),
     path('studentCoursesAPI/<id>/grades', views.GradesInStudentAPI),
     path('studentAPI/grades', views.studentsAndGradesAPI),
