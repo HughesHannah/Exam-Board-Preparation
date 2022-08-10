@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { variables } from "../../Variables";
-import { averageGrade } from "../../utils/GradeConversion.js";
+import { studentAverageGrade } from "../../utils/GradeConversion.js";
 import { useParams } from "react-router-dom";
 
 import "./single.scss";
@@ -93,8 +93,7 @@ const SingleStudent = () => {
               </div>
               <div className="detailItem">
                 <span className="itemKey">Average Grade:</span>
-                <span className="itemValue">CALCULATE</span>
-                {/* <span className="itemValue">{averageGrade(gradeData, "band")}</span> */}
+                <span className="itemValue">{gradeData.length>0?studentAverageGrade(gradeData, "band"):""}</span>
               </div>
             </div>
           </div>

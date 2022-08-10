@@ -57,7 +57,7 @@ function percentageToBroadBand(percentage) {
 }
 
 export function renderGrade(percentage, gradeState, dp) {
-  if (!isNaN(parseFloat(percentage))){
+  if (!isNaN(parseFloat(percentage))) {
     if (gradeState == "band") {
       return percentageToBand(percentage);
     }
@@ -66,7 +66,6 @@ export function renderGrade(percentage, gradeState, dp) {
     }
     return percentage.toFixed(dp);
   } else return percentage;
-  
 }
 
 function sumArray(array) {
@@ -83,7 +82,7 @@ export function getWeightedGradeFromWorks(studentWorks) {
   );
   studentWorks.forEach((work) =>
     weightedCourseMarks[work.course.className].push(
-      ((work.gradeMark*work.moderation) * work.weighting) / 100
+      (work.gradeMark * work.moderation * work.weighting) / 100
     )
   );
 
@@ -119,7 +118,7 @@ export function creditsAtBands(studentWorks) {
   );
   studentWorks.forEach((work) =>
     weightedCourseMarks[work.course.className].push(
-      ((work.gradeMark*work.moderation) * work.weighting) / 100
+      (work.gradeMark * work.moderation * work.weighting) / 100
     )
   );
 
@@ -138,58 +137,63 @@ export function creditsAtBands(studentWorks) {
   );
 
   let bands = {
-    "A": 0,
-    "B": 0,
-    "C": 0,
-    "D": 0,
-    "Fail": 0
-  }
+    A: 0,
+    B: 0,
+    C: 0,
+    D: 0,
+    Fail: 0,
+  };
 
   // for each course in bands by course
   Object.entries(bandsByCourse).forEach((entry) => {
     const [course, band] = entry;
-    bands[band] += creditsByCourse[course]
-  })
+    bands[band] += creditsByCourse[course];
+  });
 
-  
   // this could be done much better with case switching (and not including break statements)
-  bands['Fail']= bands['A'] + bands['B'] + bands['C'] + bands['D'] + bands['Fail']
-  bands['D']= bands['A'] + bands['B'] + bands['C'] + bands['D']
-  bands['C']= bands['A'] + bands['B'] + bands['C']
-  bands['B']= bands['A'] + bands['B']
+  bands["Fail"] =
+    bands["A"] + bands["B"] + bands["C"] + bands["D"] + bands["Fail"];
+  bands["D"] = bands["A"] + bands["B"] + bands["C"] + bands["D"];
+  bands["C"] = bands["A"] + bands["B"] + bands["C"];
+  bands["B"] = bands["A"] + bands["B"];
 
-  return bands
+  return bands;
 }
 
 export function countBands(studentsAndWorks) {
   let bands = {
-    "A": 0,
-    "B": 0,
-    "C": 0,
-    "D": 0,
-    "Fail": 0
-  }
+    A: 0,
+    B: 0,
+    C: 0,
+    D: 0,
+    Fail: 0,
+  };
 
   //for each student
   studentsAndWorks.forEach((student) => {
     // calculate final grade = sum(mark*weighting*coursecredits)/totalcredits
     let totalGrade = 0;
     student.work_student.forEach((work) => {
-      totalGrade += (work.gradeMark*work.moderation)*work.weighting*work.course.credits/100;
-    })
-    totalGrade = totalGrade/120;
-    
+      totalGrade +=
+        (work.gradeMark *
+          work.moderation *
+          work.weighting *
+          work.course.credits) /
+        100;
+    });
+    totalGrade = totalGrade / 120;
+
     // get band for final grade
     let studentBand = percentageToBroadBand(totalGrade);
-    // add that band to a count 
-    bands[studentBand] += 1
-  })
-  
+    // add that band to a count
+    bands[studentBand] += 1;
+  });
+
   let returnArray = [];
 
   Object.entries(bands).forEach((entry) => {
     const [grade, number] = entry;
-    returnArray.push({name: "Band "+ grade, value: number })
+    returnArray.push({ name: "Band " + grade, value: number });
   });
 
   return returnArray;
@@ -204,16 +208,45 @@ export function averageGrade(studentsAndWorks, gradeState) {
     // calculate final grade = sum(mark*weighting*coursecredits)/totalcredits
     let studentTotalGrade = 0;
     student.work_student.forEach((work) => {
-      studentTotalGrade += (work.gradeMark*work.moderation)*work.weighting*work.course.credits/100;
-    })
-    studentTotalGrade = studentTotalGrade/120;
+      if ((work.preponderance = "NA")) {
+        studentTotalGrade +=
+          (work.gradeMark *
+            work.moderation *
+            work.weighting *
+            work.course.credits) /
+          100;
+      } else {
+        studentTotalGrade += work.weighting * work.course.credits;
+      }
+    });
+    studentTotalGrade = studentTotalGrade / 120;
 
     // add to class total and class count of students
     classTotalGrade += studentTotalGrade;
     classCountOfStudents += 1;
-  })
+  });
 
   const classAverage = classTotalGrade / classCountOfStudents;
 
-  return renderGrade(classAverage, gradeState)
+  return renderGrade(classAverage, gradeState);
+}
+
+export function studentAverageGrade(works, gradeState) {
+  let studentTotalGrade = 0;
+
+  works.forEach((work) => {
+    if ((work.preponderance = "NA")) {
+      studentTotalGrade +=
+        (work.gradeMark *
+          work.moderation *
+          work.weighting *
+          work.course.credits) /
+        100;
+    } else {
+      studentTotalGrade += work.weighting * work.course.credits;
+    }
+  });
+  studentTotalGrade = studentTotalGrade / 120;
+
+  return renderGrade(studentTotalGrade, gradeState);
 }
