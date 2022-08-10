@@ -126,7 +126,7 @@ const StudentClassification = () => {
       width: 130,
       valueGetter: (params) => {
         const studentWorks = params.row.work_student;
-        return renderGrade(getWeightedGradeFromWorks(studentWorks), gradeState);
+        return renderGrade(getWeightedGradeFromWorks(studentWorks), gradeState, 2);
       },
     };
     // add to list of columns
