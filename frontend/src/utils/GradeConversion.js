@@ -56,14 +56,17 @@ function percentageToBroadBand(percentage) {
   }
 }
 
-export function renderGrade(percentage, gradeState) {
-  if (gradeState == "band") {
-    return percentageToBand(percentage);
-  }
-  if (gradeState == "point") {
-    return percentageToPoint(percentage);
-  }
-  return percentage.toFixed(0);
+export function renderGrade(percentage, gradeState, dp) {
+  if (!isNaN(parseFloat(percentage))){
+    if (gradeState == "band") {
+      return percentageToBand(percentage);
+    }
+    if (gradeState == "point") {
+      return percentageToPoint(percentage);
+    }
+    return percentage.toFixed(dp);
+  } else return percentage;
+  
 }
 
 function sumArray(array) {

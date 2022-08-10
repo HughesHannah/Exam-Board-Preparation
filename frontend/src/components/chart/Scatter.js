@@ -45,8 +45,8 @@ const ScatterChartExample = ({ inputData }) => {
       }
     });
 
-    let xValue = renderGrade(thisClass, gradeState);
-    let yValue = renderGrade((otherClasses / classes.length), gradeState);
+    let xValue = renderGrade(thisClass, gradeState, 0);
+    let yValue = renderGrade((otherClasses / classes.length), gradeState, 0);
 
     graphData.push({ x: xValue, y: yValue });
   });

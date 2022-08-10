@@ -59,7 +59,7 @@ const CoursesInStudentTable = ({courseData, gradeData}) => {
               myCourseAssesment.gradeMark * myCourseAssesment.moderation;
           }
         }
-        return finalGrade != 0 ? renderGrade(finalGrade, gradeState) : "-";
+        return finalGrade != 0 ? renderGrade(finalGrade, gradeState, 0) : "-";
       },
       renderCell: (params) => {
         const cellValue = params.value;
@@ -124,7 +124,7 @@ const CoursesInStudentTable = ({courseData, gradeData}) => {
           }
         });
 
-        return finalGrade != 0 ? renderGrade(finalGrade, gradeState) : "-";
+        return finalGrade != 0 ? renderGrade(finalGrade, gradeState, 2) : "-";
       },
     };
     setColumns((columns) => [...columns, newTotalCol]); // how to update state using existing!

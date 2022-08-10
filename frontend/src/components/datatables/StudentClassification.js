@@ -96,7 +96,7 @@ const StudentClassification = () => {
         const studentWorks = params.row.work_student.filter(
           (work) => !work.course.className.includes("project")
         );
-        return renderGrade(getWeightedGradeFromWorks(studentWorks), gradeState);
+        return renderGrade(getWeightedGradeFromWorks(studentWorks), gradeState, 2);
       },
     };
     // add to list of columns
@@ -112,7 +112,7 @@ const StudentClassification = () => {
         const projectWork = params.row.work_student.find((work) =>
           work.course.className.includes("project")
         );
-        return renderGrade((projectWork.gradeMark*projectWork.moderation), gradeState);
+        return renderGrade((projectWork.gradeMark*projectWork.moderation), gradeState, 2);
       },
     };
     // add to list of columns

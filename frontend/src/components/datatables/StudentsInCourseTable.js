@@ -96,7 +96,7 @@ const StudentInCourseTable = ({inputGradeData}) => {
         }
 
         // return the result with a hover over weighting
-        return finalGrade != 0 ? renderGrade(finalGrade, gradeState) : "-";
+        return finalGrade != 0 ? renderGrade(finalGrade, gradeState, 0) : "-";
       },
       renderCell: (params) => {
         const valueOfCell = params.value;
@@ -172,7 +172,7 @@ const StudentInCourseTable = ({inputGradeData}) => {
 
         // return the result with a hover over weighting
         return examFinalGrade != 0
-          ? renderGrade(examFinalGrade, gradeState)
+          ? renderGrade(examFinalGrade, gradeState, 0)
           : "-";
       },
       renderCell: (params) => {
@@ -233,7 +233,7 @@ const StudentInCourseTable = ({inputGradeData}) => {
           }
         });
 
-        return finalGrade != 0 ? renderGrade(finalGrade, gradeState) : "-";
+        return finalGrade != 0 ? renderGrade(finalGrade, gradeState, 0) : "-";
       },
     };
     // add to list of columns

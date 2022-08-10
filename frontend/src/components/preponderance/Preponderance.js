@@ -65,12 +65,6 @@ const Preponderance = ({ gradeData, courseData }) => {
   return (
     <div>
       <div>
-        Current Preponderance:
-        <ul>
-          <li>None</li>
-        </ul>
-      </div>
-      <div>
         Mark Preponderance:
         <select
           id="Course"
