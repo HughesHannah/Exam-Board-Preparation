@@ -1,15 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import './table.scss';
 
 const SearchTable = ({ data }) => {
 
   return (
-    <div>
+    <div className="searchTable">
       <table>
         <tbody>
           {data.map((item) => (
             <tr key={item.id}>
-              <td>
+              <td className="idColumn">
                 <Link
                   to={"/students/" + item.matriculationNumber}
                   style={{ textDecoration: "none" }}
@@ -17,7 +18,7 @@ const SearchTable = ({ data }) => {
                   {item.matriculationNumber}
                 </Link>
               </td>
-              <td>
+              <td className="nameColumn">
                 <Link
                   to={"/students/" + item.matriculationNumber}
                   style={{ textDecoration: "none" }}

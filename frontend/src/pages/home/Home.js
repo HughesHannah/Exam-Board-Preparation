@@ -28,19 +28,27 @@ const Home = () => {
   const courseKeys = ["classCode", "className"];
 
   const searchStudents = (data) => {
-    return data.filter((item) =>
-      studentKeys.some((studentKey) =>
-        item[studentKey].toLowerCase().includes(search)
-      )
-    );
+    if (search == "") {
+      return [];
+    } else {
+      return data.filter((item) =>
+        studentKeys.some((studentKey) =>
+          item[studentKey].toLowerCase().includes(search)
+        )
+      );
+    }
   };
 
   const searchCourses = (data) => {
-    return data.filter((item) =>
-      courseKeys.some((courseKey) =>
-        item[courseKey].toLowerCase().includes(search)
-      )
-    );
+    if (search == "") {
+      return [];
+    } else {
+      return data.filter((item) =>
+        courseKeys.some((courseKey) =>
+          item[courseKey].toLowerCase().includes(search)
+        )
+      );
+    }
   };
 
   let fetchStudents = async () => {
@@ -74,8 +82,23 @@ const Home = () => {
       },
     })
       .then((data) => data.json())
-      .then((data) => setStudentGrades(data))
+      .then((data) => setStudentGrades(data));
   };
+
+  function getSearchTable() {
+    if (
+      searchStudents(studentData).length > 0 ||
+      searchCourses(courseData).length > 0
+    ) {
+      return (
+        <div className="searchResults">
+          <StudentSearchTable data={searchStudents(studentData)} />
+          <CourseSearchTable data={searchCourses(courseData)} />
+        </div>
+      );
+    }
+    return "";
+  }
 
   useEffect(() => {
     fetchStudents();
@@ -88,10 +111,26 @@ const Home = () => {
       <Sidebar />
       <div className="homeContainer">
         <div className="widgets">
-         {(studentGrades.length == 0) ? <WidgetSkeleton />: <Widget type="studentCounter" data={studentGrades}/>}
-         {(studentGrades.length == 0) ? <WidgetSkeleton />: <Widget type="completedCourseCounter" data={studentGrades}/>}
-         {(studentGrades.length == 0) ? <WidgetSkeleton />:<Widget type="preponderanceCounter" data={studentGrades}/>}
-         {(studentGrades.length == 0) ? <WidgetSkeleton />: <Widget type="issueCounter" data={studentGrades}/>}
+          {studentGrades.length == 0 ? (
+            <WidgetSkeleton />
+          ) : (
+            <Widget type="studentCounter" data={studentGrades} />
+          )}
+          {studentGrades.length == 0 ? (
+            <WidgetSkeleton />
+          ) : (
+            <Widget type="completedCourseCounter" data={studentGrades} />
+          )}
+          {studentGrades.length == 0 ? (
+            <WidgetSkeleton />
+          ) : (
+            <Widget type="preponderanceCounter" data={studentGrades} />
+          )}
+          {studentGrades.length == 0 ? (
+            <WidgetSkeleton />
+          ) : (
+            <Widget type="issueCounter" data={studentGrades} />
+          )}
         </div>
         <div className="searchdiv">
           <div className="search">
@@ -105,26 +144,27 @@ const Home = () => {
             <CloseIcon className="closeIcon" onClick={() => setSearch(null)} />
           </div>
         </div>
-        <div className="searchResults">
-          <StudentSearchTable data={searchStudents(studentData)} />
-          <CourseSearchTable data={searchCourses(courseData)} />
-        </div>
+        {getSearchTable()}
+
         <div className="charts">
           <div className="pieChart">
-            <h1 className="title">
-              Student Grades
-            </h1>
+            <h1 className="title">Student Grades</h1>
             <div>
-            {(studentGrades.length == 0) ? <PieChartSkeleton />: <GradesPieChart inputData={studentGrades}/>}
-              
+              {studentGrades.length == 0 ? (
+                <PieChartSkeleton />
+              ) : (
+                <GradesPieChart inputData={studentGrades} />
+              )}
             </div>
           </div>
           <div className="lineChart">
-            <h1 className="title">
-              Average Student Grade by Year
-            </h1>
+            <h1 className="title">Average Student Grade by Year</h1>
             <div>
-              {(studentGrades.length == 0) ? <LineChartSkeleton />: <AverageGradeLineChart inputData={studentGrades}/>}
+              {studentGrades.length == 0 ? (
+                <LineChartSkeleton />
+              ) : (
+                <AverageGradeLineChart inputData={studentGrades} />
+              )}
             </div>
           </div>
         </div>

@@ -1,14 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import './table.scss';
 
 const CourseSearchTable = ({ data }) => {
   return (
-    <div>
+    <div className="searchTable">
       <table>
         <tbody>
           {data.map((item) => (
             <tr key={item.id}>
-              <td>
+              <td className="idColumn">
                 <Link
                   to={
                     "/courses/" +
@@ -23,7 +24,7 @@ const CourseSearchTable = ({ data }) => {
                   {item.classCode}
                 </Link>
               </td>
-              <td>
+              <td className="nameColumn">
                 <Link
                   to={
                     "/courses/" +

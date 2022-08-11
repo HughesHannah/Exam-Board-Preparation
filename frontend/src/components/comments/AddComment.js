@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useContext} from "react";
 import { useParams } from "react-router-dom";
 import { variables } from "../../Variables";
 import AuthContext from "../../context/AuthContext.js";
@@ -9,7 +9,7 @@ const AddComment = () => {
     const [subjectLine, setSubjectLine] = useState(null);
     const [commentBody, setCommentBody] = useState(null);
     const path = useParams();
-    let { authTokens, logoutUser } = useContext(AuthContext);
+    let { authTokens } = useContext(AuthContext);
 
   const handleSubmission = async (e) => {
     e.preventDefault();
