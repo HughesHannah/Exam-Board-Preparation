@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib import messages
 import pandas as pd
-from exam_board_preparation_app.serializers import CommentSerializer, CourseSerializer, ClassHeadSerializer, CoursesToGradesSerializer, GradedWorkSerializer, OverallGradeCourseSerializer, SimpleCourseSerializer, SimpleGradedWorkSerializer, StudentSerializer, StudentsToCoursesSerializer, StudentsToGradesSerializer, YearSerializer
-from exam_board_preparation_app.models import ClassHead, GradedWork, Student, Course, StudentComment, Year
+from exam_board_preparation_app.serializers import *
+from exam_board_preparation_app.models import *
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import date
@@ -582,9 +582,16 @@ def AddCommentAPI(request, id):
 
     return JsonResponse(comment_serializer.data, safe=False)
 
-    
-    
-    
+ 
+########## Degree Classifications ###############################    
+   
+# Degree Classification Information
+@api_view(['GET'])
+def degreeClassificationAPI(request):
+    classifications = DegreeClassification.objects.all()
+    serializer = DegreeClassificationSerializer(classifications, many=True)
+    return Response(serializer.data)
+   
 
 ########## Tokens ###############################
 

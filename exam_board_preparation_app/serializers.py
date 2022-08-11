@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import GradedWork, Student, ClassHead, Course, StudentComment, Year
+from .models import *
 from django.contrib.auth.models import User
 
 class YearSerializer(serializers.ModelSerializer):
@@ -86,5 +86,8 @@ class CommentSerializer(serializers.ModelSerializer):
         model = StudentComment
         fields = ('__all__')
          
-        
+class DegreeClassificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DegreeClassification
+        fields = ('__all__')        
     

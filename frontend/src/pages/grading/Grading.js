@@ -2,7 +2,8 @@ import React from "react";
 import "./grading.scss";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
-import Table from "../../components/table/Table.js";
+import GradeTable from "../../components/table/GradeTable.js";
+import ClassificationRulesTable from "../../components/table/ClassificationRulesTable";
 
 const Grading = () => {
   return (
@@ -10,10 +11,16 @@ const Grading = () => {
       <Sidebar />
       <div className="mainContainer">
         <h3 className="title">Grading Rules</h3>
+
+        <div className="classificationGrades">
+          <div className="editButton">Edit</div>
+          <div className="titleOfSection">Classification Rules</div>
+          <ClassificationRulesTable />
+        </div>
+
         <div className="tableOfGrades">
-          {/* <div className="editButton">Edit</div> */}
           <div className="titleOfSection">Table of Grades</div>
-          <Table />
+          <GradeTable />
         </div>
       </div>
     </div>
