@@ -588,7 +588,7 @@ def AddCommentAPI(request, id):
 # Degree Classification Information
 @api_view(['GET'])
 def degreeClassificationAPI(request):
-    classifications = DegreeClassification.objects.all()
+    classifications = DegreeClassification.objects.all().order_by('-lowerGPAStandard')
     serializer = DegreeClassificationSerializer(classifications, many=True)
     return Response(serializer.data)
    

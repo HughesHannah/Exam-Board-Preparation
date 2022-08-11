@@ -9,6 +9,7 @@ import {
   renderGrade,
   getWeightedGradeFromWorks,
   creditsAtBands,
+  getClassification,
 } from "../../utils/GradeConversion.js";
 import "./datatable.scss";
 import AuthContext from "../../context/AuthContext.js";
@@ -32,6 +33,7 @@ const StudentClassification = () => {
   const [gradeState, setGradeState] = useState("percentage");
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [classificationData, setClassificationData] = useState([]);
   const path = useParams();
   let { authTokens, logoutUser } = useContext(AuthContext);
 
@@ -42,15 +44,17 @@ const StudentClassification = () => {
     // add calculated columns
     creditsTakenColumn();
 
-    creditsAtBand('A');
-    creditsAtBand('B');
-    creditsAtBand('C');
-    creditsAtBand('D');
-    creditsAtBand('Fail');
+    creditsAtBand("A");
+    creditsAtBand("B");
+    creditsAtBand("C");
+    creditsAtBand("D");
+    creditsAtBand("Fail");
 
     projectGradeColumn();
     taughtGradeColumn();
     finalGradeColumn();
+
+    classificationColumn();
   }, [tableData, gradeState]);
 
   function creditsTakenColumn() {
@@ -75,13 +79,13 @@ const StudentClassification = () => {
 
   function creditsAtBand(bandLetter) {
     const newBandCol = {
-      field: "credits"+bandLetter,
-      headerName: "Credits ("+bandLetter+")",
+      field: "credits" + bandLetter,
+      headerName: "Credits (" + bandLetter + ")",
       width: 130,
       valueGetter: (params) => {
         const studentWorks = params.row.work_student;
-        const creditsByGradeData = creditsAtBands(studentWorks)
-        return creditsByGradeData[bandLetter]
+        const creditsByGradeData = creditsAtBands(studentWorks);
+        return creditsByGradeData[bandLetter];
       },
     };
     setColumns((columns) => [...columns, newBandCol]);
@@ -96,7 +100,11 @@ const StudentClassification = () => {
         const studentWorks = params.row.work_student.filter(
           (work) => !work.course.className.includes("project")
         );
-        return renderGrade(getWeightedGradeFromWorks(studentWorks), gradeState, 2);
+        return renderGrade(
+          getWeightedGradeFromWorks(studentWorks),
+          gradeState,
+          2
+        );
       },
     };
     // add to list of columns
@@ -112,7 +120,11 @@ const StudentClassification = () => {
         const projectWork = params.row.work_student.find((work) =>
           work.course.className.includes("project")
         );
-        return renderGrade((projectWork.gradeMark*projectWork.moderation), gradeState, 2);
+        return renderGrade(
+          projectWork.gradeMark * projectWork.moderation,
+          gradeState,
+          2
+        );
       },
     };
     // add to list of columns
@@ -126,15 +138,53 @@ const StudentClassification = () => {
       width: 130,
       valueGetter: (params) => {
         const studentWorks = params.row.work_student;
-        return renderGrade(getWeightedGradeFromWorks(studentWorks), gradeState, 2);
+        return renderGrade(
+          getWeightedGradeFromWorks(studentWorks),
+          gradeState,
+          2
+        );
       },
     };
     // add to list of columns
     setColumns((columns) => [...columns, newTotalCol]);
   }
 
+  function classificationColumn() {
+    const newClassCol = {
+      field: "classification",
+      headerName: "Classification",
+      width: 250,
+      valueGetter: (params) => {
+        const studentWorks = params.row.work_student;
+
+        const classification = getClassification(
+          studentWorks,
+          classificationData
+        );
+
+        return classification;
+      },
+    };
+    // add to list of columns
+    setColumns((columns) => [...columns, newClassCol]);
+  }
+
   const fetchDataHandler = useCallback(async () => {
     setError(null);
+
+    try {
+      const classificationResponse = await fetch(
+        variables.API_URL + "degreeClassificationAPI"
+      );
+      if (!classificationResponse.ok) {
+        throw new Error("Something went wrong!");
+      }
+      const classificationdata = await classificationResponse.json();
+      setClassificationData(classificationdata);
+    } catch (error) {
+      setError(error.message);
+    }
+
     try {
       const courseResponse = await fetch(
         variables.API_URL + "courseAPI/simple"

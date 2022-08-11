@@ -25,11 +25,14 @@ export const values = [
 ];
 
 function percentageToPoint(percentage) {
-  for (const value of values) {
-    if (percentage >= value.minValue) {
-      return value.point;
-    }
-  }
+  const point = (percentage / 100) * 22;
+  return point;
+
+  // for (const value of values) {
+  //   if (percentage >= value.minValue) {
+  //     return value.point;
+  //   }
+  // }
 }
 
 function percentageToBand(percentage) {
@@ -249,4 +252,43 @@ export function studentAverageGrade(works, gradeState) {
   studentTotalGrade = studentTotalGrade / 120;
 
   return renderGrade(studentTotalGrade, gradeState);
+}
+
+export function getClassification(studentWorks, classifications) {
+  const creditsAtEachBand = creditsAtBands(studentWorks);
+
+  // Need to get GPA
+  const weightedPercentage = getWeightedGradeFromWorks(studentWorks);
+  const weightedPoints = percentageToPoint(weightedPercentage);
+
+  // dont need to find sum for total credits, all credits at least a Fail
+  const totalCredits = creditsAtEachBand["Fail"];
+
+  let classificationResult = "didnt work";
+
+  classifications.every((classification) => {
+    // Do they have enough for the standard lower GPA?
+    if (weightedPoints > classification.lowerGPAStandard) {
+      // they dont need discretionary consideration
+      classificationResult = classification.classificationName;
+      return false; // means 'break'
+    } else {
+      // they might be eligible for discretionary
+      // Do they have enough points for the discretionry?
+      if (weightedPoints > classification.lowerGPADiscretionary) {
+        // If they have enough credits at the band for the discretionary, they get the classification
+        if (
+          creditsAtEachBand[classification.charBandForDiscretionary] >
+          (classification.percentageAboveForDiscretionary / 100) * totalCredits
+        ) {
+          classificationResult = classification.classificationName;
+          return false; // means 'break'
+        }
+        // not enough credits for discretionary, try next classification level
+      }
+      // not enough points for discretionary, try next classification Level
+      return true; // means 'continue'
+    }
+  });
+  return classificationResult;
 }
