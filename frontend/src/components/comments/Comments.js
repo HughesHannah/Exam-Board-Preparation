@@ -1,7 +1,8 @@
 import "./comments.scss";
 
-import * as React from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { variables } from "../../Variables";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
@@ -28,7 +29,7 @@ function createData(id, description, date, user, comment) {
 
 function Row(props) {
   const { row } = props;
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <React.Fragment>
@@ -61,49 +62,64 @@ function Row(props) {
   );
 }
 
-const rows = [
-  createData("4", "Student MV", "21-06-2022", "John", "MV accepted"),
-  createData(
-    "3",
-    "Student MV",
-    "13-06-2022",
-    "John",
-    "Student submitted good cause"
-  ),
-  createData(
-    "2",
-    "Student Good Cause",
-    "01-06-2022",
-    "Erika",
-    "Contacted student, may be eligible for good cause"
-  ),
-  createData(
-    "1",
-    "Student Low Grade",
-    "20-03-2022",
-    "Paul",
-    "Identified student with low grade"
-  ),
-];
+
+function getCommentTable(rows, comments){
+  if(comments.length != 0){
+    return (
+      <TableContainer component={Paper}>
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell>Description</TableCell>
+              <TableCell align="right">Date</TableCell>
+              <TableCell align="right">User</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <Row key={row.id} row={row} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>)
+    }else {return (<p>no comments</p>)}
+};
 
 export default function CollapsibleTable() {
+  const [comments, setComments] = useState([]);
+  const [rows, setRows] = useState([]);
+  const path = useParams();
+
+  useEffect(() => {
+    fetch(
+      variables.API_URL + "individualStudentAPI/" + path.studentID + "/comments"
+    )
+      .then((data) => data.json())
+      .then((data) => setComments(data));
+  }, []);
+
+  useEffect(() => {
+    if (comments.length > 0) {
+      comments.forEach(
+        (comment) =>
+          (setRows([
+            ...rows,
+            {
+              id: comment.id,
+              description: comment.subjectLine,
+              date: Date(comment.date),
+              user: comment.user.first_name,
+              comment: comment.comment,
+            },
+          ]))
+      );
+    }
+  }, [comments]);
+
+  
+
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Description</TableCell>
-            <TableCell align="right">Date</TableCell>
-            <TableCell align="right">User</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <Row key={row.id} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+    <div>{getCommentTable(rows, comments)}</div>
+  )
 }

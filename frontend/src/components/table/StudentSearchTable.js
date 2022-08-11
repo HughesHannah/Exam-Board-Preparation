@@ -11,15 +11,15 @@ const SearchTable = ({ data }) => {
             <tr key={item.id}>
               <td>
                 <Link
-                  to={"/students/" + item.metriculationNumber}
+                  to={"/students/" + item.matriculationNumber}
                   style={{ textDecoration: "none" }}
                 >
-                  {item.metriculationNumber}
+                  {item.matriculationNumber}
                 </Link>
               </td>
               <td>
                 <Link
-                  to={"/students/" + item.metriculationNumber}
+                  to={"/students/" + item.matriculationNumber}
                   style={{ textDecoration: "none" }}
                 >
                   {item.name}

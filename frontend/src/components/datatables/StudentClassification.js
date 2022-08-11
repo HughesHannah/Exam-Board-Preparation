@@ -17,10 +17,10 @@ import TableSkeletons from "../skeletons/TableSkeleton.js";
 
 const defaultColumns = [
   {
-    field: "metriculationNumber",
-    headerName: "Metriculation",
+    field: "matriculationNumber",
+    headerName: "matriculation",
     valueGetter: (params) => {
-      return params.row.metriculationNumber;
+      return params.row.matriculationNumber;
     },
   },
 ];
@@ -184,7 +184,7 @@ const StudentClassification = () => {
         return (
           <div className="cellAction">
             <Link
-              to={"/students/" + cellValues.row.metriculationNumber}
+              to={"/students/" + cellValues.row.matriculationNumber}
               style={{ textDecoration: "none" }}
             >
               <div className="viewButton">View</div>

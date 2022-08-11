@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib import messages
 import pandas as pd
-from exam_board_preparation_app.serializers import CourseSerializer, ClassHeadSerializer, CoursesToGradesSerializer, GradedWorkSerializer, OverallGradeCourseSerializer, SimpleCourseSerializer, SimpleGradedWorkSerializer, StudentSerializer, StudentsToCoursesSerializer, StudentsToGradesSerializer, YearSerializer
-from exam_board_preparation_app.models import ClassHead, GradedWork, Student, Course, Year
+from exam_board_preparation_app.serializers import CommentSerializer, CourseSerializer, ClassHeadSerializer, CoursesToGradesSerializer, GradedWorkSerializer, OverallGradeCourseSerializer, SimpleCourseSerializer, SimpleGradedWorkSerializer, StudentSerializer, StudentsToCoursesSerializer, StudentsToGradesSerializer, YearSerializer
+from exam_board_preparation_app.models import ClassHead, GradedWork, Student, Course, StudentComment, Year
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import date
@@ -140,7 +140,7 @@ def IndividualCourseYearAPI(request, year, code):
 # Get Courses for Individual Student
 @api_view(['GET'])
 def IndividualStudentCoursesAPI(request, id):
-    student = Student.objects.get(metriculationNumber=id)
+    student = Student.objects.get(matriculationNumber=id)
     courses = Course.objects.filter(students=student)
     serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data)
@@ -217,7 +217,7 @@ def WorksInCourseAPI(request, year, code):
 # get all grades for a student
 @api_view(['GET'])
 def GradesInStudentAPI(request, id):
-    student = Student.objects.get(metriculationNumber=id)
+    student = Student.objects.get(matriculationNumber=id)
 
     # get the graded works for that course
     studentGrades = GradedWork.objects.filter(student=student)
@@ -291,7 +291,7 @@ def studentsAndGradesForCourseAPI(request, year, code):
 # Individual Student
 @api_view(['GET'])
 def IndividualStudentAPI(request, id):
-    students = Student.objects.get(metriculationNumber=id)
+    students = Student.objects.get(matriculationNumber=id)
     serializer = StudentSerializer(students, many=False)
     return Response(serializer.data)
 
@@ -307,7 +307,7 @@ def AddPreponderanceAPI(request, id):
 
     y = Year.objects.get(yearStart=courseYearStartFromRequest)
     c = Course.objects.get(className=courseFromRequest, year=y)
-    s = Student.objects.get(metriculationNumber=id)
+    s = Student.objects.get(matriculationNumber=id)
     work = GradedWork.objects.get(course = c, name=assignmentFromRequest, student=s)
     
     
@@ -315,6 +315,14 @@ def AddPreponderanceAPI(request, id):
     work.save()
 
     return JsonResponse("Success", safe=False)
+
+# Individual Student Comments
+@api_view(['GET'])
+def IndividualStudentCommentsAPI(request, id):
+    student = Student.objects.get(matriculationNumber=id)
+    studentComment_set = StudentComment.objects.filter(student = student)
+    serializer = CommentSerializer(studentComment_set, many=True)
+    return Response(serializer.data)
 
 ########## Get Year(s) APIs ###############################
 
@@ -418,7 +426,7 @@ def UploadAPI(request):
 
                 # get student object from matriculation number
                 studentToAdd = Student.objects.get(
-                    metriculationNumber=dfcs.index[counter-1])
+                    matriculationNumber=dfcs.index[counter-1])
 
                 # add student to course
                 courseToAddTo.students.add(studentToAdd)
@@ -462,7 +470,7 @@ def UploadStudentsAPI(request):
 
     # create students from data
     student_instances = [Student(
-        metriculationNumber=record['ID'],
+        matriculationNumber=record['ID'],
         name=record['Name'],
         degreeTitle=record['Degree'],
         mastersStudent=record['Degree_Master'],
@@ -508,7 +516,7 @@ def UploadGradesAPI(request):
         cw.columns = ['Weight']
         cw['Name'] = cw.index
         cw = cw.drop('Course Code')
-        cw = cw.drop('Metriculation')
+        cw = cw.drop('Matriculation')
         cw = cw.drop('Student Name')
         cw = cw.drop('Total')
         cw = cw.drop('Final Grade')
@@ -536,7 +544,7 @@ def UploadGradesAPI(request):
                 name=nameOfWork,
                 course=Course.objects.get(classCode=record['Course Code']),
                 student=Student.objects.get(
-                    metriculationNumber=record['Metriculation']),
+                    matriculationNumber=record['Matriculation']),
                 weighting=workWeighting,
                 gradeMark=record[nameOfWork],
                 type=typeOfWork

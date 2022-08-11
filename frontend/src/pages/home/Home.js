@@ -24,7 +24,7 @@ const Home = () => {
   const [search, setSearch] = useState(null);
   let { authTokens, logoutUser } = useContext(AuthContext);
 
-  const studentKeys = ["name", "metriculationNumber"];
+  const studentKeys = ["name", "matriculationNumber"];
   const courseKeys = ["classCode", "className"];
 
   const searchStudents = (data) => {

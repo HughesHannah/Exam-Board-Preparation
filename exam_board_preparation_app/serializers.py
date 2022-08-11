@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import GradedWork, Student, ClassHead, Course, Year
+from .models import GradedWork, Student, ClassHead, Course, StudentComment, Year
+from django.contrib.auth.models import User
 
 class YearSerializer(serializers.ModelSerializer):
     year = serializers.CharField()
@@ -63,7 +64,7 @@ class StudentsToGradesSerializer(serializers.ModelSerializer):
     work_student = SimpleGradedWorkSerializer(many=True)
     class Meta:
         model = Student
-        fields = ('id', 'metriculationNumber', 'name', 'degreeTitle', 'work_student')     
+        fields = ('id', 'matriculationNumber', 'name', 'degreeTitle', 'work_student')     
         
 
 class OverallGradeCourseSerializer(serializers.ModelSerializer):
@@ -73,7 +74,16 @@ class OverallGradeCourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = ('__all__')    
         
-     
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('__all__')        
+        
+class CommentSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = StudentComment
+        fields = ('__all__')
          
         
     

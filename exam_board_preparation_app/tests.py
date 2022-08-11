@@ -44,11 +44,11 @@ class YearValidation(TestCase):
 class DeleteStudentDoesntDeleteYear(TestCase):
     def setUp(self):
         year = Year.objects.create(yearStart=2020, yearEnd=2021)
-        Student.objects.create(metriculationNumber="12345678", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False, exitYear=year)
+        Student.objects.create(matriculationNumber="12345678", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False, exitYear=year)
     def test_delete_year(self):
         deleteYear = Year.objects.get(yearStart=2020)
         deleteYear.delete()
-        Student.objects.get(metriculationNumber="12345678")
+        Student.objects.get(matriculationNumber="12345678")
         
 ########### Course Tests #################################
 class CourseLecturerCommentsDefaultNull(TestCase):
@@ -102,7 +102,7 @@ class DeleteCourseDoesNotDeleteYear(TestCase):
  
 # class TestModelCreation(TestCase):
 #     def number_too_long(self): 
-#         student = Student.objects.create(metriculationNumber="123456789XXXXX", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False)
+#         student = Student.objects.create(matriculationNumber="123456789XXXXX", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False)
 #         try:
 #             student.full_clean()
 #             self.fail("Student number too long")
@@ -112,10 +112,10 @@ class DeleteCourseDoesNotDeleteYear(TestCase):
 # class DeleteStudentDoesntDeleteYear(TestCase):
 #     def setUp(self):
 #         year = Year.objects.create(yearStart=2020, yearEnd=2021)
-#         Student.objects.create(metriculationNumber="12345678", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False, exitYear=year)
+#         Student.objects.create(matriculationNumber="12345678", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False, exitYear=year)
 
 #     def test_delete_year(self):
-#         deleteStudent = Student.objects.get(metriculationNumber="12345678")
+#         deleteStudent = Student.objects.get(matriculationNumber="12345678")
 #         deleteStudent.delete()
 #         Year.objects.get(yearStart=2020)
 

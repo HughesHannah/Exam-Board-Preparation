@@ -8,7 +8,7 @@ import Select from '@mui/material/Select';
 import "./datatable.scss";
 
 const columns = [
-  { field: "metriculationNumber", headerName: "Metriculation" },
+  { field: "matriculationNumber", headerName: "matriculation" },
   { field: "name", headerName: "Student Name", width: 200 },
   { field: "degreeTitle", headerName: "Degree", width: 200 },
   { field: "mastersStudent", headerName: "Masters?" },
@@ -53,7 +53,7 @@ const StudentTable = () => {
         return (
           <div className="cellAction">
             <Link
-              to={"/students/" + cellValues.row.metriculationNumber}
+              to={"/students/" + cellValues.row.matriculationNumber}
               style={{ textDecoration: "none" }}
             >
               <div className="viewButton">View</div>

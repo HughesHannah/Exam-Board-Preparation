@@ -13,14 +13,14 @@ class Year(models.Model):
     def __str__(self): return self.year
     
 class Student(models.Model):
-    metriculationNumber = models.CharField(max_length=9, unique=True)
+    matriculationNumber = models.CharField(max_length=9, unique=True)
     name = models.CharField(max_length=225)
     degreeTitle = models.CharField(max_length=100) 
     mastersStudent = models.BooleanField()
     fastRouteStudent = models.BooleanField()
     exitYear = models.ForeignKey(Year, null=True, on_delete=models.SET_NULL)
     
-    def __str__(self): return self.metriculationNumber
+    def __str__(self): return self.matriculationNumber
 
 class Course(models.Model):
     classCode = models.CharField(max_length=11)
@@ -82,10 +82,10 @@ class ClassHead(models.Model):
     def __str__(self): return ("Level " + str(self.level))
     
 
-# class StudentComment(models.Model):
-#     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-#     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-#     date = models.DateTimeField(auto_now_add=True)
-#     subjectLine = models.CharField(max_length=255)
-#     comment = models.TextField(blank=True, null=True)
+class StudentComment(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    date = models.DateTimeField(auto_now_add=True)
+    subjectLine = models.CharField(max_length=255)
+    comment = models.TextField(blank=True, null=True)
     

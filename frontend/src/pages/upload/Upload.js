@@ -83,6 +83,24 @@ const Upload = () => {
     }
   };
 
+  const handleGradeSubmission = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", file);
+
+    let response;
+    try {
+      response = axios.post(variables.API_URL + "gradeUploader", formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      });
+      alert("file uploaded");
+    } catch (error) {
+      console.error(error.response.data);
+    }
+  };
+
   return (
     <div className="upload">
       <Sidebar />
@@ -90,6 +108,16 @@ const Upload = () => {
         <div>
           <h1 className="title">Upload Page</h1>
         </div>
+        <div className="notice">
+          <h3>Notice</h3>
+          <p>
+            Since this page is almost certainly going to change in
+            implementation,{" "}
+          </p>
+          <p>it is only for proof of concept and database testing purposes. </p>
+          <b>Please do not consider this page during user testing.</b>
+        </div>
+
         <div className="form">
           <h3>Upload Students</h3>
           <div className="formInput">
@@ -118,7 +146,11 @@ const Upload = () => {
           </div>
           <div className="formInput">
             <p>Year</p>
-            <select id="Year" name="Years" onChange={(e) => setYear(e.target.value)}>
+            <select
+              id="Year"
+              name="Years"
+              onChange={(e) => setYear(e.target.value)}
+            >
               <option>Please Select</option>
               {years.map((eachYear) => (
                 <option key={eachYear.id} value={eachYear.year}>
@@ -153,7 +185,11 @@ const Upload = () => {
           </div>
           <div className="formInput">
             <p>Course Year</p>
-            <select id="Year" name="Years" onChange={(e) => setYear(e.target.value)}>
+            <select
+              id="Year"
+              name="Years"
+              onChange={(e) => setYear(e.target.value)}
+            >
               <option>Please Select</option>
               {years.map((eachYear) => (
                 <option key={eachYear.id} value={eachYear.year}>
@@ -164,6 +200,22 @@ const Upload = () => {
           </div>
           <div className="formInput">
             <button onClick={handleSubmission} disabled={!file}>
+              Submit
+            </button>
+          </div>
+        </div>
+        <div className="form">
+          <h3>Upload Grades</h3>
+          <div className="formInput">
+            <p>File to Upload:</p>
+            <input
+              type="file"
+              name="file"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+          </div>
+          <div>
+            <button onClick={handleGradeSubmission} disabled={!file}>
               Submit
             </button>
           </div>

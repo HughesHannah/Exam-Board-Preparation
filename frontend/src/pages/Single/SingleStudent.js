@@ -77,7 +77,7 @@ const SingleStudent = () => {
               <div className="detailItem">
                 <span className="itemKey">Metric:</span>
                 <span className="itemValue">
-                  {studentData.metriculationNumber}
+                  {studentData.matriculationNumber}
                 </span>
               </div>
               <div className="detailItem">
