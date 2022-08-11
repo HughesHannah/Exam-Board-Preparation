@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { variables } from "../../Variables.js";
 import Tooltip from "@mui/material/Tooltip";
 import Table from "@mui/material/Table";
@@ -9,9 +9,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-
 export default function ClassificationRulesTable() {
-    const [classifications, setClassifications] = useState([])
+  const [classifications, setClassifications] = useState([]);
 
   let fetchDegreeClassifications = async () => {
     let response = await fetch(variables.API_URL + "degreeClassificationAPI", {
@@ -22,15 +21,15 @@ export default function ClassificationRulesTable() {
     });
     let data = await response.json();
     if (response.status === 200) {
-        setClassifications(data);
+      setClassifications(data);
     } else if (response.statusText === "Unauthorized") {
       logoutUser();
     }
   };
 
   useEffect(() => {
-    fetchDegreeClassifications()
-  }, [])
+    fetchDegreeClassifications();
+  }, []);
 
   return (
     <TableContainer component={Paper}>
@@ -48,9 +47,20 @@ export default function ClassificationRulesTable() {
               <TableCell align="left">
                 {classification.classificationName}
               </TableCell>
-              <TableCell align="center">{classification.lowerGPAStandard}</TableCell>
-              <Tooltip title={"min. " + classification.percentageAboveForDiscretionary + "% credits at band " + classification.charBandForDiscretionary}>
-              <TableCell align="center">{classification.lowerGPADiscretionary}</TableCell>
+              <TableCell align="center">
+                {classification.lowerGPAStandard.toFixed(1)}
+              </TableCell>
+              <Tooltip
+                title={
+                  "min. " +
+                  classification.percentageAboveForDiscretionary +
+                  "% credits at band " +
+                  classification.charBandForDiscretionary
+                }
+              >
+                <TableCell align="center">
+                  {classification.lowerGPADiscretionary.toFixed(1)}
+                </TableCell>
               </Tooltip>
             </TableRow>
           ))}
