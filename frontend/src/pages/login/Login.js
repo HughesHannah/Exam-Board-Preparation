@@ -20,7 +20,7 @@ const Login = () => {
             <input type="submit" className="button"/>
           </div>
         </form>
-        <p className="forgotP">Forgot Password?</p>
+        {/* <p className="forgotP">Forgot Password?</p> */}
       </div>
     </div>
     

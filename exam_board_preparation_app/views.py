@@ -340,8 +340,8 @@ def YearsAPI(request):
 @permission_classes([IsAuthenticated])
 def ClassHeadAPI(request):
     user = request.user
-    classHeads = ClassHead.objects.filter(user=user)
-    serializer = ClassHeadSerializer(classHeads, many=True)
+    classHeads = ClassHead.objects.get(user=user)
+    serializer = ClassHeadSerializer(classHeads, many=False)
     return Response(serializer.data)
 
 

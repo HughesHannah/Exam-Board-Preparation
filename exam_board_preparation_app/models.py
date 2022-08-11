@@ -64,7 +64,7 @@ class GradedWork(models.Model):
     )
     
 class ClassHead(models.Model):
-    user = models.ManyToManyField(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
       
     level_choices = [
         (1, 'Level 1'),

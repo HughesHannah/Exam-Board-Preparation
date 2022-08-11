@@ -7,6 +7,11 @@ class YearSerializer(serializers.ModelSerializer):
     class Meta:
         model = Year
         fields = '__all__'     
+        
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('__all__')         
      
 class StudentSerializer(serializers.ModelSerializer):
     exitYear = YearSerializer()
@@ -15,6 +20,7 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = ('__all__')     
               
 class ClassHeadSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
     class Meta:
         model = ClassHead
         fields = '__all__'
@@ -72,12 +78,7 @@ class OverallGradeCourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ('__all__')    
-        
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('__all__')        
+        fields = ('__all__')           
         
 class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
