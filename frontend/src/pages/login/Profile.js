@@ -30,12 +30,12 @@ const Profile = () => {
     }
   };
 
-  function getLevels(){
-    if(classHead.length != 0){
-      if (classHead.level == "0"){
-        return (<p>You are eligible to view all levels.</p>)
-      }else {
-        return (<p>You are eligible to view level {classHead.level}.</p>)
+  function getLevels() {
+    if (classHead.length != 0) {
+      if (classHead.level == "0") {
+        return <p>You are eligible to view all levels.</p>;
+      } else {
+        return <p>You are eligible to view level {classHead.level}.</p>;
       }
     }
   }
@@ -47,10 +47,15 @@ const Profile = () => {
         <h3 className="title">User Profile Page</h3>
 
         <div className="table">
-          {classHead.length == 0? <p>Hello,</p>:<p>Hello {classHead.user.first_name} {classHead.user.last_name},</p>}
-          <br/>
+          {classHead.length == 0 ? (
+            <p>Hello,</p>
+          ) : (
+            <p>
+              Hello {classHead.user.first_name} {classHead.user.last_name},
+            </p>
+          )}
+          <br />
           {getLevels()}
-          
         </div>
       </div>
     </div>

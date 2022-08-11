@@ -40,7 +40,7 @@ export default function SelectVariants() {
   return (
     <div>
       <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-standard-label">Year</InputLabel>
+        <InputLabel id="selectYear">Year</InputLabel>
         <Select
           id="year-select"
           value={year}

@@ -12,7 +12,7 @@ import "./datatable.scss";
 const defaultColumns = [
   {
     field: "matriculationNumber",
-    headerName: "matriculation",
+    headerName: "Matriculation",
     valueGetter: (params) => {
       return params.row.matriculationNumber;
     },

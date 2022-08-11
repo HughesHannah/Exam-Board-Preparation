@@ -8,7 +8,7 @@ import Select from '@mui/material/Select';
 import "./datatable.scss";
 
 const columns = [
-  { field: "matriculationNumber", headerName: "matriculation" },
+  { field: "matriculationNumber", headerName: "Matriculation" },
   { field: "name", headerName: "Student Name", width: 200 },
   { field: "degreeTitle", headerName: "Degree", width: 200 },
   { field: "mastersStudent", headerName: "Masters?" },
@@ -68,8 +68,7 @@ const StudentTable = () => {
     <div>
       <div>
       <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          id="selectDegree"
           style={{width:200}}
           value={degree}
           onChange={(e)=>{setDegree(e.target.value)}}
