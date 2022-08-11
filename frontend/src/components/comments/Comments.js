@@ -1,5 +1,4 @@
 import "./comments.scss";
-
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { variables } from "../../Variables";
@@ -16,16 +15,6 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-
-function createData(id, description, date, user, comment) {
-  return {
-    id,
-    description,
-    date,
-    user,
-    comment,
-  };
-}
 
 function Row(props) {
   const { row } = props;
@@ -62,9 +51,8 @@ function Row(props) {
   );
 }
 
-
-function getCommentTable(rows, comments){
-  if(comments.length != 0){
+function getCommentTable(rows, comments) {
+  if (comments.length != 0) {
     return (
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
@@ -82,9 +70,12 @@ function getCommentTable(rows, comments){
             ))}
           </TableBody>
         </Table>
-      </TableContainer>)
-    }else {return (<p>no comments</p>)}
-};
+      </TableContainer>
+    );
+  } else {
+    return <p>no comments</p>;
+  }
+}
 
 export default function CollapsibleTable() {
   const [comments, setComments] = useState([]);
@@ -101,25 +92,21 @@ export default function CollapsibleTable() {
 
   useEffect(() => {
     if (comments.length > 0) {
-      comments.forEach(
-        (comment) =>
-          (setRows([
-            ...rows,
-            {
-              id: comment.id,
-              description: comment.subjectLine,
-              date: Date(comment.date),
-              user: comment.user.first_name,
-              comment: comment.comment,
-            },
-          ]))
+      comments.forEach((comment) =>
+        setRows((rows) => [
+          ...rows,
+          {
+            id: comment.id,
+            description: comment.subjectLine,
+            date: Date(comment.date),
+            user: comment.user.first_name,
+            comment: comment.comment,
+          },
+        ])
       );
     }
   }, [comments]);
 
-  
 
-  return (
-    <div>{getCommentTable(rows, comments)}</div>
-  )
+  return <div>{getCommentTable(rows, comments)}</div>;
 }

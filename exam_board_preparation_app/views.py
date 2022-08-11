@@ -556,6 +556,35 @@ def UploadGradesAPI(request):
 
     return JsonResponse("Success", safe=False)
 
+# Uploading Comments
+@api_view(['POST'])
+def AddCommentAPI(request, id):
+    # get the student
+    studentFromRequest = Student.objects.get(matriculationNumber=id)
+    
+    # get the user
+    userFromRequest = request.user
+    
+    # get comment details
+    subjectLineFromRequest = request.data['subjectLine']
+    commentBodyFromRequest = request.data['commentBody']
+    
+    # create comment from data
+    StudentComment.objects.create(
+        student = studentFromRequest,
+        user = userFromRequest,
+        subjectLine = subjectLineFromRequest,
+        comment = commentBodyFromRequest
+    )
+
+    comments = StudentComment.objects.all()
+    comment_serializer = CommentSerializer(comments, many=True)
+
+    return JsonResponse(comment_serializer.data, safe=False)
+
+    
+    
+    
 
 ########## Tokens ###############################
 

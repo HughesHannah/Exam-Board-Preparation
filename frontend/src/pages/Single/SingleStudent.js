@@ -7,6 +7,7 @@ import "./single.scss";
 
 import Sidebar from "../../components/sidebar/Sidebar.js";
 import Comments from "../../components/comments/Comments.js";
+import AddComment from "../../components/comments/AddComment.js";
 import CoursesInStudentTable from "../../components/datatables/CoursesInStudentTable.js";
 import Preponderance from "../../components/preponderance/Preponderance.js";
 import TableSkeleton from "../../components/skeletons/TableSkeleton.js";
@@ -16,7 +17,9 @@ const SingleStudent = () => {
   const [studentData, setStudentData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const [gradeData, setGradeData] = useState([]);
+  const [commentOpen, setCommentOpen] = useState(false);
   const [error, setError] = useState(null);
+
   const path = useParams();
 
   const fetchDataHandler = useCallback(async () => {
@@ -64,6 +67,9 @@ const SingleStudent = () => {
     fetchDataHandler();
   }, [fetchDataHandler]);
 
+  const handleAddCommentClick = async (e) => {
+    setCommentOpen(!commentOpen);
+  } 
 
   return (
     <div className="single">
@@ -99,8 +105,9 @@ const SingleStudent = () => {
             </div>
           </div>
           <div className="right">
-            <div className="editButton">Add Comment</div>
+            <div className="editButton" onClick={handleAddCommentClick}>Add Comment</div>
             <h1 className="title">Comments</h1>
+            {commentOpen? <AddComment />:""}
             <Comments />
           </div>
         </div>
