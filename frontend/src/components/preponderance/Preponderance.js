@@ -11,9 +11,7 @@ const Preponderance = ({ gradeData, courseData }) => {
   const [selectedPreponderance, setSelectedPreponderance] = useState(null);
   const path = useParams();
 
-
   const handlePreponderanceSubmission = async (e) => {
-    
     const formData = new FormData();
     formData.append("course", selectedCourse);
     formData.append("courseYearStart", selectedCourseYearStart);
@@ -22,21 +20,20 @@ const Preponderance = ({ gradeData, courseData }) => {
     let response;
 
     try {
-        response = axios.post(
-          variables.API_URL + "preponderanceAPI/" + path.studentID,
-          formData,
-          {
-            headers: {
-              "content-type": "multipart/form-data",
-            },
-          }
-        );
+      response = axios.post(
+        variables.API_URL + "preponderanceAPI/" + path.studentID,
+        formData,
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        }
+      );
       alert("Preponderance applied");
-      //location.reload();
+      location.reload();
     } catch (error) {
       console.log("error");
     }
-    
   };
 
   useEffect(() => {
@@ -88,6 +85,7 @@ const Preponderance = ({ gradeData, courseData }) => {
           {getFilteredAssignments()}
         </select>
         <p>Preponderance</p>
+        <p>You have selected {selectedPreponderance}</p>
         <select
           id="Preponderance"
           name="Preponderance"

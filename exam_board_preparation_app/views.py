@@ -590,6 +590,26 @@ def degreeClassificationAPI(request):
     classifications = DegreeClassification.objects.all().order_by('-lowerGPAStandard')
     serializer = DegreeClassificationSerializer(classifications, many=True)
     return Response(serializer.data)
+
+# edit degree classification
+@api_view(['POST'])
+def AddPreponderanceAPI(request, id):
+    # get data from request
+    classificationName = request.data['classificationName']
+    standardBoundry = request.data['standardBoundry']
+    discretionaryBoundry = request.data['discretionaryBoundry']
+    percent = request.data['percent']
+    band = request.data['band']
+
+    classificationObj = DegreeClassification.objects.get(classificationName=classificationName)
+
+    classificationObj.lowerGPAStandard = standardBoundry;
+    classificationObj.lowerGPADiscretionary =discretionaryBoundry
+    classificationObj.percentageAboveForDiscretionary =percent
+    classificationObj.charBandForDiscretionary =band
+    classificationObj.save()
+
+    return JsonResponse("Success", safe=False)
    
 
 ########## Tokens ###############################

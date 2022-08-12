@@ -24,15 +24,9 @@ export const values = [
   { minValue: 0, maxValue: 10, point: "0", band: "H" },
 ];
 
-function percentageToPoint(percentage) {
+function percentageToPoint(percentage, dp) {
   const point = (percentage / 100) * 22;
-  return point;
-
-  // for (const value of values) {
-  //   if (percentage >= value.minValue) {
-  //     return value.point;
-  //   }
-  // }
+  return point.toFixed(dp);
 }
 
 function percentageToBand(percentage) {
@@ -43,7 +37,7 @@ function percentageToBand(percentage) {
   }
 }
 
-const broadBands = [
+export const broadBands = [
   { minValue: 70, band: "A" },
   { minValue: 60, band: "B" },
   { minValue: 50, band: "C" },
@@ -65,7 +59,7 @@ export function renderGrade(percentage, gradeState, dp) {
       return percentageToBand(percentage);
     }
     if (gradeState == "point") {
-      return percentageToPoint(percentage);
+      return percentageToPoint(percentage, dp);
     }
     return percentage.toFixed(dp);
   } else return percentage;

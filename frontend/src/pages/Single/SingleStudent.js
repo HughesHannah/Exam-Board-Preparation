@@ -89,7 +89,7 @@ const SingleStudent = () => {
         </div>
         <div className="bottom">
           <h1 className="title">Student Grades</h1>
-          {gradeData.length == 0 ? (
+          {(gradeData.length == 0 || courseData.length == 0)? (
             <TableSkeleton />
           ) : (
             <CoursesInStudentTable

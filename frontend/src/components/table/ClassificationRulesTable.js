@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { variables } from "../../Variables.js";
+import React from "react";
 import Tooltip from "@mui/material/Tooltip";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,28 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-export default function ClassificationRulesTable() {
-  const [classifications, setClassifications] = useState([]);
-
-  let fetchDegreeClassifications = async () => {
-    let response = await fetch(variables.API_URL + "degreeClassificationAPI", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    let data = await response.json();
-    if (response.status === 200) {
-      setClassifications(data);
-    } else if (response.statusText === "Unauthorized") {
-      logoutUser();
-    }
-  };
-
-  useEffect(() => {
-    fetchDegreeClassifications();
-  }, []);
-
+export default function ClassificationRulesTable({classifications}) {
   return (
     <TableContainer component={Paper}>
       <Table>
