@@ -18,58 +18,26 @@ const SingleStudent = () => {
   const [courseData, setCourseData] = useState([]);
   const [gradeData, setGradeData] = useState([]);
   const [commentOpen, setCommentOpen] = useState(false);
-  const [error, setError] = useState(null);
 
   const path = useParams();
 
-  const fetchDataHandler = useCallback(async () => {
-    setError(null);
-    try {
-      const response = await fetch(
-        variables.API_URL + "individualStudentAPI/" + path.studentID
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
-      const data = await response.json();
-      setStudentData(data);
-    } catch (error) {
-      setError(error.message);
-    }
-
-    try {
-      const response = await fetch(
-        variables.API_URL + "studentCoursesAPI/" + path.studentID
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
-      const data = await response.json();
-      setCourseData(data);
-    } catch (error) {
-      setError(error.message);
-    }
-    try {
-      const response2 = await fetch(
-        variables.API_URL + "studentCoursesAPI/" + path.studentID + "/grades"
-      );
-      if (!response2.ok) {
-        throw new Error("Something went wrong!");
-      }
-      const data2 = await response2.json();
-      setGradeData(data2);
-    } catch (error) {
-      setError(error.message);
-    }
-  }, []);
-
   useEffect(() => {
-    fetchDataHandler();
-  }, [fetchDataHandler]);
+    fetch(variables.API_URL + "individualStudentAPI/" + path.studentID)
+      .then((data) => data.json())
+      .then((data) => setStudentData(data));
+
+    fetch(variables.API_URL + "studentCoursesAPI/" + path.studentID)
+      .then((data) => data.json())
+      .then((data) => setCourseData(data));
+
+    fetch(variables.API_URL + "studentCoursesAPI/" + path.studentID + "/grades")
+      .then((data) => data.json())
+      .then((data) => setGradeData(data));
+  }, []);
 
   const handleAddCommentClick = async (e) => {
     setCommentOpen(!commentOpen);
-  } 
+  };
 
   return (
     <div className="single">
@@ -88,7 +56,9 @@ const SingleStudent = () => {
               </div>
               <div className="detailItem">
                 <span className="itemKey">Exit Year:</span>
-                <span className="itemValue">{studentData.length != 0? studentData.exitYear.year:""}</span>
+                <span className="itemValue">
+                  {studentData.length != 0 ? studentData.exitYear.year : ""}
+                </span>
               </div>
               <div className="detailItem">
                 <span className="itemKey">Degree:</span>
@@ -100,14 +70,20 @@ const SingleStudent = () => {
               </div>
               <div className="detailItem">
                 <span className="itemKey">Average Grade:</span>
-                <span className="itemValue">{gradeData.length>0?studentAverageGrade(gradeData, "band"):""}</span>
+                <span className="itemValue">
+                  {gradeData.length > 0
+                    ? studentAverageGrade(gradeData, "band")
+                    : ""}
+                </span>
               </div>
             </div>
           </div>
           <div className="right">
-            <div className="editButton" onClick={handleAddCommentClick}>Add Comment</div>
+            <div className="editButton" onClick={handleAddCommentClick}>
+              Add Comment
+            </div>
             <h1 className="title">Comments</h1>
-            {commentOpen? <AddComment />:""}
+            {commentOpen ? <AddComment /> : ""}
             <Comments />
           </div>
         </div>
@@ -117,9 +93,9 @@ const SingleStudent = () => {
             <TableSkeleton />
           ) : (
             <CoursesInStudentTable
-            courseData={courseData}
-            gradeData={gradeData}
-          />
+              courseData={courseData}
+              gradeData={gradeData}
+            />
           )}
         </div>
         <div className="preponderanceSection">
@@ -127,8 +103,7 @@ const SingleStudent = () => {
           {gradeData.length == 0 ? (
             <ModerationSkeleton /> // just using moderation skeleton because its similar
           ) : (
-            <Preponderance gradeData={gradeData} courseData={courseData}
-            />
+            <Preponderance gradeData={gradeData} courseData={courseData} />
           )}
         </div>
       </div>

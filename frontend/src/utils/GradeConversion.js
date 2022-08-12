@@ -211,7 +211,7 @@ export function averageGrade(studentsAndWorks, gradeState) {
     // calculate final grade = sum(mark*weighting*coursecredits)/totalcredits
     let studentTotalGrade = 0;
     student.work_student.forEach((work) => {
-      if ((work.preponderance = "NA")) {
+      if ((work.preponderance === "NA")) {
         studentTotalGrade +=
           (work.gradeMark *
             work.moderation *
@@ -238,7 +238,7 @@ export function studentAverageGrade(works, gradeState) {
   let studentTotalGrade = 0;
 
   works.forEach((work) => {
-    if ((work.preponderance = "NA")) {
+    if ((work.preponderance === "NA")) {
       studentTotalGrade +=
         (work.gradeMark *
           work.moderation *

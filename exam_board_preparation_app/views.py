@@ -233,6 +233,7 @@ def allPreponderanceGradedWork(request):
     students = getStudentsForUser(user)
         
     gradedWorks = GradedWork.objects.filter(student__in = students).exclude(preponderance = 'NA') 
+    
     serializer = GradedWorkSerializer(gradedWorks, many=True)
     return Response(serializer.data)   
     
@@ -298,7 +299,6 @@ def IndividualStudentAPI(request, id):
 ### Add Preponderance ###
 @api_view(['POST'])
 def AddPreponderanceAPI(request, id):
-
     # get data from request
     courseFromRequest = request.data['course']
     courseYearStartFromRequest = request.data['courseYearStart']
@@ -309,7 +309,6 @@ def AddPreponderanceAPI(request, id):
     c = Course.objects.get(className=courseFromRequest, year=y)
     s = Student.objects.get(matriculationNumber=id)
     work = GradedWork.objects.get(course = c, name=assignmentFromRequest, student=s)
-    
     
     work.preponderance=preponderanceFromRequest
     work.save()

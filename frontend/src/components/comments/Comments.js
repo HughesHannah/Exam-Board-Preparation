@@ -98,7 +98,7 @@ export default function CollapsibleTable() {
           {
             id: comment.id,
             description: comment.subjectLine,
-            date: Date(comment.date),
+            date: new Date(comment.date).toLocaleDateString("en-UK"),
             user: comment.user.first_name,
             comment: comment.comment,
           },

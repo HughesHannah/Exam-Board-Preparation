@@ -126,11 +126,10 @@ const SingleCourse = () => {
         <div className="moderationSection">
           <h1 className="title">Course Moderation</h1>
           {gradeData.length == 0 ? (
-              <ModerationSkeleton />
-            ) : (
-              <Moderation modifiedWorks={modifiedWorks} works={works}/>
-            )}
-          
+            <ModerationSkeleton />
+          ) : (
+            <Moderation modifiedWorks={modifiedWorks} works={works} />
+          )}
         </div>
       </div>
     </div>
