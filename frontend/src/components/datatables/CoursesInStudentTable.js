@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { variables } from "../../Variables.js";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
@@ -15,7 +15,7 @@ const defaultColumns = [
   { field: "credits", headerName: "Credits" },
 ];
 
-const CoursesInStudentTable = ({courseData, gradeData}) => {
+const CoursesInStudentTable = ({ courseData, gradeData }) => {
   const [columns, setColumns] = useState(defaultColumns);
   const [gradeState, setGradeState] = useState("percentage");
 
@@ -156,7 +156,7 @@ const CoursesInStudentTable = ({courseData, gradeData}) => {
   ];
 
   return (
-    <div style={{ height: 700, width: "100%" }} className="datatable">
+    <div >
       <Select
         id="grade-select"
         style={{ width: 200 }}
@@ -169,16 +169,18 @@ const CoursesInStudentTable = ({courseData, gradeData}) => {
         <MenuItem value={"band"}>Band</MenuItem>
         <MenuItem value={"point"}>Point</MenuItem>
       </Select>
-      <DataGrid
-        rows={courseData}
-        columns={columns.concat(actionColumn)}
-        pageSize={50}
-        checkboxSelection
-        components={{ Toolbar: GridToolbar }}
-        componentsProps={{
-          toolbar: { printOptions: { disableToolbarButton: true } },
-        }}
-      />
+      <div style={{ height: 700, width: "100%" }} className="datatable">
+        <DataGrid
+          rows={courseData}
+          columns={columns.concat(actionColumn)}
+          pageSize={50}
+          checkboxSelection
+          components={{ Toolbar: GridToolbar }}
+          componentsProps={{
+            toolbar: { printOptions: { disableToolbarButton: true } },
+          }}
+        />
+      </div>
     </div>
   );
 };

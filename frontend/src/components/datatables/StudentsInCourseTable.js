@@ -288,7 +288,7 @@ const StudentInCourseTable = ({inputGradeData}) => {
   ];
 
   return (
-    <div style={{ height: 700, width: "100%" }} className="datatable">
+    <div>
       <Select
         id="grade-select"
         style={{ width: 200 }}
@@ -301,6 +301,7 @@ const StudentInCourseTable = ({inputGradeData}) => {
         <MenuItem value={"band"}>Band</MenuItem>
         <MenuItem value={"point"}>Point</MenuItem>
       </Select>
+        <div  style={{ height: 700, width: "100%" }} className="datatable">
       <DataGrid
         rows={inputGradeData}
         columns={columns.concat(actionColumn)}
@@ -310,7 +311,7 @@ const StudentInCourseTable = ({inputGradeData}) => {
         componentsProps={{
           toolbar: { printOptions: { disableToolbarButton: true } },
         }}
-      />
+      /></div>
     </div>
   );
 };

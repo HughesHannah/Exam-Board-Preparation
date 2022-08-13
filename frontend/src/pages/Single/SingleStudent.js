@@ -89,6 +89,7 @@ const SingleStudent = () => {
         </div>
         <div className="bottom">
           <h1 className="title">Student Grades</h1>
+          <div>
           {(gradeData.length == 0 || courseData.length == 0)? (
             <TableSkeleton />
           ) : (
@@ -97,6 +98,7 @@ const SingleStudent = () => {
               gradeData={gradeData}
             />
           )}
+          </div>
         </div>
         <div className="preponderanceSection">
           <h1 className="title">Student Preponderance</h1>

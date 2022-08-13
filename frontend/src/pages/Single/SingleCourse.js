@@ -83,7 +83,7 @@ const SingleCourse = () => {
               <div className="detailItem">
                 <span className="itemKey">Average Grade:</span>
                 <span className="itemValue">
-                  {averageGrade(gradeData, "band")}
+                  {gradeData.length>0? averageGrade(gradeData, "band"):""}
                 </span>
               </div>
               <div className="detailItem">
