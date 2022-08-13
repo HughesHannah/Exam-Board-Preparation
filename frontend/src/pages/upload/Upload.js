@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./upload.scss";
 import axios from "axios";
+import "../../utils/main.scss";
 
 import { variables } from "../../Variables.js";
 import Sidebar from "../../components/sidebar/Sidebar.js";
@@ -118,35 +119,42 @@ const Upload = () => {
           <b>Please do not consider this page during user testing.</b>
         </div>
 
-        <div className="form">
+        <div className="form blueBackground">
           <h3>Upload Students</h3>
-          <div className="formInput">
+          <div className="formInputThree">
             <p>File to Upload:</p>
             <input
+              className="inputFile"
               type="file"
               name="file"
               onChange={(e) => setFile(e.target.files[0])}
             />
           </div>
-          <div>
-            <button onClick={handleStudentSubmission} disabled={!file}>
+          <div className="buttonDiv">
+            <button
+              className="button"
+              onClick={handleStudentSubmission}
+              disabled={!file}
+            >
               Submit
             </button>
           </div>
         </div>
-        <div className="form">
+        <div className="form blueBackground">
           <h3>Upload Courses</h3>
-          <div className="formInput">
+          <div className="formInputThree">
             <p>File to Upload:</p>
             <input
+              className="inputFile"
               type="file"
               name="file"
               onChange={(e) => setFile(e.target.files[0])}
             />
           </div>
-          <div className="formInput">
+          <div className="formInputThree">
             <p>Year</p>
             <select
+              className="inputBox"
               id="Year"
               name="Years"
               onChange={(e) => setYear(e.target.value)}
@@ -159,33 +167,40 @@ const Upload = () => {
               ))}
             </select>
           </div>
-          <div>
-            <button onClick={handleCourseSubmission} disabled={!file}>
+          <div className="buttonDiv">
+            <button
+              className="button"
+              onClick={handleCourseSubmission}
+              disabled={!file}
+            >
               Submit
             </button>
           </div>
         </div>
-        <div className="form">
+        <div className="form blueBackground">
           <h3>Upload Students to Courses</h3>
-          <div className="formInput">
+          <div className="formInputThree">
             <p>File to Upload:</p>
             <input
+              className="inputFile"
               type="file"
               name="file"
               onChange={(e) => setFile(e.target.files[0])}
             />
           </div>
-          <div className="formInput">
+          <div className="formInputThree">
             <p>Level:</p>
             <input
+              className="inputBox"
               type="number"
               onChange={(e) => setLevel(e.target.value)}
               value={level}
             />
           </div>
-          <div className="formInput">
+          <div className="formInputThree">
             <p>Course Year</p>
-            <select
+            <div className="userInput"><select
+              className="inputBox"
               id="Year"
               name="Years"
               onChange={(e) => setYear(e.target.value)}
@@ -196,26 +211,39 @@ const Upload = () => {
                   {eachYear.year}
                 </option>
               ))}
-            </select>
+            </select></div>
           </div>
-          <div className="formInput">
-            <button onClick={handleSubmission} disabled={!file}>
+          <div className="buttonDiv">
+            <button
+              className="button"
+              onClick={handleSubmission}
+              disabled={!file}
+            >
               Submit
             </button>
           </div>
         </div>
-        <div className="form">
+        <div className="form blueBackground">
           <h3>Upload Grades</h3>
-          <div className="formInput">
-            <p>File to Upload:</p>
-            <input
-              type="file"
-              name="file"
-              onChange={(e) => setFile(e.target.files[0])}
-            />
+          <div className="formInputThree">
+            <div className="uploadTitle">
+              <p>File to Upload:</p>
+            </div>
+            <div className="userInput">
+              <input
+                className="inputFile"
+                type="file"
+                name="file"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+            </div>
           </div>
-          <div>
-            <button onClick={handleGradeSubmission} disabled={!file}>
+          <div className="buttonDiv">
+            <button
+              className="button"
+              onClick={handleGradeSubmission}
+              disabled={!file}
+            >
               Submit
             </button>
           </div>
