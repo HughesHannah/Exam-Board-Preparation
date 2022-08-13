@@ -19,29 +19,23 @@ const StudentTable = () => {
   const [degree, setDegree] = useState('all');
   const [tableData, setTableData] = useState([]);
   const [filteredData, setFilteredData] = useState(tableData)
-  let { authTokens, logoutUser } = useContext(AuthContext);
-  
-  let fetchStudents = async () => {
-    let response = await fetch(variables.API_URL + "studentAPI", {
+  let { authTokens } = useContext(AuthContext);
+
+  useEffect(() => {
+    setFilteredData(degree === 'all' ? tableData: tableData.filter(dt=>dt.degreeTitle === degree))
+  }, [tableData, degree]);
+
+  useEffect(() => {
+    fetch(variables.API_URL + "studentAPI", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + String(authTokens.access),
       },
-    });
-    let data = await response.json();
-    if (response.status === 200) {
-      setTableData(data);
-    } else if (response.statusText === "Unauthorized") {
-      logoutUser();
-    }
-  };
-
-  useEffect(() => {
-    fetchStudents();
-
-    setFilteredData(degree === 'all' ? tableData: tableData.filter(dt=>dt.degreeTitle === degree))
-  }, [tableData, degree]);
+    })
+      .then((data) => data.json())
+      .then((data) => setTableData(data));
+  }, []);
 
 
   const actionColumn = [
@@ -66,23 +60,23 @@ const StudentTable = () => {
 
   return (
     <div>
-      <div>
+      <div className="degreeSelect">
       <Select
           id="selectDegree"
-          style={{width:200}}
+          style={{height:40, width:200}}
           value={degree}
           onChange={(e)=>{setDegree(e.target.value)}}
         >
           <MenuItem value={'Computing Science'}>Computing Science</MenuItem>
           <MenuItem value={'Software Engineering'}>Software Engineering</MenuItem>
-          <MenuItem value={'all'}>All</MenuItem>
+          <MenuItem value={'all'}>All Degrees</MenuItem>
         </Select>
       </div>
-      <div style={{ height: 700, width: "100%" }}>
+      <div>
         <DataGrid
+        autoHeight {...filteredData}
           rows={filteredData}
           columns={columns.concat(actionColumn)}
-          pageSize={50}
           checkboxSelection
           rowsPerPageOptions={[10, 50, 100]}
           components={{ Toolbar: GridToolbar }}

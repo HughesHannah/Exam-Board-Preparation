@@ -14,7 +14,8 @@
       font-size: 24px;
     }
 
-    .tableOfGrades, .classificationGrades {
+    .tableOfGrades,
+    .classificationGrades {
       padding: 20px;
       margin: 20px;
       -webkit-box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.47);
@@ -38,5 +39,62 @@
         color: gray;
       }
     }
+  }
+}
+
+.editClassification {
+  background-color: #0a91ff37;
+  padding: 20px;
+  margin: 20px 0px;
+  border-radius: 10px;
+
+  .sectionTitle {
+    font-size: 16px;
+    padding-bottom: 10px;
+    color: #0a91ff;
+  }
+
+  .formInput {
+    padding: 10px 0px;
+    display: flex;
+  }
+
+  .formInitialInput {
+    padding: 10px 0px;
+  }
+
+  .input {
+    flex: 4;
+  }
+
+  .inputBox{
+    font-size: 14px;
+    padding: 5px;
+    border: 1px solid;
+    border-radius: 3px;
+    border-color: lightgray;
+  }
+
+  p{
+    flex: 2;
+    padding-right: 10px;
+  }
+
+  .button {
+    cursor: pointer;
+    background: #0a91ff;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    color: white;
+    padding: 5px 40px;
+    margin-left:auto;
+  }
+
+  .buttonDiv{
+    display: flex;
+    padding-right: 20px
   }
 }

@@ -1,0 +1,13 @@
+.formInput{
+    display:flex;
+    padding: 5px;
+
+    p{
+        flex: 2;
+    }
+
+    .input{
+        flex: 8;
+        padding-right: 5px;
+    }
+}

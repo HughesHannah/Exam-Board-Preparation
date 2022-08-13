@@ -1,5 +1,8 @@
 import { broadBands } from "../../utils/GradeConversion.js";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { variables } from "../../Variables";
+import axios from "axios";
+import "./grading.scss";
 
 const EditClassificationGrade = ({ classificationData }) => {
   const [inputClassification, setInputClassification] = useState(null);
@@ -12,6 +15,7 @@ const EditClassificationGrade = ({ classificationData }) => {
 
   const handleClassificationChangeSubmission = async (e) => {
     const formData = new FormData();
+
     formData.append("classificationName", inputClassification);
     formData.append("standardBoundry", inputStandardBoundry);
     formData.append("discretionaryBoundry", inputStandardBoundry);
@@ -36,78 +40,92 @@ const EditClassificationGrade = ({ classificationData }) => {
     }
   };
 
-
-
   function loadFields() {
     if (inputClassification) {
-      let selectedClassification = (classificationData.find((obj) => obj.classificationName === inputClassification))
-     
+      let selectedClassification = classificationData.find(
+        (obj) => obj.classificationName === inputClassification
+      );
 
       return (
         <div>
           <div className="formInput">
             <p>Set lower boundry for standard GPA:</p>
-            <input
-              type="number"
-              step="any"
-              defaultValue={selectedClassification.lowerGPAStandard}
-              onChange={(e) => setInputStandardBoundry(e.target.value)}
-            />
+            <div className="input">
+              <input
+                className="inputBox"
+                type="number"
+                step="any"
+                onChange={(e) => setInputStandardBoundry(e.target.value)}
+              />
+            </div>
           </div>
           <div className="formInput">
             <p>Set lower boundry for discretionary GPA:</p>
-            <input
-              type="number"
-              step="any"
-              defaultValue={selectedClassification.lowerGPADiscretionary}
-              onChange={(e) => setInputDiscretionaryBoundry(e.target.value)}
-            />
+            <div className="input">
+              <input
+                className="inputBox"
+                type="number"
+                step="any"
+                onChange={(e) => setInputDiscretionaryBoundry(e.target.value)}
+              />
+            </div>
           </div>
           <div className="formInput">
             <p>Set discretionary percentage:</p>
-            <input
-              type="number"
-              defaultValue={selectedClassification.percentageAboveForDiscretionary}
-              onChange={(e) => setInputDiscretionaryPercent(e.target.value)}
-            />
+            <div className="input">
+              <input
+                className="inputBox"
+                type="number"
+                onChange={(e) => setInputDiscretionaryPercent(e.target.value)}
+              />%
+            </div>
           </div>
           <div className="formInput">
             <p>At band</p>
-            <select
-              id="Classification"
-              name="classification"
-              onChange={(e) => setInputBand(e.target.value)}
-            >
-              <option>Please Select</option>
-              {broadBands.map((eachBand) => (
-                <option key={eachBand.band} value={eachBand.band}>
-                  {eachBand.band}
-                </option>
-              ))}
-            </select>
+            <div className="input">
+              <select
+                className="inputBox"
+                id="Classification"
+                name="classification"
+                onChange={(e) => setInputBand(e.target.value)}
+              >
+                <option>Please Select</option>
+                {broadBands.map((eachBand) => (
+                  <option key={eachBand.band} value={eachBand.band}>
+                    {eachBand.band}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
-          <button
-            onClick={handleClassificationChangeSubmission}
-            disabled={
-              !inputClassification &&
-              !inputStandardBoundry &&
-              !inputInputDiscretionaryBoundry &&
-              !inputDiscretionaryPercent &&
-              !inputBand
-            }
-          >
-            Submit
-          </button>
+          <div className="buttonDiv">
+            <button
+              className="button"
+              onClick={handleClassificationChangeSubmission}
+              disabled={
+                !inputClassification &&
+                !inputStandardBoundry &&
+                !inputInputDiscretionaryBoundry &&
+                !inputDiscretionaryPercent &&
+                !inputBand
+              }
+            >
+              Submit
+            </button>
+          </div>
         </div>
       );
     } else return "";
   }
 
   return (
-    <div className="editGradeForm">
-      <div className="formInput">
-        <p>Classification</p>
+    <div className="editClassification">
+      <div>
+        <p className="sectionTitle">Edit Classification</p>
+      </div>
+      <div className="formInitialInput">
         <select
+          className="inputBox"
           id="Classification"
           name="classification"
           onChange={(e) => setInputClassification(e.target.value)}

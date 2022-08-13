@@ -593,7 +593,7 @@ def degreeClassificationAPI(request):
 
 # edit degree classification
 @api_view(['POST'])
-def AddPreponderanceAPI(request, id):
+def ClassificationChangeAPI(request):
     # get data from request
     classificationName = request.data['classificationName']
     standardBoundry = request.data['standardBoundry']

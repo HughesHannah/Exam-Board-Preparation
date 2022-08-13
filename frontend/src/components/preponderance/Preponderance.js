@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { variables } from "../../Variables.js";
+import "./preponderance.scss";
 
 const Preponderance = ({ gradeData, courseData }) => {
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -62,48 +63,63 @@ const Preponderance = ({ gradeData, courseData }) => {
   return (
     <div>
       <div>
-        Mark Preponderance:
-        <select
-          id="Course"
-          name="Course"
-          onChange={(e) => setSelectedCourse(e.target.value)}
-        >
-          <option>Please Select</option>
-          {courseData.map((course) => (
-            <option key={course.className} value={course.className}>
-              {course.className}
-            </option>
-          ))}
-        </select>
-        <p>Assessment</p>
-        <select
-          id="Course"
-          name="Course"
-          onChange={(e) => setSelectedAssignment(e.target.value)}
-        >
-          <option>Please Select</option>
-          {getFilteredAssignments()}
-        </select>
-        <p>Preponderance</p>
-        <p>You have selected {selectedPreponderance}</p>
-        <select
-          id="Preponderance"
-          name="Preponderance"
-          onChange={(e) => setSelectedPreponderance(e.target.value)}
-        >
-          <option value="NA">None</option>
-          <option value="MV">Medical Void</option>
-          <option value="CW">Credit Witheld</option>
-          <option value="CR">Credit Refused</option>
-        </select>
-        <button
-          onClick={handlePreponderanceSubmission}
-          disabled={
-            !selectedCourse && !selectedAssignment && !selectedPreponderance
-          }
-        >
-          Submit
-        </button>
+        <div className="formInput">
+          <p>Course</p>
+          <div className="input">
+            <select
+              id="Course"
+              name="Course"
+              onChange={(e) => setSelectedCourse(e.target.value)}
+            >
+              <option disabled selected hidden>Please Select</option>
+              {courseData.map((course) => (
+                <option key={course.className} value={course.className}>
+                  {course.className}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="formInput">
+          <p>Assessment</p>
+          <div className="input">
+            <select
+              id="Course"
+              name="Course"
+              disabled={selectedCourse==null}
+              onChange={(e) => setSelectedAssignment(e.target.value)}
+            >
+              <option disabled selected hidden>Please Select</option>
+              {getFilteredAssignments()}
+            </select>
+          </div>
+        </div>
+        <div className="formInput">
+          <p>Preponderance</p>
+          <div className="input">
+            <select
+              id="Preponderance"
+              name="Preponderance"
+              disabled={selectedCourse==null || selectedAssignment==null}
+              onChange={(e) => setSelectedPreponderance(e.target.value)}
+            >
+              <option value="NA">None</option>
+              <option value="MV">Medical Void</option>
+              <option value="CW">Credit Witheld</option>
+              <option value="CR">Credit Refused</option>
+            </select>
+          </div>
+        </div>
+        <div className="button">
+          <button
+            onClick={handlePreponderanceSubmission}
+            disabled={
+              !selectedCourse && !selectedAssignment && !selectedPreponderance
+            }
+          >
+            Add Preponderance
+          </button>
+        </div>
       </div>
     </div>
   );

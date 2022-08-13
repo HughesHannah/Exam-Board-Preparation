@@ -100,31 +100,66 @@ class DeleteCourseDoesNotDeleteYear(TestCase):
       
 ########### Student Tests #################################       
  
-# class TestModelCreation(TestCase):
-#     def number_too_long(self): 
-#         student = Student.objects.create(matriculationNumber="123456789XXXXX", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False)
-#         try:
-#             student.full_clean()
-#             self.fail("Student number too long")
-#         except ValidationError:
-#             pass
+class TestModelCreation(TestCase):
+    def number_too_long(self): 
+        student = Student.objects.create(matriculationNumber="123456789XXXXX", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False)
+        try:
+            student.full_clean()
+            self.fail("Student number too long")
+        except ValidationError:
+            pass
     
-# class DeleteStudentDoesntDeleteYear(TestCase):
+class DeleteStudentDoesntDeleteYear(TestCase):
+    def setUp(self):
+        year = Year.objects.create(yearStart=2020, yearEnd=2021)
+        Student.objects.create(matriculationNumber="12345678", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False, exitYear=year)
+
+    def test_delete_year(self):
+        deleteStudent = Student.objects.get(matriculationNumber="12345678")
+        deleteStudent.delete()
+        Year.objects.get(yearStart=2020)
+
+# class DeleteStudentDeletesComment(TestCase):
 #     def setUp(self):
 #         year = Year.objects.create(yearStart=2020, yearEnd=2021)
-#         Student.objects.create(matriculationNumber="12345678", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False, exitYear=year)
+#         user = User.objects.create(username='testUser')
+#         student = Student.objects.create(matriculationNumber="12345678", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False, exitYear=year)
+#         StudentComment.objects.create(student = student, user=user, subjectLine="test", comment= "test comment")
 
-#     def test_delete_year(self):
-#         deleteStudent = Student.objects.get(matriculationNumber="12345678")
-#         deleteStudent.delete()
-#         Year.objects.get(yearStart=2020)
+#     def test_delete_comment(self):
+#             deleteStudent = Student.objects.get(matriculationNumber="12345678")
+#             deleteStudent.delete()
+#             user = User.objects.get(username='testUser')
+#             if (StudentComment.objects.get(user=user).DoesNotExist):
+#                 FAIL_FAST
+            
+
+            
+            
+            
+            
+    
+    
+########### GradedWork Tests ################################# 
 
 
-########### Assignment Tests ################################# 
 
-########### Exam Tests ################################# 
+########### ClassHead Tests #################################    
 
-########### ClassHead Tests #################################        
+########### StudentComment Tests #################################   
+
+class DeleteUserDoesntDeleteComment(TestCase):
+    def setUp(self):
+        year = Year.objects.create(yearStart=2020, yearEnd=2021)
+        user = User.objects.create(username='testUser')
+        student = Student.objects.create(matriculationNumber="12345678", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False, exitYear=year)
+        StudentComment.objects.create(student = student, user=user, subjectLine="test", comment= "test comment")
+
+    def test_delete_comment(self):
+            getStudent = Student.objects.get(matriculationNumber="12345678")
+            user = User.objects.get(username='testUser')
+            user.delete()
+            StudentComment.objects.get(student=getStudent) 
         
 ########### API Tests #################################  
 

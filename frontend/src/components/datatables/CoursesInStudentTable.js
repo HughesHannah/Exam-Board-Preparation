@@ -157,6 +157,7 @@ const CoursesInStudentTable = ({ courseData, gradeData }) => {
 
   return (
     <div >
+      <div className="degreeSelect">
       <Select
         id="grade-select"
         style={{ width: 200 }}
@@ -168,12 +169,13 @@ const CoursesInStudentTable = ({ courseData, gradeData }) => {
         <MenuItem value={"percentage"}>Percentage</MenuItem>
         <MenuItem value={"band"}>Band</MenuItem>
         <MenuItem value={"point"}>Point</MenuItem>
-      </Select>
+      </Select></div>
       <div style={{ height: 700, width: "100%" }} className="datatable">
         <DataGrid
+        autoHeight {...courseData}
           rows={courseData}
           columns={columns.concat(actionColumn)}
-          pageSize={50}
+          rowsPerPageOptions={[10, 50, 100]}
           checkboxSelection
           components={{ Toolbar: GridToolbar }}
           componentsProps={{

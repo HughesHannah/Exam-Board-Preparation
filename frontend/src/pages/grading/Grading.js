@@ -10,7 +10,7 @@ import EditClassificationGrade from "./EditClassificationGrade.js";
 
 const Grading = () => {
   const [classificationData, setClassificationData] = useState([]);
-  const [editOpen, setEditOpen] = useState(true)
+  const [editOpen, setEditOpen] = useState(false)
 
   const handleEditButtonClick = async (e) => {
     setEditOpen(!editOpen);
