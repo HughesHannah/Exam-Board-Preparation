@@ -73,7 +73,7 @@ function getCommentTable(rows, comments) {
       </TableContainer>
     );
   } else {
-    return <p>no comments</p>;
+    return <p>No Comments.</p>;
   }
 }
 

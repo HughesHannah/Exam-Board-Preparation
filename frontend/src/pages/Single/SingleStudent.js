@@ -101,7 +101,8 @@ const SingleStudent = () => {
           </div>
         </div>
         <div className="preponderanceSection">
-          <h1 className="title">Student Preponderance</h1>
+          
+          <h3>Student Preponderance</h3>
           {gradeData.length == 0 ? (
             <ModerationSkeleton /> // just using moderation skeleton because its similar
           ) : (

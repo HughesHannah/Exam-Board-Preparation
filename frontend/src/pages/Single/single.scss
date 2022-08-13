@@ -21,9 +21,7 @@
         padding: 20px;
         position: relative;
         
-        p{
-          color: gray;
-        }
+        
 
         .editButton {
           position: absolute;
@@ -77,5 +75,12 @@
       color: lightgray;
       margin-bottom: 20px;
     }
+  }
+  .preponderanceSection{
+    h3{
+      color: #0a91ff;
+      padding-bottom:20px;
+    }
+    background-color: #0a91ff37;
   }
 }

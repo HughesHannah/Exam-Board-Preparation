@@ -64,14 +64,17 @@ const Preponderance = ({ gradeData, courseData }) => {
     <div>
       <div>
         <div className="formInput">
-          <p>Course</p>
+          <p>Course:</p>
           <div className="input">
             <select
+              className="inputBox"
               id="Course"
               name="Course"
               onChange={(e) => setSelectedCourse(e.target.value)}
             >
-              <option disabled selected hidden>Please Select</option>
+              <option hidden>
+                Please Select
+              </option>
               {courseData.map((course) => (
                 <option key={course.className} value={course.className}>
                   {course.className}
@@ -81,26 +84,30 @@ const Preponderance = ({ gradeData, courseData }) => {
           </div>
         </div>
         <div className="formInput">
-          <p>Assessment</p>
+          <p>Assessment:</p>
           <div className="input">
             <select
               id="Course"
+              className="inputBox"
               name="Course"
-              disabled={selectedCourse==null}
+              disabled={selectedCourse == null}
               onChange={(e) => setSelectedAssignment(e.target.value)}
             >
-              <option disabled selected hidden>Please Select</option>
+              <option hidden>
+                Please Select
+              </option>
               {getFilteredAssignments()}
             </select>
           </div>
         </div>
         <div className="formInput">
-          <p>Preponderance</p>
+          <p>Preponderance:</p>
           <div className="input">
             <select
               id="Preponderance"
               name="Preponderance"
-              disabled={selectedCourse==null || selectedAssignment==null}
+              className="inputBox"
+              disabled={selectedCourse == null || selectedAssignment == null}
               onChange={(e) => setSelectedPreponderance(e.target.value)}
             >
               <option value="NA">None</option>
@@ -110,11 +117,12 @@ const Preponderance = ({ gradeData, courseData }) => {
             </select>
           </div>
         </div>
-        <div className="button">
+        <div className="buttonDiv">
           <button
+            className="button"
             onClick={handlePreponderanceSubmission}
             disabled={
-              !selectedCourse && !selectedAssignment && !selectedPreponderance
+              !selectedCourse || !selectedAssignment || !selectedPreponderance
             }
           >
             Add Preponderance
