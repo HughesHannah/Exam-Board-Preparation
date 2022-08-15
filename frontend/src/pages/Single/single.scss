@@ -8,7 +8,8 @@
     height: 100vh;
     overflow: scroll;
 
-    .top, .middle {
+    .top,
+    .middle {
       padding: 20px;
       display: flex;
       gap: 20px;
@@ -20,8 +21,6 @@
         box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
         padding: 20px;
         position: relative;
-        
-        
 
         .editButton {
           position: absolute;
@@ -63,11 +62,22 @@
       }
     }
 
-    .bottom, .moderationSection, .preponderanceSection {
+    .bottom,
+    .moderationSection,
+    .preponderanceSection {
       -webkit-box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.47);
       box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
       padding: 20px;
       margin: 10px 20px;
+    }
+
+    .moderationSection {
+      background-color: #0a91ff37;
+      .moderationTitle {
+        color: #0a91ff;
+        padding-bottom: 20px;
+        font-size: 16px;
+      }
     }
 
     .title {
@@ -76,10 +86,10 @@
       margin-bottom: 20px;
     }
   }
-  .preponderanceSection{
-    h3{
+  .preponderanceSection {
+    h3 {
       color: #0a91ff;
-      padding-bottom:20px;
+      padding-bottom: 20px;
     }
     background-color: #0a91ff37;
   }

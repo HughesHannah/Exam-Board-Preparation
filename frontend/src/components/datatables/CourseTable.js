@@ -41,12 +41,13 @@ const CourseTable = () => {
   ];
 
   return (
-    <div style={{ height: 700, width: "100%" }}>
+    <div >
       <DataGrid
+      autoHeight {...tableData}
         rows={tableData}
         columns={columns.concat(actionColumn)}
-        pageSize={25}
         checkboxSelection
+        rowsPerPageOptions={[10, 50, 100]}
         components={{ Toolbar: GridToolbar }}
           componentsProps={{
             toolbar: { printOptions: { disableToolbarButton: true } },

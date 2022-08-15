@@ -124,7 +124,7 @@ const SingleCourse = () => {
           )}
         </div>
         <div className="moderationSection">
-          <h1 className="title">Course Moderation</h1>
+          <h3 className="moderationTitle">Course Moderation</h3>
           {gradeData.length == 0 ? (
             <ModerationSkeleton />
           ) : (

@@ -3,8 +3,8 @@ import { variables } from "../../Variables.js";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import AuthContext from "../../context/AuthContext.js";
 import { Link } from "react-router-dom";
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import "./datatable.scss";
 
 const columns = [
@@ -16,13 +16,17 @@ const columns = [
 ];
 
 const StudentTable = () => {
-  const [degree, setDegree] = useState('all');
+  const [degree, setDegree] = useState("all");
   const [tableData, setTableData] = useState([]);
-  const [filteredData, setFilteredData] = useState(tableData)
+  const [filteredData, setFilteredData] = useState(tableData);
   let { authTokens } = useContext(AuthContext);
 
   useEffect(() => {
-    setFilteredData(degree === 'all' ? tableData: tableData.filter(dt=>dt.degreeTitle === degree))
+    setFilteredData(
+      degree === "all"
+        ? tableData
+        : tableData.filter((dt) => dt.degreeTitle === degree)
+    );
   }, [tableData, degree]);
 
   useEffect(() => {
@@ -36,7 +40,6 @@ const StudentTable = () => {
       .then((data) => data.json())
       .then((data) => setTableData(data));
   }, []);
-
 
   const actionColumn = [
     {
@@ -61,20 +64,25 @@ const StudentTable = () => {
   return (
     <div>
       <div className="degreeSelect">
-      <Select
+        <Select
           id="selectDegree"
-          style={{height:40, width:200}}
+          style={{ height: 40, width: 200 }}
           value={degree}
-          onChange={(e)=>{setDegree(e.target.value)}}
+          onChange={(e) => {
+            setDegree(e.target.value);
+          }}
         >
-          <MenuItem value={'Computing Science'}>Computing Science</MenuItem>
-          <MenuItem value={'Software Engineering'}>Software Engineering</MenuItem>
-          <MenuItem value={'all'}>All Degrees</MenuItem>
+          <MenuItem value={"Computing Science"}>Computing Science</MenuItem>
+          <MenuItem value={"Software Engineering"}>
+            Software Engineering
+          </MenuItem>
+          <MenuItem value={"all"}>All Degrees</MenuItem>
         </Select>
       </div>
       <div>
         <DataGrid
-        autoHeight {...filteredData}
+          autoHeight
+          {...filteredData}
           rows={filteredData}
           columns={columns.concat(actionColumn)}
           checkboxSelection

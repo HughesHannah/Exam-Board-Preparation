@@ -19,7 +19,8 @@ import TableSkeletons from "../skeletons/TableSkeleton.js";
 const defaultColumns = [
   {
     field: "matriculationNumber",
-    headerName: "matriculation",
+    headerName: "Matriculation",
+    width: 120,
     valueGetter: (params) => {
       return params.row.matriculationNumber;
     },
@@ -27,7 +28,6 @@ const defaultColumns = [
 ];
 
 const StudentClassification = () => {
-  const [courseData, setCourseData] = useState([]);
   const [error, setError] = useState(null);
   const [columns, setColumns] = useState(defaultColumns);
   const [gradeState, setGradeState] = useState("percentage");
@@ -61,7 +61,6 @@ const StudentClassification = () => {
     const newCreditCol = {
       field: "creditsTaken",
       headerName: "Total Credits",
-      width: 130,
       valueGetter: (params) => {
         const studentWorks = params.row.work_student;
         let creditsByCourse = {};
@@ -80,8 +79,10 @@ const StudentClassification = () => {
   function creditsAtBand(bandLetter) {
     const newBandCol = {
       field: "credits" + bandLetter,
-      headerName: "Credits (" + bandLetter + ")",
-      width: 130,
+      // headerName: "Credits (" + bandLetter + ")",
+      headerName: "> " + bandLetter,
+      // width: 120,
+      width: 80,
       valueGetter: (params) => {
         const studentWorks = params.row.work_student;
         const creditsByGradeData = creditsAtBands(studentWorks);
@@ -186,19 +187,6 @@ const StudentClassification = () => {
     }
 
     try {
-      const courseResponse = await fetch(
-        variables.API_URL + "courseAPI/simple"
-      );
-      if (!courseResponse.ok) {
-        throw new Error("Something went wrong!");
-      }
-      const coursedata = await courseResponse.json();
-      setCourseData(coursedata);
-    } catch (error) {
-      setError(error.message);
-    }
-
-    try {
       const studentgradeResponse = await fetch(
         variables.API_URL + "studentAPI/grades/" + path.degree,
         {
@@ -261,9 +249,11 @@ const StudentClassification = () => {
         <MenuItem value={"point"}>Point</MenuItem>
       </Select>
       <DataGrid
+      autoHeight
+      {...tableData}
         rows={tableData}
         columns={columns.concat(actionColumn)}
-        pageSize={50}
+        rowsPerPageOptions={[10, 50, 100]}
         checkboxSelection
         components={{ Toolbar: GridToolbar }}
         componentsProps={{

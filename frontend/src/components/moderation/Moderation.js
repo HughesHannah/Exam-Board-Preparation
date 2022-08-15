@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { variables } from "../../Variables.js";
 import { useParams } from "react-router-dom";
+import "./moderation.scss"
 
 function getListOfModified(modifiedWorks) {
   if (modifiedWorks.length != 0) {
     return modifiedWorks.map((work) => (
       <li key={work} value={work}>
-        {work.name} - {work.moderation}
+        {work.name} is moderated by {work.moderation}
       </li>
     ));
   } else {
@@ -77,13 +78,15 @@ const Moderation = ({modifiedWorks, works}) => {
 
   return (
     <div className="moderation">
-      <div>
+      <div className="currentModeration">
         <p>Current Moderation:</p>
         <ul>{getListOfModified(modifiedWorks)}</ul>
       </div>
-      <div>
-        <p>Add Moderation:</p>
+      <div className="formInput">
+        <div className="input">
+        <p>Add Moderation to coursework:</p>
         <select
+          className="inputBox"
           id="Assignment"
           name="Assignment"
           onChange={(e) => setSelectedAssignment(e.target.value)}
@@ -95,20 +98,23 @@ const Moderation = ({modifiedWorks, works}) => {
               {eachWork}
             </option>
           ))}
-        </select>
+        </select></div><div className="input">
         <p>Moderation:</p>
         <input
+          className="inputBox"
           type="number"
           step="any"
           onChange={(e) => setModeration(e.target.value)}
           value={moderation}
-        />
+        /></div>
+        <div className="buttonDiv">
         <button
+          className="button"
           onClick={handleWorkModerationSubmission}
           disabled={!selectedAssignment && !moderation}
         >
           Submit
-        </button>
+        </button></div>
       </div>
     </div>
   );

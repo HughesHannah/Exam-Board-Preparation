@@ -33,7 +33,7 @@ const defaultColumns = [
   },
 ];
 
-const StudentInCourseTable = ({inputGradeData}) => {
+const StudentInCourseTable = ({ inputGradeData }) => {
   const [error, setError] = useState(null);
   const [columns, setColumns] = useState(defaultColumns);
   const [gradeState, setGradeState] = useState("percentage");
@@ -55,7 +55,6 @@ const StudentInCourseTable = ({inputGradeData}) => {
 
     //calculate final grade
     finalGradeColumn();
-
   }, [courseData, gradeState]);
 
   function addGradedWorkColumn(work) {
@@ -90,7 +89,7 @@ const StudentInCourseTable = ({inputGradeData}) => {
             finalGrade = individualWork.preponderance;
             status = "PREP";
           } else {
-            finalGrade = (individualWork.gradeMark*individualWork.moderation);
+            finalGrade = individualWork.gradeMark * individualWork.moderation;
             status = "GRADE";
           }
         }
@@ -161,7 +160,9 @@ const StudentInCourseTable = ({inputGradeData}) => {
             } else {
               // if a previous exam Q was marked as MV, examGrade will not be integer
               if (!(examGrade instanceof String)) {
-                examGrade = examGrade + ((obj.gradeMark*obj.moderation) * obj.weighting) / 100;
+                examGrade =
+                  examGrade +
+                  (obj.gradeMark * obj.moderation * obj.weighting) / 100;
               }
             }
             examWeight += obj.weighting;
@@ -229,7 +230,9 @@ const StudentInCourseTable = ({inputGradeData}) => {
           if (obj.preponderance != "NA") {
             finalGrade += obj.weighting / 100;
           } else {
-            finalGrade = finalGrade + ((obj.gradeMark*obj.moderation) * obj.weighting) / 100;
+            finalGrade =
+              finalGrade +
+              (obj.gradeMark * obj.moderation * obj.weighting) / 100;
           }
         });
 
@@ -242,7 +245,6 @@ const StudentInCourseTable = ({inputGradeData}) => {
 
   const fetchDataHandler = useCallback(async () => {
     setError(null);
-    
 
     try {
       const courseResponse = await fetch(
@@ -289,29 +291,34 @@ const StudentInCourseTable = ({inputGradeData}) => {
 
   return (
     <div>
-      <Select
-        id="grade-select"
-        style={{ width: 200 }}
-        value={gradeState}
-        onChange={(e) => {
-          setGradeState(e.target.value);
-        }}
-      >
-        <MenuItem value={"percentage"}>Percentage</MenuItem>
-        <MenuItem value={"band"}>Band</MenuItem>
-        <MenuItem value={"point"}>Point</MenuItem>
-      </Select>
-        <div  style={{ height: 700, width: "100%" }} className="datatable">
-      <DataGrid
-        rows={inputGradeData}
-        columns={columns.concat(actionColumn)}
-        pageSize={50}
-        checkboxSelection
-        components={{ Toolbar: GridToolbar }}
-        componentsProps={{
-          toolbar: { printOptions: { disableToolbarButton: true } },
-        }}
-      /></div>
+      <div>
+        <Select
+          id="grade-select"
+          style={{ width: 200 }}
+          value={gradeState}
+          onChange={(e) => {
+            setGradeState(e.target.value);
+          }}
+        >
+          <MenuItem value={"percentage"}>Percentage</MenuItem>
+          <MenuItem value={"band"}>Band</MenuItem>
+          <MenuItem value={"point"}>Point</MenuItem>
+        </Select>
+      </div>
+      <div className="datatable">
+        <DataGrid
+          autoHeight
+          {...inputGradeData}
+          rows={inputGradeData}
+          columns={columns.concat(actionColumn)}
+          checkboxSelection
+          rowsPerPageOptions={[10, 50, 100]}
+          components={{ Toolbar: GridToolbar }}
+          componentsProps={{
+            toolbar: { printOptions: { disableToolbarButton: true } },
+          }}
+        />
+      </div>
     </div>
   );
 };
