@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { theme } from "../../Variables.js";
+import { ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { renderGrade } from "../../utils/GradeConversion.js";
 import Tooltip from "@mui/material/Tooltip";
@@ -158,25 +160,27 @@ const CoursesInStudentTable = ({ courseData, gradeData }) => {
 
   return (
     <div>
-      <div className="singleFilter">
-        <div className="gradeToggles">
-          <GradeToggles changeGradeState={changeGradeState} />
+      <ThemeProvider theme={theme}>
+        <div className="singleFilter">
+          <div className="gradeToggles">
+            <GradeToggles changeGradeState={changeGradeState} />
+          </div>
         </div>
-      </div>
-      <div style={{ height: 700, width: "100%" }} className="datatable">
-        <DataGrid
-          autoHeight
-          {...courseData}
-          rows={courseData}
-          columns={columns.concat(actionColumn)}
-          rowsPerPageOptions={[10, 50, 100]}
-          checkboxSelection
-          components={{ Toolbar: GridToolbar }}
-          componentsProps={{
-            toolbar: { printOptions: { disableToolbarButton: true } },
-          }}
-        />
-      </div>
+        <div style={{ height: 700, width: "100%" }} className="datatable">
+          <DataGrid
+            autoHeight
+            {...courseData}
+            rows={courseData}
+            columns={columns.concat(actionColumn)}
+            rowsPerPageOptions={[10, 50, 100]}
+            checkboxSelection
+            components={{ Toolbar: GridToolbar }}
+            componentsProps={{
+              toolbar: { printOptions: { disableToolbarButton: true } },
+            }}
+          />
+        </div>
+      </ThemeProvider>
     </div>
   );
 };

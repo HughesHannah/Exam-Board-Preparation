@@ -3,14 +3,15 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { variables } from "../../Variables";
+import { variables, theme } from "../../Variables";
+import { ThemeProvider } from "@mui/material/styles";
 import { useParams, useNavigate } from "react-router-dom";
 
 export default function SelectVariants() {
   const [year, setYear] = useState("");
   let [years, setYears] = useState([]);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const path = useParams();
   let currentYear = path.year;
@@ -30,31 +31,34 @@ export default function SelectVariants() {
     setYears(data);
   };
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     setYear(event.target.value);
-    navigate("/courses/" + event.target.value)
-    window.location.reload()
+    navigate("/courses/" + event.target.value);
+    window.location.reload();
   };
-  
 
   return (
     <div>
-      <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="selectYear">Year</InputLabel>
-        <Select
-          id="year-select"
-          value={year}
-          onChange={handleChange}
-          label="Year"
-        >
-          <MenuItem value="">
-            <em>{currentYear}</em>
-          </MenuItem>
-          {years.map((eachYear) => (
-              <MenuItem key={eachYear.id} value={eachYear.year}>{eachYear.year}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div> 
+      <ThemeProvider theme={theme}>
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+          <InputLabel id="selectYear">Year</InputLabel>
+          <Select
+            id="year-select"
+            value={year}
+            onChange={handleChange}
+            label="Year"
+          >
+            <MenuItem value="">
+              <em>{currentYear}</em>
+            </MenuItem>
+            {years.map((eachYear) => (
+              <MenuItem key={eachYear.id} value={eachYear.year}>
+                {eachYear.year}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </ThemeProvider>
+    </div>
   );
 }

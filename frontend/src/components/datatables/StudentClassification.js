@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
-import { variables } from "../../Variables.js";
+import { variables, theme } from "../../Variables.js";
+import { ThemeProvider } from "@mui/material/styles";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -238,6 +239,7 @@ const StudentClassification = () => {
 
   let dataTableSection = (
     <>
+    <ThemeProvider theme={theme}>
       <div className="filters">
         <DegreePicker />
         <div className="gradeToggles">
@@ -256,6 +258,7 @@ const StudentClassification = () => {
           toolbar: { printOptions: { disableToolbarButton: true } },
         }}
       />
+      </ThemeProvider>
     </>
   );
 

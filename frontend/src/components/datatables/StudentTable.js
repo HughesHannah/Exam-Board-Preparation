@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
-import { variables } from "../../Variables.js";
+import { variables, theme } from "../../Variables.js";
+import { ThemeProvider } from "@mui/material/styles";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import AuthContext from "../../context/AuthContext.js";
 import { Link } from "react-router-dom";
@@ -63,6 +64,7 @@ const StudentTable = () => {
 
   return (
     <div>
+      <ThemeProvider theme={theme}>
       <div className="degreeSelect">
         <Select
           id="selectDegree"
@@ -97,7 +99,7 @@ const StudentTable = () => {
             toolbar: { printOptions: { disableToolbarButton: true } },
           }}
         />
-      </div>
+      </div></ThemeProvider>
     </div>
   );
 };

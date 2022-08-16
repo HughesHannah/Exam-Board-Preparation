@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { variables } from "../../Variables.js";
+import { variables, theme } from "../../Variables.js";
+import { ThemeProvider } from "@mui/material/styles";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
-import Select from "@mui/material/Select";
 import { renderGrade } from "../../utils/GradeConversion.js";
 import GradeToggles from "../toggles/GradeToggles.js";
 import "./datatable.scss";
@@ -296,30 +295,32 @@ const StudentInCourseTable = ({ inputGradeData }) => {
 
   return (
     <div>
-      <div className="singleFilter">
-        <div className="gradeToggles">
-          <GradeToggles changeGradeState={changeGradeState} />
+      <ThemeProvider theme={theme}>
+        <div className="singleFilter">
+          <div className="gradeToggles">
+            <GradeToggles changeGradeState={changeGradeState} />
+          </div>
         </div>
-      </div>
-      <div className="datatable">
-        <DataGrid
-          autoHeight
-          {...inputGradeData}
-          rows={inputGradeData}
-          columns={columns.concat(actionColumn)}
-          checkboxSelection
-          initialState={{
-            pagination: {
-              pageSize: 10,
-            },
-          }}
-          rowsPerPageOptions={[10, 50, 100]}
-          components={{ Toolbar: GridToolbar }}
-          componentsProps={{
-            toolbar: { printOptions: { disableToolbarButton: true } },
-          }}
-        />
-      </div>
+        <div className="datatable">
+          <DataGrid
+            autoHeight
+            {...inputGradeData}
+            rows={inputGradeData}
+            columns={columns.concat(actionColumn)}
+            checkboxSelection
+            initialState={{
+              pagination: {
+                pageSize: 10,
+              },
+            }}
+            rowsPerPageOptions={[10, 50, 100]}
+            components={{ Toolbar: GridToolbar }}
+            componentsProps={{
+              toolbar: { printOptions: { disableToolbarButton: true } },
+            }}
+          />
+        </div>
+      </ThemeProvider>
     </div>
   );
 };
