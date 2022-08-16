@@ -1,7 +1,6 @@
 import React from "react";
 import { renderGrade } from "../../utils/GradeConversion.js";
 import { useParams } from "react-router-dom";
-
 import {
   ScatterChart,
   Scatter,
@@ -67,7 +66,7 @@ const ScatterChartExample = ({ inputData }) => {
         <XAxis type="number" dataKey="x" name="This Class" unit={unit} domain={scale}/>
         <YAxis type="number" dataKey="y" name="Other Classes" unit={unit} domain={scale}/>
         <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-        <Scatter name="CourseGradeComparison" data={graphData} fill="#8884d8" />
+        <Scatter name="CourseGradeComparison" data={graphData} fill="#B06C96" />
       </ScatterChart>
     </div>
   );

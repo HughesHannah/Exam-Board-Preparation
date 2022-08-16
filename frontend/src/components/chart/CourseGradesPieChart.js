@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { countBands } from "../../utils/GradeConversion.js";
 import { PieChart, Pie, Sector, Cell, Tooltip } from "recharts";
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#800080"];
+const COLORS = ["#00B5D1", "#B06C96", "#FFB948", "#ABE188", "#2E5077"];
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;

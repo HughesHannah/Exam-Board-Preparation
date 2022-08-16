@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import "./chart.scss";
 import {averageGrade} from "../../utils/GradeConversion.js";
 import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
-import { variables } from "../../Variables.js";
-import AuthContext from "../../context/AuthContext.js";
+
 
 
 const AverageGradeLineChart = ({inputData}) => {
-  let { user, authTokens, logoutUser } = useContext(AuthContext);
-  // const [studentGrades, setStudentGrades] = useState([]);
+
   const data = [
     {
       name: "2016",
@@ -40,22 +38,6 @@ const AverageGradeLineChart = ({inputData}) => {
     },
   ];
 
-  // const fetchGrades = async () => {
-  //   const res = await fetch(variables.API_URL + "studentAPI/grades", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: "Bearer " + String(authTokens.access),
-  //     },
-  //   })
-  //     .then((data) => data.json())
-  //     .then((data) => setStudentGrades(data))
-  // };
-
-  useEffect(() => {
-    // fetchGrades();
-  }, []);
-
   return (
     <div className="chart">
       
@@ -76,7 +58,7 @@ const AverageGradeLineChart = ({inputData}) => {
         <Line
           type="monotone"
           dataKey="avg"
-          stroke="#8884d8"
+          stroke="#B06C96"
           activeDot={{ r: 8 }}
         />
       </LineChart>

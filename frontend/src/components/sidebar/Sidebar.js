@@ -50,7 +50,7 @@ const Sidebar = () => {
           </Link>
 
           {/* FUTURE WORK: Link to current year - for this project only considering one year */}
-          <Link to="/courses/2020-2021" style={{ textDecoration: "none" }}>
+          <Link to="/courses/2021-2022" style={{ textDecoration: "none" }}>
             <li>
               <HistoryEduIcon className="icon" />
               <span>Courses</span>
