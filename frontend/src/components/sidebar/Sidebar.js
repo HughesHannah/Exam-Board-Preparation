@@ -1,5 +1,6 @@
 import React, {useContext} from "react";
-import "./sidebar.scss";
+import { Link } from "react-router-dom";
+import AuthContext from "../../context/AuthContext.js";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SchoolIcon from "@mui/icons-material/School";
@@ -7,12 +8,11 @@ import GroupIcon from "@mui/icons-material/Group";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import GavelIcon from '@mui/icons-material/Gavel';
 
-import { Link } from "react-router-dom";
-import AuthContext from "../../context/AuthContext.js";
+import "./sidebar.scss";
+
 
 const Sidebar = () => {
   let {user, logoutUser} = useContext(AuthContext)
