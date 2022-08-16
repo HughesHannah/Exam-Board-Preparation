@@ -17,7 +17,7 @@ const Login = () => {
             <input type="password" name="password" placeholder="Enter Password" className="inputBox"/>
           </div>
           <div className="inputDiv">
-            <input type="submit" className="button"/>
+            <input type="submit" className="loginButton"/>
           </div>
         </form>
         {/* <p className="forgotP">Forgot Password?</p> */}
