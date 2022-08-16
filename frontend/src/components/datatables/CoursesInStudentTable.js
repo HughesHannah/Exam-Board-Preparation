@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { variables } from "../../Variables.js";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
 import { renderGrade } from "../../utils/GradeConversion.js";
-import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
-import Select from "@mui/material/Select";
+import GradeToggles from "../toggles/GradeToggles.js";
 import "./datatable.scss";
 
 const defaultColumns = [
@@ -155,24 +152,21 @@ const CoursesInStudentTable = ({ courseData, gradeData }) => {
     },
   ];
 
+  const changeGradeState = (gradeType) => {
+    setGradeState(gradeType);
+  };
+
   return (
-    <div >
-      <div className="degreeSelect">
-      <Select
-        id="grade-select"
-        style={{ width: 200 }}
-        value={gradeState}
-        onChange={(e) => {
-          setGradeState(e.target.value);
-        }}
-      >
-        <MenuItem value={"percentage"}>Percentage</MenuItem>
-        <MenuItem value={"band"}>Band</MenuItem>
-        <MenuItem value={"point"}>Point</MenuItem>
-      </Select></div>
+    <div>
+      <div className="singleFilter">
+        <div className="gradeToggles">
+          <GradeToggles changeGradeState={changeGradeState} />
+        </div>
+      </div>
       <div style={{ height: 700, width: "100%" }} className="datatable">
         <DataGrid
-        autoHeight {...courseData}
+          autoHeight
+          {...courseData}
           rows={courseData}
           columns={columns.concat(actionColumn)}
           rowsPerPageOptions={[10, 50, 100]}

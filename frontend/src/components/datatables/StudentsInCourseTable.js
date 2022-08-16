@@ -7,6 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
 import Select from "@mui/material/Select";
 import { renderGrade } from "../../utils/GradeConversion.js";
+import GradeToggles from "../toggles/GradeToggles.js";
 import "./datatable.scss";
 
 const defaultColumns = [
@@ -289,21 +290,16 @@ const StudentInCourseTable = ({ inputGradeData }) => {
     },
   ];
 
+  const changeGradeState = (gradeType) => {
+    setGradeState(gradeType);
+  };
+
   return (
     <div>
-      <div>
-        <Select
-          id="grade-select"
-          style={{ width: 200 }}
-          value={gradeState}
-          onChange={(e) => {
-            setGradeState(e.target.value);
-          }}
-        >
-          <MenuItem value={"percentage"}>Percentage</MenuItem>
-          <MenuItem value={"band"}>Band</MenuItem>
-          <MenuItem value={"point"}>Point</MenuItem>
-        </Select>
+      <div className="singleFilter">
+        <div className="gradeToggles">
+          <GradeToggles changeGradeState={changeGradeState} />
+        </div>
       </div>
       <div className="datatable">
         <DataGrid

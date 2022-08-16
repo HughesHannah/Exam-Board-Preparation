@@ -3,8 +3,6 @@ import { variables } from "../../Variables.js";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import {
   renderGrade,
   getWeightedGradeFromWorks,
@@ -15,6 +13,7 @@ import "./datatable.scss";
 import AuthContext from "../../context/AuthContext.js";
 import DegreePicker from "../picker/DegreePicker.js";
 import TableSkeletons from "../skeletons/TableSkeleton.js";
+import GradeToggles from "../toggles/GradeToggles.js";
 
 const defaultColumns = [
   {
@@ -35,7 +34,7 @@ const StudentClassification = () => {
   const [loading, setLoading] = useState(true);
   const [classificationData, setClassificationData] = useState([]);
   const path = useParams();
-  let { authTokens, logoutUser } = useContext(AuthContext);
+  let { authTokens } = useContext(AuthContext);
 
   useEffect(() => {
     // reset columns so we dont infinately add to them
@@ -233,24 +232,21 @@ const StudentClassification = () => {
     },
   ];
 
+  const changeGradeState = (gradeType) => {
+    setGradeState(gradeType);
+  };
+
   let dataTableSection = (
     <>
-      <DegreePicker />
-      <Select
-        id="grade-select"
-        style={{ width: 200 }}
-        value={gradeState}
-        onChange={(e) => {
-          setGradeState(e.target.value);
-        }}
-      >
-        <MenuItem value={"percentage"}>Percentage</MenuItem>
-        <MenuItem value={"band"}>Band</MenuItem>
-        <MenuItem value={"point"}>Point</MenuItem>
-      </Select>
+      <div className="filters">
+        <DegreePicker />
+        <div className="gradeToggles">
+          <GradeToggles changeGradeState={changeGradeState} />
+        </div>
+      </div>
       <DataGrid
-      autoHeight
-      {...tableData}
+        autoHeight
+        {...tableData}
         rows={tableData}
         columns={columns.concat(actionColumn)}
         rowsPerPageOptions={[10, 50, 100]}
@@ -264,7 +260,7 @@ const StudentClassification = () => {
   );
 
   return (
-    <div style={{ height: 700, width: "100%" }} className="datatable">
+    <div className="datatable">
       {loading ? <TableSkeletons /> : dataTableSection}
     </div>
   );
