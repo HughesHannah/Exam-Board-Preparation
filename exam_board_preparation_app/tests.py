@@ -2,6 +2,9 @@ from django.test import TestCase
 from exam_board_preparation_app.models import *
 from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
+from exam_board_preparation_app.views import *
+from rest_framework.test import APIRequestFactory
+from rest_framework.test import force_authenticate
 
 
 ########### Year Tests #################################
@@ -162,5 +165,124 @@ class DeleteUserDoesntDeleteComment(TestCase):
             StudentComment.objects.get(student=getStudent) 
         
 ########### API Tests #################################  
-
-
+class testClassHeadAPI(TestCase):
+    def setUp(self):
+        user = User.objects.create(username='Glasgow', password='secret')
+        ClassHead.objects.create(user=user)
+    def testClassHeadAPIResponse(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username='Glasgow')
+        classHead = ClassHead.objects.get(user=user)
+        request = factory.get('classheads')
+        force_authenticate(request, user=user)
+        response = ClassHeadAPI(request)
+        self.assertTrue(response.status_code == 200)
+        # print(response.data)
+        # self.assertTrue(classHead in response.data)
+        
+class testStudentAPI(TestCase):
+    def setUp(self):
+        year = Year.objects.create(yearStart=2020, yearEnd=2021)
+        user = User.objects.create(username='Glasgow', password='secret')
+        ClassHead.objects.create(user=user)
+        Student.objects.create(matriculationNumber="12345678", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False, exitYear=year)
+        
+    def testStudentAPIResponse(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username='Glasgow')
+        request = factory.get('studentAPI/')
+        force_authenticate(request, user=user)
+        response = StudentAPI(request)
+        self.assertTrue(response.status_code == 200)
+        
+    def testStudentGradesAPI(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username='Glasgow')
+        request = factory.get('studentAPI/grades')
+        force_authenticate(request, user=user)
+        response = studentsAndGradesAPI(request)
+        self.assertTrue(response.status_code == 200)  
+        
+    def testStudentGradesforDegreeAPI(self):
+        factory = APIRequestFactory()
+        user = User.objects.get(username='Glasgow')
+        degree = Student.objects.get(matriculationNumber="12345678").degreeTitle
+        request = factory.get('studentAPI/grades/' + degree)
+        force_authenticate(request, user=user)
+        response = studentsAndGradesAPI(request)
+        self.assertTrue(response.status_code == 200)      
+                 
+class testCourseAPI(TestCase):
+    def setUp(self):
+        year = Year.objects.create(yearStart=2020, yearEnd=2021)
+        Course.objects.create(classCode="TEST1234", className="Course Name", credits=10, isTaught=True, year=year)
+        
+    def testCourseAPIResponse(self):
+        factory = APIRequestFactory()
+        request = factory.get('courseAPI/')
+        response = CourseAPI(request)
+        self.assertTrue(response.status_code == 200)    
+        
+    def testCourseAPIYearResponse(self):
+        factory = APIRequestFactory()
+        year = Year.objects.get(yearStart=2020)
+        request = factory.get('courseAPI/' + year.year)
+        response = CourseYearAPI(request, year.year)
+        self.assertTrue(response.status_code == 200)
+        
+    def testGradesInCourseAPIResponse(self):
+        factory = APIRequestFactory()
+        year = Year.objects.get(yearStart=2020)
+        course = Course.objects.get(classCode="TEST1234")
+        request = factory.get('courseAPI/' + year.year + '/'+ course.classCode+'/students/grades')
+        response = GradesInCourseAPI(request, year.year, course.classCode)
+        self.assertTrue(response.status_code == 200)  
+        
+    def testStudentsInCourseAPIResponse(self):
+        factory = APIRequestFactory()
+        year = Year.objects.get(yearStart=2020)
+        course = Course.objects.get(classCode="TEST1234")
+        request = factory.get('courseAPI/' + year.year + '/'+ course.classCode+'/students')
+        response = WorksInCourseAPI(request, year.year, course.classCode)
+        self.assertTrue(response.status_code == 200)    
+        
+    def testSpecificCourseAPIResponse(self):
+        factory = APIRequestFactory()
+        year = Year.objects.get(yearStart=2020)
+        course = Course.objects.get(classCode="TEST1234")
+        request = factory.get('courseAPI/' + year.year + '/'+ course.classCode)
+        response = IndividualCourseYearAPI(request, year.year, course.classCode)
+        self.assertTrue(response.status_code == 200)        
+        
+class testDegreeClassificationAPI(TestCase):
+    def testDegreeClassificationAPIResponse(self):
+        factory = APIRequestFactory()
+        request = factory.get('degreeClassificationAPI/')
+        response = degreeClassificationAPI(request)
+        self.assertTrue(response.status_code == 200)
+        
+class testIndividualStudentAPI(TestCase):
+    def setUp(self):
+        year = Year.objects.create(yearStart=2020, yearEnd=2021)
+        Student.objects.create(matriculationNumber="12345678", name="test", degreeTitle="CS", mastersStudent=True, fastRouteStudent=False, exitYear=year)
+        
+    def testIndividualStudentAPIResponse(self):
+        factory = APIRequestFactory()
+        student = Student.objects.get(matriculationNumber="12345678")
+        request = factory.get('individualStudentAPI/'+ student.matriculationNumber)
+        response = IndividualStudentAPI(request, student.matriculationNumber)
+        self.assertTrue(response.status_code == 200)   
+        
+    def testIndividualStudentCommentsAPIResponse(self):
+        factory = APIRequestFactory()
+        student = Student.objects.get(matriculationNumber="12345678")
+        request = factory.get('individualStudentAPI/'+ student.matriculationNumber+'/comments')
+        response = IndividualStudentCommentsAPI(request, student.matriculationNumber)
+        self.assertTrue(response.status_code == 200)        
+        
+    def testIndividualStudentCoursesAPIResponse(self):
+        factory = APIRequestFactory()
+        student = Student.objects.get(matriculationNumber="12345678")
+        request = factory.get('studentCoursesAPI/'+ student.matriculationNumber)
+        response = IndividualStudentCommentsAPI(request, student.matriculationNumber)
+        self.assertTrue(response.status_code == 200)     

@@ -113,11 +113,11 @@ def CourseAPI(request, id=0):
     serializer = CourseSerializer(courses, many=True)
     return Response(serializer.data)
 
-@api_view(['GET'])
-def simpleCourseAPI(request, id=0):
-    courses = Course.objects.all()
-    serializer = SimpleCourseSerializer(courses, many=True)
-    return Response(serializer.data)
+# @api_view(['GET'])
+# def simpleCourseAPI(request, id=0):
+#     courses = Course.objects.all()
+#     serializer = SimpleCourseSerializer(courses, many=True)
+#     return Response(serializer.data)
 
 # All Courses in particular year
 @api_view(['GET'])
@@ -279,15 +279,15 @@ def studentsAndGradesForDegreeAPI(request, degree):
     return Response(serializer.data)
 
 # get Students and their Grades for a Course
-@api_view(['GET'])
-def studentsAndGradesForCourseAPI(request, year, code):
-    start = year.split('-')[0]
-    dbYear = Year.objects.get(yearStart=start)
-    course = Course.objects.get(year=dbYear.id, classCode=code)
-    students = course.students.all()
+# @api_view(['GET'])
+# def studentsAndGradesForCourseAPI(request, year, code):
+#     start = year.split('-')[0]
+#     dbYear = Year.objects.get(yearStart=start)
+#     course = Course.objects.get(year=dbYear.id, classCode=code)
+#     students = course.students.all()
     
-    serializer = StudentsToGradesSerializer(students, many=True)
-    return Response(serializer.data)
+#     serializer = StudentsToGradesSerializer(students, many=True)
+#     return Response(serializer.data)
 
 # Individual Student
 @api_view(['GET'])
