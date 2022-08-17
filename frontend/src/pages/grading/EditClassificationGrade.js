@@ -7,7 +7,7 @@ import "./grading.scss";
 const EditClassificationGrade = ({ classificationData }) => {
   const [inputClassification, setInputClassification] = useState(null);
   const [inputStandardBoundry, setInputStandardBoundry] = useState(null);
-  const [inputInputDiscretionaryBoundry, setInputDiscretionaryBoundry] =
+  const [inputDiscretionaryBoundry, setInputDiscretionaryBoundry] =
     useState(null);
   const [inputDiscretionaryPercent, setInputDiscretionaryPercent] =
     useState(null);
@@ -18,7 +18,7 @@ const EditClassificationGrade = ({ classificationData }) => {
 
     formData.append("classificationName", inputClassification);
     formData.append("standardBoundry", inputStandardBoundry);
-    formData.append("discretionaryBoundry", inputStandardBoundry);
+    formData.append("discretionaryBoundry", inputDiscretionaryBoundry);
     formData.append("percent", inputDiscretionaryPercent);
     formData.append("band", inputBand);
     let response;
@@ -105,7 +105,7 @@ const EditClassificationGrade = ({ classificationData }) => {
               disabled={
                 !inputClassification &&
                 !inputStandardBoundry &&
-                !inputInputDiscretionaryBoundry &&
+                !inputDiscretionaryBoundry &&
                 !inputDiscretionaryPercent &&
                 !inputBand
               }
