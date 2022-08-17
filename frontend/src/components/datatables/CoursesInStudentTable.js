@@ -172,6 +172,11 @@ const CoursesInStudentTable = ({ courseData, gradeData }) => {
             {...courseData}
             rows={courseData}
             columns={columns.concat(actionColumn)}
+            initialState={{
+              pagination: {
+                pageSize: 10,
+              },
+            }}
             rowsPerPageOptions={[10, 50, 100]}
             checkboxSelection
             components={{ Toolbar: GridToolbar }}

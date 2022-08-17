@@ -75,11 +75,12 @@ export const AuthProvider = ({children}) => {
     }
 
     useEffect(()=> {
-
+        // refresh the user token every time they load a new page
         if(loading){
             updateToken()
         }
 
+        // and every four minutes
         let fourMinutes = 1000 * 60 * 4
         let interval = setInterval(() => {
             if(authTokens){

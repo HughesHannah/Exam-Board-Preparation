@@ -57,6 +57,11 @@ const CourseTable = () => {
           rows={tableData}
           columns={columns.concat(actionColumn)}
           checkboxSelection
+          initialState={{
+            pagination: {
+              pageSize: 10,
+            },
+          }}
           rowsPerPageOptions={[10, 50, 100]}
           components={{ Toolbar: GridToolbar }}
           componentsProps={{
