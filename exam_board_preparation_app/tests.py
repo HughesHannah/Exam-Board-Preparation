@@ -285,4 +285,21 @@ class testIndividualStudentAPI(TestCase):
         student = Student.objects.get(matriculationNumber="12345678")
         request = factory.get('studentCoursesAPI/'+ student.matriculationNumber)
         response = IndividualStudentCommentsAPI(request, student.matriculationNumber)
-        self.assertTrue(response.status_code == 200)     
+        self.assertTrue(response.status_code == 200)  
+        
+    def gradesInStudentAPIResponse(self):
+        factory = APIRequestFactory()
+        student = Student.objects.get(matriculationNumber="12345678"+'/grades')
+        request = factory.get('studentCoursesAPI/'+ student.matriculationNumber)
+        response = GradesInStudentAPI(request, student.matriculationNumber)
+        self.assertTrue(response.status_code == 200)        
+        
+class testYearsAPI(TestCase):
+    def setUp(self):
+        Year.objects.create(yearStart=2020, yearEnd=2021)
+        
+    def testIndividualStudentAPIResponse(self):
+        factory = APIRequestFactory()
+        request = factory.get('yearsAPI/')
+        response = YearsAPI(request)
+        self.assertTrue(response.status_code == 200)           
