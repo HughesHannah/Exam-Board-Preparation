@@ -6,8 +6,8 @@ import "./grading.scss";
 
 const EditClassificationGrade = ({ classificationData }) => {
   const [inputClassification, setInputClassification] = useState(null);
-  const [inputStandardBoundry, setInputStandardBoundry] = useState(null);
-  const [inputDiscretionaryBoundry, setInputDiscretionaryBoundry] =
+  const [inputStandardBoundary, setInputStandardBoundary] = useState(null);
+  const [inputDiscretionaryBoundary, setInputDiscretionaryBoundary] =
     useState(null);
   const [inputDiscretionaryPercent, setInputDiscretionaryPercent] =
     useState(null);
@@ -17,8 +17,8 @@ const EditClassificationGrade = ({ classificationData }) => {
     const formData = new FormData();
 
     formData.append("classificationName", inputClassification);
-    formData.append("standardBoundry", inputStandardBoundry);
-    formData.append("discretionaryBoundry", inputDiscretionaryBoundry);
+    formData.append("standardBoundary", inputStandardBoundary);
+    formData.append("discretionaryBoundary", inputDiscretionaryBoundary);
     formData.append("percent", inputDiscretionaryPercent);
     formData.append("band", inputBand);
     let response;
@@ -49,24 +49,24 @@ const EditClassificationGrade = ({ classificationData }) => {
       return (
         <div>
           <div className="formInput">
-            <p>Set lower boundry for standard GPA:</p>
+            <p>Set lower boundary for standard GPA:</p>
             <div className="input">
               <input
                 className="inputBox"
                 type="number"
                 step="any"
-                onChange={(e) => setInputStandardBoundry(e.target.value)}
+                onChange={(e) => setInputStandardBoundary(e.target.value)}
               />
             </div>
           </div>
           <div className="formInput">
-            <p>Set lower boundry for discretionary GPA:</p>
+            <p>Set lower boundary for discretionary GPA:</p>
             <div className="input">
               <input
                 className="inputBox"
                 type="number"
                 step="any"
-                onChange={(e) => setInputDiscretionaryBoundry(e.target.value)}
+                onChange={(e) => setInputDiscretionaryBoundary(e.target.value)}
               />
             </div>
           </div>
@@ -104,8 +104,8 @@ const EditClassificationGrade = ({ classificationData }) => {
               onClick={handleClassificationChangeSubmission}
               disabled={
                 !inputClassification &&
-                !inputStandardBoundry &&
-                !inputDiscretionaryBoundry &&
+                !inputStandardBoundary &&
+                !inputDiscretionaryBoundary &&
                 !inputDiscretionaryPercent &&
                 !inputBand
               }

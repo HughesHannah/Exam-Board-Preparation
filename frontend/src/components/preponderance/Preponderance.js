@@ -72,7 +72,7 @@ const Preponderance = ({ gradeData, courseData }) => {
               name="Course"
               onChange={(e) => setSelectedCourse(e.target.value)}
             >
-              <option hidden>
+              <option selected disabled>
                 Please Select
               </option>
               {courseData.map((course) => (
@@ -93,7 +93,7 @@ const Preponderance = ({ gradeData, courseData }) => {
               disabled={selectedCourse == null}
               onChange={(e) => setSelectedAssignment(e.target.value)}
             >
-              <option hidden>
+              <option selected disabled>
                 Please Select
               </option>
               {getFilteredAssignments()}
