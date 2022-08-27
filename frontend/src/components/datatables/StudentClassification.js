@@ -188,7 +188,7 @@ const StudentClassification = () => {
 
     try {
       const studentgradeResponse = await fetch(
-        variables.API_URL + "studentAPI/grades/" + path.degree,
+        variables.API_URL + "studentAPI/grades/exit/" + path.degree,
         {
           method: "GET",
           headers: {

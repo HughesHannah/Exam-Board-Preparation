@@ -23,13 +23,18 @@ from itertools import chain
 
 ########## Helper Functions ###############################
 
-def getStudentsByLevel(level):
-    # get the current year
+def getCurrentYear():
     today = date.today()
     if (today.month >= 9):
         currentYear = Year.objects.get(yearStart=today.year)
     else:
         currentYear = Year.objects.get(yearEnd=today.year)
+        
+    return currentYear
+
+def getStudentsByLevel(level):
+    # get the current year
+    currentYear = getCurrentYear()
     
     # view students for that level
     # work out exit years
@@ -89,6 +94,32 @@ def getStudentsbyLevelandDegree(level, degree):
     students = chain(masterStudents, bachelorStudents) 
     
     return students  
+
+def getExitStudentsbyLevelandDegree(level, degree):  
+    # get the current year
+    today = date.today()
+    if (today.month >= 9):
+        currentYear = Year.objects.get(yearStart=today.year)
+    else:
+        currentYear = Year.objects.get(yearEnd=today.year)
+    
+    # view students for that level
+    # work out exit years
+    masterExit = (5-level)+currentYear.yearEnd
+    bachelorExit = (4-level)+currentYear.yearEnd
+
+    # get exit year objects
+    exitYearForMasters = Year.objects.get(yearEnd=masterExit)
+    exitYearForBachelor = Year.objects.get(yearEnd=bachelorExit)
+
+    # get students based on these exit years
+    masterStudents = Student.objects.filter(
+        exitYear=exitYearForMasters, mastersStudent=True, degreeTitle=degree).filter(exitYear=currentYear)
+    bachelorStudents = Student.objects.filter(
+        exitYear=exitYearForBachelor, mastersStudent=False, degreeTitle=degree).filter(exitYear=currentYear)
+    students = chain(masterStudents, bachelorStudents) 
+    
+    return students  
     
 def getStudentsByUserandDegree(user, degree):
     # get the user and classhead object
@@ -103,6 +134,25 @@ def getStudentsByUserandDegree(user, degree):
         students = getStudentsbyLevelandDegree(classHead[0].level, degree)
         
     return students
+
+def getExitStudentsByUserandDegree(user, degree):
+    # get the current year
+    currentYear = getCurrentYear
+    
+    # get the user and classhead object
+    classHead = ClassHead.objects.filter(user=user)
+
+    # can they view all?
+    if (classHead[0].level == 0):
+        # view all students
+        students = Student.objects.filter(degreeTitle=degree, exitYear=currentYear)
+
+    else:
+        # exitStudents = Student.objects.filter(degreeTitle=degree, exitYear=currentYear)
+        students = getExitStudentsbyLevelandDegree(classHead[0].level, degree)
+        
+    return students
+
 
 ########## Get Course(s) APIs ###############################
 
@@ -268,6 +318,13 @@ def StudentsInCourseAPI(request, year, code):
 @api_view(['GET'])
 def studentsAndGradesAPI(request):
     students = getStudentsForUser(request.user)
+    serializer = StudentsToGradesSerializer(students, many=True)
+    return Response(serializer.data)
+
+# get All Students and their Grades if they are in an exit year
+@api_view(['GET'])
+def studentsAndGradesInExitAPI(request, degree):
+    students = getExitStudentsByUserandDegree(request.user, degree)
     serializer = StudentsToGradesSerializer(students, many=True)
     return Response(serializer.data)
 
