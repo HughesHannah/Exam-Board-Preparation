@@ -653,14 +653,14 @@ def degreeClassificationAPI(request):
 def ClassificationChangeAPI(request):
     # get data from request
     classificationName = request.data['classificationName']
-    standardBoundry = request.data['standardBoundry']
+    standardBoundary = request.data['standardBoundary']
     discretionaryBoundry = request.data['discretionaryBoundry']
     percent = request.data['percent']
     band = request.data['band']
 
     classificationObj = DegreeClassification.objects.get(classificationName=classificationName)
 
-    classificationObj.lowerGPAStandard = standardBoundry;
+    classificationObj.lowerGPAStandard = standardBoundary;
     classificationObj.lowerGPADiscretionary =discretionaryBoundry
     classificationObj.percentageAboveForDiscretionary =percent
     classificationObj.charBandForDiscretionary =band
