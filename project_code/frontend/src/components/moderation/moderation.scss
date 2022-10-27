@@ -1,0 +1,44 @@
+.currentModeration {
+  padding-bottom: 10px;
+}
+
+.button {
+  cursor: pointer;
+  background: #00B5D1;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  color: white;
+  padding: 5px 40px;
+  margin-left: auto;
+}
+
+.buttonDiv {
+  display: flex;
+  padding-right: 20px;
+  padding-top: 20px;
+}
+
+.formInput {
+  display: flex;
+  padding: 5px;
+
+  p {
+    flex: 2;
+  }
+
+  .input {
+    flex: 8;
+    padding-right: 5px;
+  }
+
+  .inputBox {
+    font-size: 14px;
+    padding: 5px;
+    border: 1px solid;
+    border-radius: 3px;
+    border-color: lightgray;
+  }
+}

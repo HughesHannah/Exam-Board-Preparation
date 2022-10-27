@@ -1,0 +1,12 @@
+.chart {
+  flex: 4;
+  padding: 10px;
+
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: gray;
+    padding-bottom: 20px;
+  }
+}

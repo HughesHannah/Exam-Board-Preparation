@@ -1,0 +1,35 @@
+.blueBackground{
+    background-color: #00B5D137;
+}
+
+.blueHeading{
+    color: #00B5D1;
+    padding-bottom:20px;
+    font-size: 16px;
+}
+
+.inputBox{
+    font-size: 14px;
+    padding: 5px;
+    border: 1px solid;
+    border-radius: 3px;
+    border-color: lightgray;
+  }
+
+.button {
+    cursor: pointer;
+    background: #00B5D1;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    color: white;
+    padding: 5px 40px;
+    margin-left:auto;
+  }
+
+.buttonDiv{
+    display: flex;
+    padding-right: 20px
+}
