@@ -10,4 +10,7 @@ For the project I taught myself React for the front end which I found challengin
 * Middleware - Django REST framework
 * Database - SQLite
 
+### Demonstration
+View the overview and demonstration of the app here:
+https://vimeo.com/770768469
 
