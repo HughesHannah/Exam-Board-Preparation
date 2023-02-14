@@ -1,9 +1,9 @@
-# A Web Application for The School of Computing Science Exam Boards
+# A Web Application for Glasgow University's School of Computing Science
 
 ### Overview
-For my individual masters project, I built a full stack web application for Glasgow University School of Computing Science to manage student grades and calculate degree classifications in preparation for external validation. The university needed a new system because the current one was antiquated to the point that it was unusable by many staff members. I was asked to create a web application that encapsulated all of the original functionality but had a much better user experience. 
+As part of my individual master's project, I designed and developed a full-stack web application for Glasgow University's School of Computing Science. The aim was to enhance their existing system and provide a better user experience for managing student grades and calculating degree classifications, in preparation for external validation. The university recognised the need for an updated system as the current one was antiquated and unsuitable for many staff members. The resulting application encapsulated all the original functionality, but with a modern and user-friendly interface.
 
-For the project I taught myself React for the front end which I found challenging but rewarding when I saw the final product. I also enjoyed interviewing users for requirements which allowed me to meet and develop a relationship with lecturers and staff members of the department that I was studying in. All users in my final evaluation survey thought that the app was a significant improvement from the original.
+During the project, I taught myself React for the frontend, a challenging yet rewarding experience that resulted in a final product that was praised by all users in my evaluation survey. My work also involved conducting interviews with lecturers and staff members of the department to gather requirements and build strong relationships.
 
 ### Technologies Used
 * Frontend - React, MaterialUI, Recharts
